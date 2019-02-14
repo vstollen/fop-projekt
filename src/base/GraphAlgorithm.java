@@ -99,7 +99,31 @@ public abstract class GraphAlgorithm<T> {
      * @see Edge#getOtherNode(Node)
      */
     public void run() {
-        // TODO: GraphAlgorithm<T>#run()
+
+        AlgorithmNode<T> visitedNode = getSmallestNode();
+
+        while (visitedNode != null) {
+            for (Edge<T> edge : graph.getEdges(visitedNode.node)) {
+
+                if (!isPassable(edge)) {
+                    continue;
+                }
+
+                Node<T> neighborNode = edge.getOtherNode(visitedNode.node);
+
+                AlgorithmNode<T> neighbor = algorithmNodes.get(neighborNode);
+
+                double alternativePathValue = getValue(edge) + visitedNode.value;
+
+                if (neighbor.value == -1 || alternativePathValue < neighbor.value) {
+                    neighbor.value = alternativePathValue;
+                    neighbor.previous = visitedNode;
+                }
+            }
+
+            visitedNode = getSmallestNode();
+        }
+
     }
 
     /**

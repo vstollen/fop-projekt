@@ -58,8 +58,29 @@ public abstract class GraphAlgorithm<T> {
      * @return Der nächste abzuarbeitende Knoten oder null
      */
     private AlgorithmNode<T> getSmallestNode() {
-        // TODO: GraphAlgorithm<T>#getSmallestNode()
-        return null;
+        AlgorithmNode<T> smallestNode = null;
+
+        Iterator<Node<T>> nodeIterator = availableNodes.iterator();
+
+        while (nodeIterator.hasNext()) {
+
+            AlgorithmNode<T> nextNode = algorithmNodes.get(nodeIterator.next());
+
+            if (smallestNode == null) {
+                smallestNode = nextNode;
+                continue;
+            }
+
+            if (nextNode.value < smallestNode.value) {
+                smallestNode = nextNode;
+            }
+        }
+
+        if (smallestNode != null) {
+            availableNodes.remove(smallestNode.node);
+        }
+
+        return smallestNode;
     }
 
     /**

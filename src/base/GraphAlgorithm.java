@@ -134,8 +134,22 @@ public abstract class GraphAlgorithm<T> {
      * @return eine Liste von Kanten oder null
      */
     public List<Edge<T>> getPath(Node<T> destination) {
-        // TODO: GraphAlgorithm<T>#getPath(Node<T>)
-        return null;
+
+        LinkedList<Edge<T>> inversePath = new LinkedList<>();
+
+        AlgorithmNode<T> currentNode = algorithmNodes.get(destination);
+        AlgorithmNode<T> previousNode = currentNode.previous;
+
+        while (previousNode != null) {
+            inversePath.add(graph.getEdge(currentNode.node, previousNode.node));
+
+            currentNode = previousNode;
+            previousNode = currentNode.previous;
+        }
+
+        Collections.reverse(inversePath);
+
+        return inversePath;
     }
 
     /**

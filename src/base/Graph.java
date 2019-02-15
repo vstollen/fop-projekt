@@ -79,7 +79,7 @@ public class Graph<T> {
      * @return Eine Liste aller Knotenwerte
      */
     public List<T> getAllValues() {
-    	return this.nodes.stream().map((node) -> node.getValue()).collect(Collectors.toCollection(ArrayList::new));
+    	return this.nodes.stream().map(node -> node.getValue()).collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -90,8 +90,7 @@ public class Graph<T> {
      * @return Die Liste aller zum Knoten zugehörigen Kanten
      */
     public List<Edge<T>> getEdges(Node<T> node) {
-        // TODO: Graph<T>#getEdges(Node<T>)
-        return new ArrayList<>();
+    	return this.edges.stream().filter(edge -> edge.contains(node)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**

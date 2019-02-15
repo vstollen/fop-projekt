@@ -111,8 +111,7 @@ public class Graph<T> {
      * @return Ein Knoten mit dem angegebenen Wert oder null
      */
     public Node<T> getNode(T value) {
-        // TODO: Graph<T>#getNode(T)
-        return null;
+    	return this.nodes.stream().filter(node -> node.getValue().equals(value)).collect(Collectors.toList()).get(0);
     }
     
     /**

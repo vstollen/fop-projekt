@@ -126,9 +126,7 @@ public class Graph<T> {
      * @return true, wenn alle Knoten erreichbar sind
      */
     public boolean allNodesConnected() {
-    	for (Node<T> node : this.nodes)
-    		if (this.getEdges(node).isEmpty())
-    			return false;
-        return true;
+    	// TODO: Graph<T>#allNodesConnected()
+        return false;
     }
 }

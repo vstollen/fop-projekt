@@ -101,8 +101,7 @@ public class Graph<T> {
      * @return Die Kante zwischen beiden Knoten oder null
      */
     public Edge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
-        // TODO: Graph<T>#getEdge(Node<T>, Node<T>)
-        return null;
+    	return this.edges.stream().filter(edge -> edge.getOtherNode(nodeA).equals(nodeB)).collect(Collectors.toCollection(ArrayList::new)).get(0);
     }
 
     /**

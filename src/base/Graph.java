@@ -79,7 +79,9 @@ public class Graph<T> {
      * @return Eine Liste aller Knotenwerte
      */
     public List<T> getAllValues() {
-    	return this.nodes.stream().map(node -> node.getValue()).collect(Collectors.toCollection(ArrayList::new));
+    	return this.nodes.stream()
+    			.map(node -> node.getValue())
+    			.collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -90,7 +92,9 @@ public class Graph<T> {
      * @return Die Liste aller zum Knoten zugehörigen Kanten
      */
     public List<Edge<T>> getEdges(Node<T> node) {
-    	return this.edges.stream().filter(edge -> edge.contains(node)).collect(Collectors.toCollection(ArrayList::new));
+    	return this.edges.stream()
+    			.filter(edge -> edge.contains(node))
+    			.collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -101,7 +105,9 @@ public class Graph<T> {
      * @return Die Kante zwischen beiden Knoten oder null
      */
     public Edge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
-    	return this.edges.stream().filter(edge -> edge.getOtherNode(nodeA).equals(nodeB)).collect(Collectors.toCollection(ArrayList::new)).get(0);
+    	return this.edges.stream()
+    			.filter(edge -> edge.getOtherNode(nodeA).equals(nodeB))
+    			.collect(Collectors.toCollection(ArrayList::new)).get(0);
     }
 
     /**
@@ -110,7 +116,9 @@ public class Graph<T> {
      * @return Ein Knoten mit dem angegebenen Wert oder null
      */
     public Node<T> getNode(T value) {
-    	return this.nodes.stream().filter(node -> node.getValue().equals(value)).collect(Collectors.toList()).get(0);
+    	return this.nodes.stream()
+    			.filter(node -> node.getValue().equals(value))
+    			.collect(Collectors.toList()).get(0);
     }
     
     /**

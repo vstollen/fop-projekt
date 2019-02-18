@@ -107,7 +107,8 @@ public class Graph<T> {
     public Edge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
     	return this.edges.stream()
     			.filter(edge -> edge.getOtherNode(nodeA).equals(nodeB))
-    			.collect(Collectors.toCollection(ArrayList::new)).get(0);
+    			.collect(Collectors.toList())
+    			.get(0);
     }
 
     /**
@@ -118,7 +119,8 @@ public class Graph<T> {
     public Node<T> getNode(T value) {
     	return this.nodes.stream()
     			.filter(node -> node.getValue().equals(value))
-    			.collect(Collectors.toList()).get(0);
+    			.collect(Collectors.toList())
+    			.get(0);
     }
     
     /**

@@ -147,6 +147,10 @@ public abstract class GraphAlgorithm<T> {
             previousNode = currentNode.previous;
         }
 
+        if (inversePath.isEmpty()) {
+        	return null;
+        }
+        
         Collections.reverse(inversePath);
 
         return inversePath;

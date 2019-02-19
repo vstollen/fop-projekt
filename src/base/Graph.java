@@ -107,8 +107,8 @@ public class Graph<T> {
     public Edge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
     	return this.edges.stream()
     			.filter(edge -> edge.contains(nodeA) && edge.getOtherNode(nodeA).equals(nodeB))
-    			.collect(Collectors.toList())
-    			.get(0);
+    			.findFirst()
+    			.orElse(null);
     }
 
     /**
@@ -119,8 +119,8 @@ public class Graph<T> {
     public Node<T> getNode(T value) {
     	return this.nodes.stream()
     			.filter(node -> node.getValue().equals(value))
-    			.collect(Collectors.toList())
-    			.get(0);
+    			.findFirst()
+    			.orElse(null);
     }
     
     /**

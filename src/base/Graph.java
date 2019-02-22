@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import game.map.Castle;
 
@@ -78,8 +79,9 @@ public class Graph<T> {
      * @return Eine Liste aller Knotenwerte
      */
     public List<T> getAllValues() {
-        // TODO: Graph<T>#getAllValues()
-        return new ArrayList<>();
+    	return this.nodes.stream()
+    			.map(node -> node.getValue())
+    			.collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -90,8 +92,9 @@ public class Graph<T> {
      * @return Die Liste aller zum Knoten zugehörigen Kanten
      */
     public List<Edge<T>> getEdges(Node<T> node) {
-        // TODO: Graph<T>#getEdges(Node<T>)
-        return new ArrayList<>();
+    	return this.edges.stream()
+    			.filter(edge -> edge.contains(node))
+    			.collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -102,8 +105,10 @@ public class Graph<T> {
      * @return Die Kante zwischen beiden Knoten oder null
      */
     public Edge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
-        // TODO: Graph<T>#getEdge(Node<T>, Node<T>)
-        return null;
+    	return this.edges.stream()
+    			.filter(edge -> edge.contains(nodeA) && edge.getOtherNode(nodeA).equals(nodeB))
+    			.findFirst()
+    			.orElse(null);
     }
 
     /**
@@ -112,8 +117,10 @@ public class Graph<T> {
      * @return Ein Knoten mit dem angegebenen Wert oder null
      */
     public Node<T> getNode(T value) {
-        // TODO: Graph<T>#getNode(T)
-        return null;
+    	return this.nodes.stream()
+    			.filter(node -> node.getValue().equals(value))
+    			.findFirst()
+    			.orElse(null);
     }
     
     /**

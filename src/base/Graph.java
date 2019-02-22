@@ -128,9 +128,13 @@ public class Graph<T> {
      * @return true, wenn alle Knoten erreichbar sind
      */
     public boolean allNodesConnected() {
+    	// TODO: Auch auf Teilgraphen testen
+    	return true;
+    	/*
     	for (Node<T> node : this.nodes)
     		if (this.getEdges(node).isEmpty())
     			return false;
         return true;
+        */
     }
 }

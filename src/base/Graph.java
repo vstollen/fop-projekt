@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import game.map.Castle;
 
@@ -79,9 +78,8 @@ public class Graph<T> {
      * @return Eine Liste aller Knotenwerte
      */
     public List<T> getAllValues() {
-    	return this.nodes.stream()
-    			.map(node -> node.getValue())
-    			.collect(Collectors.toCollection(ArrayList::new));
+        // TODO: Graph<T>#getAllValues()
+        return new ArrayList<>();
     }
 
     /**
@@ -92,9 +90,8 @@ public class Graph<T> {
      * @return Die Liste aller zum Knoten zugehörigen Kanten
      */
     public List<Edge<T>> getEdges(Node<T> node) {
-    	return this.edges.stream()
-    			.filter(edge -> edge.contains(node))
-    			.collect(Collectors.toCollection(ArrayList::new));
+        // TODO: Graph<T>#getEdges(Node<T>)
+        return new ArrayList<>();
     }
 
     /**
@@ -105,10 +102,8 @@ public class Graph<T> {
      * @return Die Kante zwischen beiden Knoten oder null
      */
     public Edge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
-    	return this.edges.stream()
-    			.filter(edge -> edge.contains(nodeA) && edge.getOtherNode(nodeA).equals(nodeB))
-    			.findFirst()
-    			.orElse(null);
+        // TODO: Graph<T>#getEdge(Node<T>, Node<T>)
+        return null;
     }
 
     /**
@@ -117,10 +112,8 @@ public class Graph<T> {
      * @return Ein Knoten mit dem angegebenen Wert oder null
      */
     public Node<T> getNode(T value) {
-    	return this.nodes.stream()
-    			.filter(node -> node.getValue().equals(value))
-    			.findFirst()
-    			.orElse(null);
+        // TODO: Graph<T>#getNode(T)
+        return null;
     }
     
     /**
@@ -128,13 +121,7 @@ public class Graph<T> {
      * @return true, wenn alle Knoten erreichbar sind
      */
     public boolean allNodesConnected() {
-    	// TODO: Auch auf Teilgraphen testen
-    	return true;
-    	/*
-    	for (Node<T> node : this.nodes)
-    		if (this.getEdges(node).isEmpty())
-    			return false;
-        return true;
-        */
+    	// TODO: Graph<T>#allNodesConnected()
+        return false;
     }
 }

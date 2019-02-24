@@ -152,27 +152,6 @@ public class GameMap {
      */
     private void generateEdges() {
     	 // TODO: GameMap#generateEdges()
-    	List<Node<Castle>> freeNodes = castleGraph.getNodes();
-    	if (freeNodes.isEmpty()) return;
-    	Node<Castle> p = freeNodes.remove(0);
-    	while (!freeNodes.isEmpty()) {
-    		Node<Castle> next = freeNodes.get(0);
-    		double smallestDistance = p.getValue().distance(next.getValue());
-    		for (int i = 1; i < freeNodes.size(); i++) {
-    			double distance = p.getValue().distance(freeNodes.get(i).getValue());
-    			if (distance < smallestDistance) {
-    				next = freeNodes.get(i);
-    				smallestDistance = distance;
-    			}
-    		}
-    		castleGraph.addEdge(p, next);
-    		p = freeNodes.remove(freeNodes.indexOf(next));
-    	}
-    	
-    	// TODO: Sauber implementieren
-    	// TODO: Überschneidungen reduzieren
-    	// TODO: Mehr Kanten generieren
-    	
     }
 
     /**

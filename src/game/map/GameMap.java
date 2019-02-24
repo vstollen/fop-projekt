@@ -5,8 +5,10 @@ import game.GameConstants;
 import gui.Resources;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -150,8 +152,160 @@ public class GameMap {
      * Hier werden die Kanten erzeugt. Dazu werden zunächst alle Burgen durch eine Linie verbunden und anschließend
      * jede Burg mit allen anderen in einem bestimmten Radius nochmals verbunden
      */
-    private void generateEdges() {
+	private void generateEdges() {
     	 // TODO: GameMap#generateEdges()
+    	
+    	ArrayList<Node<Castle>> nodes = new ArrayList<>(castleGraph.getNodes());
+    	
+    	HashMap<Node<Castle>, ArrayList<Node<Castle>>> closestNodes = new HashMap<>();
+    	
+    	
+    	/*
+    	ArrayList<Edge<Castle>> firsts = new ArrayList<>();
+    	ArrayList<Edge<Castle>> seconds = new ArrayList<>();
+    	ArrayList<Edge<Castle>> thirds = new ArrayList<>();
+    	ArrayList<Edge<Castle>> additional = new ArrayList<>();
+    	*/
+    	
+    	for (Node<Castle> nodeA : castleGraph.getNodes()) {
+    		nodes.sort((n1, n2) -> {
+    				double p = n1.getValue().distance(nodeA.getValue()) - n2.getValue().distance(nodeA.getValue());
+    				return p > 0 ? 1 : -1;
+    			});
+    		closestNodes.put(nodeA, new ArrayList<>(nodes));
+    	}
+    	
+    	for (Node<Castle> nodeA : castleGraph.getNodes()) {
+    		Node<Castle> nodeB = closestNodes.get(nodeA).get(1);
+    		
+    		boolean doesNotIntersect = true;
+    		
+    		for (Edge<Castle> edge : castleGraph.getEdges()) {
+    			Node<Castle> altA = edge.getNodeA();
+    			Node<Castle> altB = edge.getNodeB();
+    			if (Line2D.linesIntersect(
+    					nodeA.getValue().getLocationOnMap().getX(),
+    					nodeA.getValue().getLocationOnMap().getY(),
+    					nodeB.getValue().getLocationOnMap().getX(),
+    					nodeB.getValue().getLocationOnMap().getY(),
+    					altA.getValue().getLocationOnMap().getX(),
+    					altA.getValue().getLocationOnMap().getY(),
+    					altB.getValue().getLocationOnMap().getX(),
+    					altB.getValue().getLocationOnMap().getY()
+    					)) {
+    				if (nodeA == altA || nodeA == altB || nodeB == altA || nodeB == altB)
+    					continue;
+    				doesNotIntersect = false;
+    				break;
+    			}
+    		}
+    		
+    		if (doesNotIntersect)
+    			castleGraph.addEdge(nodeA, nodeB);
+    	}
+    	
+    	for (Node<Castle> nodeA : castleGraph.getNodes()) {
+    		Node<Castle> nodeB = closestNodes.get(nodeA).get(2);
+    		
+    		boolean doesNotIntersect = true;
+    		
+    		for (Edge<Castle> edge : castleGraph.getEdges()) {
+    			Node<Castle> altA = edge.getNodeA();
+    			Node<Castle> altB = edge.getNodeB();
+    			if (Line2D.linesIntersect(
+    					nodeA.getValue().getLocationOnMap().getX(),
+    					nodeA.getValue().getLocationOnMap().getY(),
+    					nodeB.getValue().getLocationOnMap().getX(),
+    					nodeB.getValue().getLocationOnMap().getY(),
+    					altA.getValue().getLocationOnMap().getX(),
+    					altA.getValue().getLocationOnMap().getY(),
+    					altB.getValue().getLocationOnMap().getX(),
+    					altB.getValue().getLocationOnMap().getY()
+    					)) {
+    				if (nodeA == altA || nodeA == altB || nodeB == altA || nodeB == altB)
+    					continue;
+    				doesNotIntersect = false;
+    				break;
+    			}
+    		}
+    		
+    		if (doesNotIntersect)
+    			castleGraph.addEdge(nodeA, nodeB);
+    	}
+    	
+    	for (Node<Castle> nodeA : castleGraph.getNodes()) {
+    		Node<Castle> nodeB = closestNodes.get(nodeA).get(3);
+    		
+    		boolean doesNotIntersect = true;
+    		
+    		for (Edge<Castle> edge : castleGraph.getEdges()) {
+    			Node<Castle> altA = edge.getNodeA();
+    			Node<Castle> altB = edge.getNodeB();
+    			if (Line2D.linesIntersect(
+    					nodeA.getValue().getLocationOnMap().getX(),
+    					nodeA.getValue().getLocationOnMap().getY(),
+    					nodeB.getValue().getLocationOnMap().getX(),
+    					nodeB.getValue().getLocationOnMap().getY(),
+    					altA.getValue().getLocationOnMap().getX(),
+    					altA.getValue().getLocationOnMap().getY(),
+    					altB.getValue().getLocationOnMap().getX(),
+    					altB.getValue().getLocationOnMap().getY()
+    					)) {
+    				if (nodeA == altA || nodeA == altB || nodeB == altA || nodeB == altB)
+    					continue;
+    				doesNotIntersect = false;
+    				break;
+    			}
+    		}
+    		
+    		if (doesNotIntersect)
+    			castleGraph.addEdge(nodeA, nodeB);
+    	}
+    	
+    		/*
+    		firsts.add(new Edge<Castle>(nodeA, nodes.get(1)));
+    		seconds.add(new Edge<Castle>(nodeA, nodes.get(2)));
+    		thirds.add(new Edge<Castle>(nodeA, nodes.get(3)));
+    		
+    		for (Node<Castle> nodeB : nodes) {
+    			if (nodeB.getValue().distance(nodeA.getValue()) > 200)
+    				break;
+    			if (nodeA != nodeB) {
+    				System.out.println(nodeA.getValue().getName() + " -> " + nodeB.getValue().getName());
+    				additional.add(new Edge<Castle>(nodeA, nodeB));
+    			}
+    		}
+    		*/
+    		/*
+    		castleGraph.addEdge(nodeA, nodes.get(1));
+    		castleGraph.addEdge(nodeA, nodes.get(2));
+    		castleGraph.addEdge(nodeA, nodes.get(3));
+    		*/
+    		/*
+    		for (Node<Castle> nodeB : nodes) {
+    			if (nodeB.getValue().distance(nodeA.getValue()) > 200)
+    				break;
+    			if (castleGraph.getEdge(nodeA, nodeB) == null && nodeA != nodeB) {
+    				System.out.println(nodeA.getValue().getName() + " -> " + nodeB.getValue().getName());
+        			castleGraph.addEdge(nodeA, nodeB);
+    			}
+    		}
+    		*/
+    	//}
+    	
+    	/*
+    	removeOverlappingEdges(firsts, seconds, thirds, additional);
+    	
+    	for (Edge<Castle> edge : firsts)
+    		castleGraph.addEdge(edge.getNodeA(), edge.getNodeB());
+    	for (Edge<Castle> edge : seconds)
+    		castleGraph.addEdge(edge.getNodeA(), edge.getNodeB());
+    	for (Edge<Castle> edge : thirds)
+    		castleGraph.addEdge(edge.getNodeA(), edge.getNodeB());
+    	for (Edge<Castle> edge : additional)
+    		castleGraph.addEdge(edge.getNodeA(), edge.getNodeB());
+    	*/
+    	/*
     	ArrayList<Node<Castle>> freeNodes = new ArrayList<>(castleGraph.getNodes());
     	if (freeNodes.isEmpty()) return;
     	Node<Castle> p = freeNodes.remove(0);
@@ -168,12 +322,41 @@ public class GameMap {
     		castleGraph.addEdge(p, next);
     		p = freeNodes.remove(freeNodes.indexOf(next));
     	}
-    	
+    	*/
     	// TODO: Sauber implementieren
     	// TODO: Überschneidungen reduzieren
     	// TODO: Mehr Kanten generieren
     	
     }
+
+    /*
+    @SuppressWarnings("unchecked")
+	private void removeOverlappingEdges(List<Edge<Castle>>...priorityEdges) {
+    	for (List<Edge<Castle>> currentPriority : priorityEdges) {
+    		for (List<Edge<Castle>> lesserPriority : priorityEdges) {
+    			for (Edge<Castle> currentEdge : currentPriority) {
+    				for (Edge<Castle> lesserEdge : lesserPriority) {
+    					Point edgeANodeAPos = currentEdge.getNodeA().getValue().getLocationOnMap();
+    					Point edgeANodeBPos = currentEdge.getNodeB().getValue().getLocationOnMap();
+    					Point edgeBNodeAPos = lesserEdge.getNodeA().getValue().getLocationOnMap();
+    					Point edgeBNodeBPos = lesserEdge.getNodeB().getValue().getLocationOnMap();
+    					if (Line2D.linesIntersect(
+    							edgeANodeAPos.getX(),
+    							edgeANodeAPos.getY(),
+    							edgeANodeBPos.getX(),
+    							edgeANodeBPos.getY(),
+    							edgeBNodeAPos.getX(),
+    							edgeBNodeAPos.getY(),
+    							edgeBNodeBPos.getX(),
+    							edgeBNodeBPos.getY()
+    							) && currentEdge != lesserEdge)
+    						lesserPriority.remove(lesserEdge);
+    				}
+    			}
+    		}
+    	}
+    }
+    */
 
     /**
      * Hier werden die Burgen in Königreiche unterteilt. Dazu wird der {@link Clustering} Algorithmus aufgerufen.

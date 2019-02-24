@@ -152,7 +152,7 @@ public class GameMap {
      */
     private void generateEdges() {
     	 // TODO: GameMap#generateEdges()
-    	ArrayList<Node<Castle>> freeNodes = new ArrayList<>(castleGraph.getNodes());
+    	List<Node<Castle>> freeNodes = castleGraph.getNodes();
     	if (freeNodes.isEmpty()) return;
     	Node<Castle> p = freeNodes.remove(0);
     	while (!freeNodes.isEmpty()) {

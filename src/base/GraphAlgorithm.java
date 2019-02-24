@@ -71,7 +71,7 @@ public abstract class GraphAlgorithm<T> {
                 continue;
             }
 
-            if (nextNode.value < smallestNode.value) {
+            if ((nextNode.value < smallestNode.value && nextNode.value != -1) || smallestNode.value == -1) {
                 smallestNode = nextNode;
             }
         }
@@ -103,6 +103,17 @@ public abstract class GraphAlgorithm<T> {
         AlgorithmNode<T> visitedNode = getSmallestNode();
 
         while (visitedNode != null) {
+
+        	if (!isPassable(visitedNode.node)) {
+        		visitedNode = getSmallestNode();
+        		continue;
+        	}
+        	
+        	if (visitedNode.value == -1) {
+        		visitedNode = getSmallestNode();
+        		continue;
+        	}
+        
             for (Edge<T> edge : graph.getEdges(visitedNode.node)) {
 
                 if (!isPassable(edge)) {

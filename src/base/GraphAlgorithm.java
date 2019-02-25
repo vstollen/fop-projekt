@@ -70,8 +70,12 @@ public abstract class GraphAlgorithm<T> {
                 smallestNode = nextNode;
                 continue;
             }
+            
+            if (nextNode.value == -1) {
+            	continue;
+            }
 
-            if ((nextNode.value < smallestNode.value && nextNode.value != -1) || smallestNode.value == -1) {
+            if (nextNode.value < smallestNode.value || smallestNode.value == -1) {
                 smallestNode = nextNode;
             }
         }

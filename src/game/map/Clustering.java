@@ -1,6 +1,7 @@
 package game.map;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -41,6 +42,9 @@ public class Clustering {
     	createKingdoms(kingdomCount);
     	
     	List<Castle> centers = chooseRandomCenters();
+    	
+    	setKingdomsToNearestCenter(centers);
+    	
         return kingdoms;
     }
     
@@ -82,6 +86,44 @@ public class Clustering {
     	}
     	
     	return centers;
+    }
+    
+    /**
+     * Ordnet alle Burgen, dem ihnen nächtgelegenen Königreich zu
+     * @param centers
+     */
+    private void setKingdomsToNearestCenter(Collection<Castle> centers) {
+    	
+    	for (Castle castle : allCastles) {
+    		
+    		Kingdom nearestKingdom = getNearestKingdom(castle, centers);
+    		castle.setKingdom(nearestKingdom);
+    	}
+    }
+    
+    /**
+     * Findet das Königreich, mit der geringsten euklidischen Distanz zwischen castle und dem zugehörigen Zentrum.
+     * @param castle Die Burg deren nächstes Königreich gesucht werden soll
+     * @param centers Die Zentren aller Königreiche
+     * @return Das Königreich mit dem nächsten Zentrum zu castle
+     */
+    private Kingdom getNearestKingdom(Castle castle, Collection<Castle> centers) {
+    	
+    	Castle nearestCenter = null;
+    	
+    	for (Castle newCenter : centers) {
+    		
+    		if (nearestCenter == null) {
+    			nearestCenter = newCenter;
+    			continue;
+    		}
+    		
+    		if (castle.distance(newCenter) < castle.distance(nearestCenter)) {
+    			nearestCenter = newCenter;
+    		}
+    	}
+    	
+    	return nearestCenter.getKingdom();
     }
     
     /**

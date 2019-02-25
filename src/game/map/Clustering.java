@@ -13,6 +13,8 @@ public class Clustering {
     private Random random;
     private final List<Castle> allCastles;
     private final int kingdomCount;
+    
+    private final ArrayList<Kingdom> kingdoms = new ArrayList<>();
 
     /**
      * Ein neues Clustering-Objekt erzeugen.
@@ -35,6 +37,61 @@ public class Clustering {
      */
     public List<Kingdom> getPointsClusters() {
         // TODO Clustering#getPointsClusters()
-        return new ArrayList<>();
+    	
+    	createKingdoms(kingdomCount);
+    	
+    	List<Castle> centers = chooseRandomCenters();
+        return kingdoms;
+    }
+    
+    /**
+     * Füllt {@link Clustering#kingdoms} mit n neuen Königreichen.
+     * @param n Die Anzahl an Königreichen die generiert werden sollen
+     * @return Die Liste mit den Königreichen
+     */
+    private List<Kingdom> createKingdoms(int n) {
+    	
+    	kingdoms.clear();
+    	
+    	for (int i = 0; i < n; i++) {
+    		kingdoms.add(new Kingdom(i));
+    	}
+    	
+    	return kingdoms;
+    }
+    
+    /**
+     * Ordnet jedem Königreich eine zufällige Burg zu
+     * @return Eine Liste mit den zugeordneten Burgen
+     */
+    private List<Castle> chooseRandomCenters() {
+    	
+    	ArrayList<Castle> centers = new ArrayList<>();
+    	
+    	for (Kingdom kingdom : kingdoms) {
+    		
+    		Castle newCenter = getRandomCastle();
+    		
+    		while (centers.contains(newCenter)) {
+    			newCenter = getRandomCastle();
+    		}
+    		
+    		centers.add(newCenter);
+    		
+    		newCenter.setKingdom(kingdom);
+    	}
+    	
+    	return centers;
+    }
+    
+    /**
+     * Wählt eine zufällige Burg aus
+     * @return Eine zufällige Burg aus {@link Clustering#allCastles}
+     */
+    private Castle getRandomCastle() {
+    	
+		int randomCastleIndex = random.nextInt(allCastles.size()); 
+		
+		return allCastles.get(randomCastleIndex);
     }
 }

@@ -1,5 +1,7 @@
 package game.map;
 
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,12 +40,19 @@ public class Clustering {
      */
     public List<Kingdom> getPointsClusters() {
         // TODO Clustering#getPointsClusters()
-    	
     	createKingdoms(kingdomCount);
-    	
     	List<Castle> centers = chooseRandomCenters();
     	
-    	setKingdomsToNearestCenter(centers);
+    	List<Kingdom> oldAssignments = null;
+    	List<Kingdom> newAssignments = null;
+    	do {
+    		oldAssignments = newAssignments;
+    		
+    		setKingdomsToNearestCenter(centers);
+    		newAssignments = getCastleKingdomAssignments();
+    		
+    		centers = findNewCenters();
+    	} while (!newAssignments.equals(oldAssignments));
     	
         return kingdoms;
     }
@@ -89,6 +98,24 @@ public class Clustering {
     }
     
     /**
+     * Findet für alle Königreiche neue Zentren durch berechnung der durchschnittlichen Koordinaten
+     * @return Eine Liste mit den neuen Zentren
+     */
+    private List<Castle> findNewCenters() {
+    	
+    	ArrayList<Castle> centers = new ArrayList<>();
+    	
+    	for (Kingdom kingdom : kingdoms) {
+    		
+    		Point averageLocation = getAverageLocation(kingdom.getCastles());
+    		Castle newCenter = getNearestCastle(allCastles, averageLocation);
+    		centers.add(newCenter);
+    	}
+    	
+    	return centers;
+    }
+    
+    /**
      * Ordnet alle Burgen, dem ihnen nächtgelegenen Königreich zu
      * @param centers
      */
@@ -124,6 +151,69 @@ public class Clustering {
     	}
     	
     	return nearestCenter.getKingdom();
+    }
+    
+    /**
+     * Findet die nächste Burg zu einem Ort
+     * @param castles Die Burgen aus denen die nächste Burg zu location gesucht wird
+     * @param location Der Ort, zu dem die nächste Burg gesucht wird
+     * @return Die location am nächsten liegende Burg
+     */
+    private Castle getNearestCastle(Collection<Castle> castles, Point location) {
+    	
+    	Castle nearestCastle = null;
+    	
+    	for (Castle castle : castles) {
+    		
+    		if (nearestCastle == null) {
+    			nearestCastle = castle;
+    			continue;
+    		}
+    		
+    		if (castle.distance(location) < nearestCastle.distance(location)) {
+    			nearestCastle = castle;
+    		}
+    	}
+    	
+    	return nearestCastle;
+    }
+    
+    /**
+     * Bildet eine Liste, die in der Reihenfolge der Burgen in allCastles jeweils die Königreiche der Burg enthält.
+     * @return Eine Liste mit Königreichen, in der Reihenfolge der jeweiligen Königreiche von allCastles
+     */
+    private List<Kingdom> getCastleKingdomAssignments() {
+    	ArrayList<Kingdom> castleKingdoms = new ArrayList<>(allCastles.size());
+    	
+    	for (Castle castle : allCastles) {
+    		castleKingdoms.add(castle.getKingdom());
+    	}
+    	
+    	return castleKingdoms;
+    }
+    
+    /**
+     * Berechnet die durchschnittlichen Koordinaten der Burgen in castles
+     * @param castles Die Burgen deren durchschnittliche Koordinaten gesucht sind
+     * @return Die durchschnittlichen Koordinaten der Burgen
+     */
+    private Point getAverageLocation(Collection<Castle> castles) {
+    	
+    	int totalX = 0;
+    	int totalY = 0;
+    	
+    	for (Castle castle : castles) {
+    		
+    		Point location = castle.getLocationOnMap();
+    		
+    		totalX += location.getX();
+    		totalY += location.getY();
+    	}
+    	
+    	double averageX = Math.round((double) totalX / castles.size());
+    	double averageY = Math.round((double) totalY / castles.size());
+
+    	return new Point((int) averageX, (int) averageY);
     }
     
     /**

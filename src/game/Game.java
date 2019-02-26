@@ -65,7 +65,7 @@ public class Game {
         int width = (int) Math.ceil(0.6 * numTiles);
         int height = (int) Math.ceil(0.4 * numTiles);
 
-        int continents = Math.min(3, playerCount + this.mapSize.ordinal());
+        int continents = Math.min(6, playerCount + this.mapSize.ordinal());
 
         this.gameMap = GameMap.generateRandomMap(width, height, 40, numRegions, continents);
     }

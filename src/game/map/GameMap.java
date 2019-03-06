@@ -156,6 +156,7 @@ public class GameMap {
     	 // TODO: GameMap#generateEdges()
     	
     	ArrayList<Node<Castle>> nodes = new ArrayList<>(castleGraph.getNodes());
+    	int amountOfNodes = nodes.size();
     	
     	HashMap<Node<Castle>, ArrayList<Node<Castle>>> closestNodes = new HashMap<>();
     	
@@ -167,7 +168,7 @@ public class GameMap {
     		closestNodes.put(nodeA, new ArrayList<>(nodes));
     	}
     	
-    	for (int level = 1; level <= 3; level++) {
+    	for (int level = 1; level <= 3 && level < amountOfNodes || !castleGraph.allNodesConnected(); level++) {
     		for (Node<Castle> nodeA : castleGraph.getNodes()) {
     			Node<Castle> nodeB = closestNodes.get(nodeA).get(level);
     			if (!hasIntersection(nodeA, nodeB))
@@ -175,7 +176,6 @@ public class GameMap {
     		}
     	}
     	
-    	// TODO: Sind alle Knoten drin? -> Lösung finden
     	// TODO: Nahe Kanten reduzieren
     	
     }

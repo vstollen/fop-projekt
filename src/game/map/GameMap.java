@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Diese Klasse representiert das Spielfeld. Sie beinhaltet das Hintergrundbild, welches mit Perlin noise erzeugt wurde,
@@ -170,7 +171,9 @@ public class GameMap {
     	for (int level = 1; level <= 3; level++) {
     		for (Node<Castle> nodeA : castleGraph.getNodes()) {
     			Node<Castle> nodeB = closestNodes.get(nodeA).get(level);
-    			if (!hasIntersection(nodeA, nodeB))
+    			if (hasIntersection(nodeA, nodeB))
+    				continue;
+    			//if (angleLarger(1, nodeA, nodeB))
     				castleGraph.addEdge(nodeA, nodeB);
     		}
     	}
@@ -210,6 +213,17 @@ public class GameMap {
 				return true;
 		}
 		return false;
+	}
+
+	private boolean angleLarger(double angle, Node<Castle> nodeA, Node<Castle> nodeB) {
+		ArrayList<Node<Castle>> p = castleGraph.getEdges(nodeA).stream().map(edge -> edge.getOtherNode(nodeA)).collect(Collectors.toCollection(ArrayList::new));
+		for (Node<Castle> connectedNode : p) {
+			double angleN = Math.atan2(connectedNode.getValue().getLocationOnMap().getY() - nodeA.getValue().getLocationOnMap().getY(), connectedNode.getValue().getLocationOnMap().getX() - nodeA.getValue().getLocationOnMap().getX()) -
+							Math.atan2(nodeB.getValue().getLocationOnMap().getY()         - nodeA.getValue().getLocationOnMap().getY(), nodeB.getValue().getLocationOnMap().getX() - nodeA.getValue().getLocationOnMap().getX());
+			if (angleN <= angle)
+				return false;
+		}
+		return true;
 	}
 
     /**

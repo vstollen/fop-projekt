@@ -128,13 +128,35 @@ public class Graph<T> {
      * @return true, wenn alle Knoten erreichbar sind
      */
     public boolean allNodesConnected() {
-    	// TODO: Auch auf Teilgraphen testen
-    	return true;
-    	/*
-    	for (Node<T> node : this.nodes)
-    		if (this.getEdges(node).isEmpty())
-    			return false;
-        return true;
-        */
+    	Node<T> root = nodes.get(0);
+    	List<Node<T>> reachableNodes = traverseGraph(root, new ArrayList<>());
+    	
+    	if (reachableNodes.containsAll(nodes))
+    		return true;
+    	
+    	return false;
+    }
+    
+    /**
+     * Durchläuft ausgehend vom Startknoten rekursiv alle mit diesem verbundenen Knoten.
+     * Die Rekursion wird nur aufgerufen, wenn der neue Knoten noch nicht in der
+     * mitgegbenen Liste aller besuchten Knoten steht.
+     * @param node Der Startknoten der Ausbreitung
+     * @param visited Die Liste aller bisher besuchten Knoten
+     * @return Die Liste aller bisher besuchten Knoten, inklusive des momentan betrachteten
+     * sowie seiner Nachfolger
+     */
+    private List<Node<T>> traverseGraph(Node<T> node, List<Node<T>> visited) {
+    	visited.add(node);
+    	
+    	List <Node<T>> nextNodes = getEdges(node).stream()
+    			.map(edge -> edge.getOtherNode(node))
+    			.collect(Collectors.toCollection(ArrayList::new));
+    	
+    	for (Node<T> nextNode : nextNodes)
+    		if (!visited.contains(nextNode))
+    			visited = traverseGraph(nextNode, visited);
+    	
+    	return visited;
     }
 }

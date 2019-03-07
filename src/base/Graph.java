@@ -122,7 +122,7 @@ public class Graph<T> {
     			.findFirst()
     			.orElse(null);
     }
-    
+
     /**
      * Überprüft, ob alle Knoten in dem Graphen erreichbar sind.
      * @return true, wenn alle Knoten erreichbar sind
@@ -136,7 +136,7 @@ public class Graph<T> {
     	
     	return false;
     }
-    
+
     /**
      * Durchläuft ausgehend vom Startknoten rekursiv alle mit diesem verbundenen Knoten.
      * Die Rekursion wird nur aufgerufen, wenn der neue Knoten noch nicht in der

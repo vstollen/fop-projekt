@@ -149,12 +149,12 @@ public class GameMap {
         }
     }
 
-    /**
-     * Hier werden die Kanten erzeugt. Dazu werden zunächst alle Burgen durch eine Linie verbunden und anschließend
-     * jede Burg mit allen anderen in einem bestimmten Radius nochmals verbunden.
-     */
+  /**
+   * Hier werden die Kanten erzeugt. Dazu werden zunächst alle Burgen durch eine Linie verbunden und anschließend
+   * jede Burg mit allen anderen in einem bestimmten Radius nochmals verbunden.
+   */
 	private void generateEdges() {
-    	 ArrayList<Node<Castle>> nodes = new ArrayList<>(castleGraph.getNodes());
+    	ArrayList<Node<Castle>> nodes = new ArrayList<>(castleGraph.getNodes());
     	int amountOfNodes = nodes.size();
     	
     	// Eine HashMap, die für jede Burg die jeweils nächstgelegenen in einer sortierten Liste enthält

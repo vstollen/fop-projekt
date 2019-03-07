@@ -43,17 +43,17 @@ public class Clustering {
     public List<Kingdom> getPointsClusters() {
         // TODO Clustering#getPointsClusters()
     	createKingdoms(kingdomCount);
-    	List<Castle> centers = chooseRandomCenters();
+    	setRandomCenters(kingdoms);
     	
     	List<Kingdom> oldAssignments = null;
     	List<Kingdom> newAssignments = null;
     	do {
     		oldAssignments = newAssignments;
     		
-    		setKingdomsToNearestCenter(centers);
+    		setKingdomsToNearestCenter(allCastles);
     		newAssignments = getCastleKingdomAssignments();
     		
-    		centers = findNewCenters();
+    		findNewCenters();
     	} while (!newAssignments.equals(oldAssignments));
     	
         return kingdoms;
@@ -76,56 +76,37 @@ public class Clustering {
     }
     
     /**
-     * Ordnet jedem Königreich eine zufällige Burg zu
-     * @return Eine Liste mit den zugeordneten Burgen
+     * Ordnet jedem Königreich ein zufälliges Zentrum zu
+     * @param kingdoms die königreiche denen neue Zentren zugeordnet werden sollen
      */
-    private List<Castle> chooseRandomCenters() {
-    	
-    	ArrayList<Castle> centers = new ArrayList<>();
+    private void setRandomCenters(Collection<Kingdom> kingdoms) {
     	
     	for (Kingdom kingdom : kingdoms) {
-    		
-    		Castle newCenter = getRandomCastle();
-    		
-    		while (centers.contains(newCenter)) {
-    			newCenter = getRandomCastle();
-    		}
-    		
-    		centers.add(newCenter);
-    		
-    		newCenter.setKingdom(kingdom);
+    		Point newCenter = getRandomLocation();
+    		kingdom.setCenter(newCenter);
     	}
-    	
-    	return centers;
     }
     
     /**
      * Findet für alle Königreiche neue Zentren durch berechnung der durchschnittlichen Koordinaten
-     * @return Eine Liste mit den neuen Zentren
      */
-    private List<Castle> findNewCenters() {
-    	
-    	ArrayList<Castle> centers = new ArrayList<>();
+    private void findNewCenters() {
     	
     	for (Kingdom kingdom : kingdoms) {
     		
     		Point averageLocation = getAverageLocation(kingdom.getCastles());
-    		Castle newCenter = getNearestCastle(allCastles, averageLocation);
-    		centers.add(newCenter);
+    		kingdom.setCenter(averageLocation);
     	}
-    	
-    	return centers;
     }
     
     /**
-     * Ordnet alle Burgen, dem ihnen nächtgelegenen Königreich zu
-     * @param centers
+     * Ordnet allen Burgen aus castles, dem ihnen nächtgelegenen Königreich zu
+     * @param castles Burgen denen ein neues Königreich zugeordnet werden soll
      */
-    private void setKingdomsToNearestCenter(Collection<Castle> centers) {
+    private void setKingdomsToNearestCenter(Collection<Castle> castles) {
     	
-    	for (Castle castle : allCastles) {
-    		
-    		Kingdom nearestKingdom = getNearestKingdom(castle, centers);
+    	for (Castle castle : castles) {
+    		Kingdom nearestKingdom = getNearestKingdom(castle);
     		castle.setKingdom(nearestKingdom);
     	}
     }
@@ -133,51 +114,25 @@ public class Clustering {
     /**
      * Findet das Königreich, mit der geringsten euklidischen Distanz zwischen castle und dem zugehörigen Zentrum.
      * @param castle Die Burg deren nächstes Königreich gesucht werden soll
-     * @param centers Die Zentren aller Königreiche
      * @return Das Königreich mit dem nächsten Zentrum zu castle
      */
-    private Kingdom getNearestKingdom(Castle castle, Collection<Castle> centers) {
+    private Kingdom getNearestKingdom(Castle castle) {
     	
-    	Castle nearestCenter = null;
+    	Kingdom nearestKingdom = null;
     	
-    	for (Castle newCenter : centers) {
+    	for (Kingdom newKingdom : kingdoms) {
     		
-    		if (nearestCenter == null) {
-    			nearestCenter = newCenter;
+    		if (nearestKingdom == null) {
+    			nearestKingdom = newKingdom;
     			continue;
     		}
     		
-    		if (castle.distance(newCenter) < castle.distance(nearestCenter)) {
-    			nearestCenter = newCenter;
+    		if (castle.distance(newKingdom.getCenter()) < castle.distance(nearestKingdom.getCenter())) {
+    			nearestKingdom = newKingdom;
     		}
     	}
     	
-    	return nearestCenter.getKingdom();
-    }
-    
-    /**
-     * Findet die nächste Burg zu einem Ort
-     * @param castles Die Burgen aus denen die nächste Burg zu location gesucht wird
-     * @param location Der Ort, zu dem die nächste Burg gesucht wird
-     * @return Die location am nächsten liegende Burg
-     */
-    private Castle getNearestCastle(Collection<Castle> castles, Point location) {
-    	
-    	Castle nearestCastle = null;
-    	
-    	for (Castle castle : castles) {
-    		
-    		if (nearestCastle == null) {
-    			nearestCastle = castle;
-    			continue;
-    		}
-    		
-    		if (castle.distance(location) < nearestCastle.distance(location)) {
-    			nearestCastle = castle;
-    		}
-    	}
-    	
-    	return nearestCastle;
+    	return nearestKingdom;
     }
     
     /**
@@ -218,14 +173,10 @@ public class Clustering {
     	return new Point((int) averageX, (int) averageY);
     }
     
-    /**
-     * Wählt eine zufällige Burg aus
-     * @return Eine zufällige Burg aus {@link Clustering#allCastles}
-     */
-    private Castle getRandomCastle() {
+    private Point getRandomLocation() {
+    	int x = random.nextInt(mapSize.width);
+    	int y = random.nextInt(mapSize.height);
     	
-		int randomCastleIndex = random.nextInt(allCastles.size()); 
-		
-		return allCastles.get(randomCastleIndex);
+    	return new Point(x, y);
     }
 }

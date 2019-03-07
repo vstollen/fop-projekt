@@ -1,5 +1,6 @@
 package game.map;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +16,7 @@ public class Clustering {
     private Random random;
     private final List<Castle> allCastles;
     private final int kingdomCount;
-    private final GameMap gameMap;
+    private final Dimension mapSize;
     
     private final ArrayList<Kingdom> kingdoms = new ArrayList<>();
 
@@ -24,14 +25,14 @@ public class Clustering {
      * @param castles Die Liste von Burgen, die aufgeteilt werden sollen
      * @param kingdomCount Die Anzahl von Königreichen die generiert werden sollen
      */
-    public Clustering(List<Castle> castles, int kingdomCount, GameMap gameMap) {
+    public Clustering(List<Castle> castles, int kingdomCount, Dimension mapSize) {
         if (kingdomCount < 2)
             throw new IllegalArgumentException("Ungültige Anzahl an Königreichen");
 
         this.random = new Random();
         this.kingdomCount = kingdomCount;
         this.allCastles = Collections.unmodifiableList(castles);
-        this.gameMap = gameMap;
+        this.mapSize = mapSize;
     }
 
     /**

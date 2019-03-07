@@ -2,6 +2,7 @@ package game.map;
 
 import game.Player;
 
+import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,6 +14,8 @@ public class Kingdom {
 
     private List<Castle> castles;
     private int type;
+    
+    private Point center;
 
     /**
      * Erstellt ein neues Königreich
@@ -71,5 +74,21 @@ public class Kingdom {
      */
     public List<Castle> getCastles() {
         return this.castles;
+    }
+    
+    /**
+     * Setzt das Zentrum des Königreiches
+     * @param center Das Zentrum des Königreihes
+     */
+    public void setCenter(Point center) {
+    	this.center = center;
+    }
+    
+    /**
+     * Gibt das Zentrum des Königreiches zurück
+     * @return Das Zentrum des Königreiches
+     */
+    public Point getCenter() {
+    	return center;
     }
 }

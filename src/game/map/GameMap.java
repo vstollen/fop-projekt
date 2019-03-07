@@ -149,22 +149,23 @@ public class GameMap {
         }
     }
 
-  /**
-   * Hier werden die Kanten erzeugt. Dazu werden zunächst alle Burgen durch eine Linie verbunden und anschließend
-   * jede Burg mit allen anderen in einem bestimmten Radius nochmals verbunden.
-   */
-	private void generateEdges() {
-    	ArrayList<Node<Castle>> nodes = new ArrayList<>(castleGraph.getNodes());
-    	int amountOfNodes = nodes.size();
+    /**
+     * Hier werden die Kanten erzeugt. Dazu werden zunächst alle Burgen durch eine Linie verbunden und anschließend
+     * jede Burg mit allen anderen in einem bestimmten Radius nochmals verbunden.
+     */
+    private void generateEdges() {
+		ArrayList<Node<Castle>> nodes = new ArrayList<>(castleGraph.getNodes());
+		int amountOfNodes = nodes.size();
     	
-    	// Eine HashMap, die für jede Burg die jeweils nächstgelegenen in einer sortierten Liste enthält
-    	HashMap<Node<Castle>, ArrayList<Node<Castle>>> closestNodes = new HashMap<>();
+		// Eine HashMap, die für jede Burg die jeweils nächstgelegenen in einer sortierten Liste enthält
+		HashMap<Node<Castle>, ArrayList<Node<Castle>>> closestNodes = new HashMap<>();
     	
-    	for (Node<Castle> nodeA : castleGraph.getNodes()) {
-    		nodes.sort((n1, n2) -> {
-    				double p = n1.getValue().distance(nodeA.getValue()) - n2.getValue().distance(nodeA.getValue());
-    				return p > 0 ? 1 : -1;
-    			});
+		for (Node<Castle> nodeA : castleGraph.getNodes()) {
+			nodes.sort((n1, n2) -> {
+					double p = n1.getValue().distance(nodeA.getValue()) - n2.getValue().distance(nodeA.getValue());
+					return p > 0 ? 1 : -1;
+				}
+			);
     		closestNodes.put(nodeA, new ArrayList<>(nodes));
     	}
     	

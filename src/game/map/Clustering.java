@@ -24,6 +24,7 @@ public class Clustering {
      * Ein neues Clustering-Objekt erzeugen.
      * @param castles Die Liste von Burgen, die aufgeteilt werden sollen
      * @param kingdomCount Die Anzahl von Königreichen die generiert werden sollen
+     * @param mapSize Die Größe der Map
      */
     public Clustering(List<Castle> castles, int kingdomCount, Dimension mapSize) {
         if (kingdomCount < 2)
@@ -36,12 +37,12 @@ public class Clustering {
     }
 
     /**
-     * Gibt eine Liste von Königreichen zurück.
+     * Generiert eine Liste von Königreichen
      * Jedes Königreich sollte dabei einen Index im Bereich 0-5 bekommen, damit die Burg richtig angezeigt werden kann.
      * Siehe auch {@link Kingdom#getType()}
+     * @return Die Generierte Liste von Königreichen
      */
     public List<Kingdom> getPointsClusters() {
-        // TODO Clustering#getPointsClusters()
     	createKingdoms(kingdomCount);
     	setRandomCenters(kingdoms);
     	
@@ -173,6 +174,10 @@ public class Clustering {
     	return new Point((int) averageX, (int) averageY);
     }
     
+    /**
+     * Findet eine zufällige Position auf der Karte
+     * @return Die zufällige Position
+     */
     private Point getRandomLocation() {
     	int x = random.nextInt(mapSize.width);
     	int y = random.nextInt(mapSize.height);

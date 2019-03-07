@@ -52,8 +52,18 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
      * @see Date#getTime()
      * @param printWriter der PrintWriter, mit dem der Eintrag geschrieben wird
      */
-    public void write(PrintWriter printWriter) {
+        public void write(PrintWriter printWriter) { 
         // TODO: ScoreEntry#write(PrintWriter)
+    	StringBuilder bobTheStringBuilder = new StringBuilder();
+    	bobTheStringBuilder.append(this.getName()) //line format is "Name;Time_as_Unix_timestamp;Score;Mode"
+    					   .append(";")
+    					   .append(this.getDate().getTime())
+    					   .append(";")
+    					   .append(this.getScore())
+    					   .append(";")
+    					   .append(this.getMode());
+    	
+    	printWriter.write(bobTheStringBuilder.toString());
     }
 
     /**
@@ -72,11 +82,36 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
      * @param line Die zu lesende Zeile
      * @return Ein ScoreEntry-Objekt oder null
      */
-    public static ScoreEntry read(String line) {
-        // TODO: ScoreEntry#read(String)
-        return null;
+    public static ScoreEntry read(String line) { //TODO be sure that there are no bugs in here
+    	
+    	// Missing information if there are other invalid data points
+    	
+        try {
+        	String[] entries = line.split(";"); // this whole block can be packed into one line, and is in optionalEntry
+        	SimpleDateFormat dateParser = new SimpleDateFormat();  
+        	
+        	String tempname = entries[0];  // since we only get a string, split, convert and then use to make a ScoreEntry object
+        	Date tempDate = dateParser.parse(entries[1]); 
+        	int tempscore = Integer.parseInt(entries[2]);
+        	String tempGametype = entries[3];
+        	
+        	ScoreEntry finalEntry = new ScoreEntry(tempname, tempscore, tempDate,  tempGametype);
+        	
+        	// optionalEntry is the exact same thing as finalEntry, just with less readability
+        	//ScoreEntry optionalEntry = new ScoreEntry(entries[0], Integer.parseInt(entries[2]), dateParser.parse(entries[1]), entries[4]);
+        	//return optionalEntry;
+        	
+        	return finalEntry;
+        
+        // return null, if any of the given line  contained  invalid information
+        }catch(ParseException parseEx) {
+        	return null;
+        }catch(RuntimeException run) {
+        	return null;
+        	
+        }
     }
-
+    
     public Date getDate() {
         return date;
     }

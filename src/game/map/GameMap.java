@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Diese Klasse representiert das Spielfeld. Sie beinhaltet das Hintergrundbild, welches mit Perlin noise erzeugt wurde,
@@ -150,14 +151,13 @@ public class GameMap {
 
     /**
      * Hier werden die Kanten erzeugt. Dazu werden zunächst alle Burgen durch eine Linie verbunden und anschließend
-     * jede Burg mit allen anderen in einem bestimmten Radius nochmals verbunden
+     * jede Burg mit allen anderen in einem bestimmten Radius nochmals verbunden.
      */
 	private void generateEdges() {
-    	 // TODO: GameMap#generateEdges()
-    	
-    	ArrayList<Node<Castle>> nodes = new ArrayList<>(castleGraph.getNodes());
+    	 ArrayList<Node<Castle>> nodes = new ArrayList<>(castleGraph.getNodes());
     	int amountOfNodes = nodes.size();
     	
+    	// Eine HashMap, die für jede Burg die jeweils nächstgelegenen in einer sortierten Liste enthält
     	HashMap<Node<Castle>, ArrayList<Node<Castle>>> closestNodes = new HashMap<>();
     	
     	for (Node<Castle> nodeA : castleGraph.getNodes()) {
@@ -168,16 +168,29 @@ public class GameMap {
     		closestNodes.put(nodeA, new ArrayList<>(nodes));
     	}
     	
-    	for (int level = 1; level <= 3 && level < amountOfNodes || !castleGraph.allNodesConnected(); level++) {
+    	/*
+    	 * Erzeuge neue Verbindungen, indem jede Burg mit den n nächstgelegenen verbunden wird.
+    	 * Ist danach noch nicht jede Burg im selben Graphen, so wird n weiter erhöht.
+    	 * Eine Verbindung wird nur gebildet, wenn sie keine bisherigen schneidet und
+    	 * sie mindestens 15°deg von der nächsten Verbindung der selben Burg abweicht.
+    	 */
+    	for (int level = 1; level <= 3 || !castleGraph.allNodesConnected(); level++) {
+    		
+    		if (level == amountOfNodes)
+    			break;
+    		
     		for (Node<Castle> nodeA : castleGraph.getNodes()) {
     			Node<Castle> nodeB = closestNodes.get(nodeA).get(level);
-    			if (!hasIntersection(nodeA, nodeB))
-    				castleGraph.addEdge(nodeA, nodeB);
+    			
+    			if (hasIntersection(nodeA, nodeB))
+    				continue;
+    			
+    			if (angleBelow(15.0, nodeA, nodeB))
+    				continue;
+    			
+    			castleGraph.addEdge(nodeA, nodeB);
     		}
     	}
-    	
-    	// TODO: Nahe Kanten reduzieren
-    	
     }
 
 	/**
@@ -209,6 +222,54 @@ public class GameMap {
 					nodeDPos.getY()))
 				return true;
 		}
+		return false;
+	}
+
+	/**
+	 * Diese Methode erhält die beiden Punkte, zwischen denen eine Kante generiert werden soll.
+	 * Sie betrachtet die bisherigen Kanten von nodeA und vergleicht die Winkel zwischen
+	 * diesen und der neuen Kante.
+	 * Ist einer dieser Winkel kleiner als maxDegree, so wird true zurückgegeben.
+	 * @param maxDegree der maximale Grenzwinkel
+	 * @param nodeA der Startknoten der neuen Verbindung
+	 * @param nodeB der Endknoten der neuen Verbindung
+	 * @return true, wenn eine der bisherigen Kangten von nodeA einen kleineren Winkel als maxDegree
+	 * zu der neuen Kante besitzt
+	 */
+	private boolean angleBelow(double maxDegree, Node<Castle> nodeA, Node<Castle> nodeB) {
+		
+		// Koordinaten der bisherigen Kanten vom Startknoten aus
+		List<Point> compareNodeLocations = castleGraph.getEdges(nodeA).stream()
+    			.map(edge -> edge.getOtherNode(nodeA).getValue().getLocationOnMap())
+    			.collect(Collectors.toCollection(ArrayList::new));
+		
+		// Koordinaten von Startknoten und neuem Endknoten
+		Point origin = nodeA.getValue().getLocationOnMap();
+		Point dest = nodeB.getValue().getLocationOnMap();
+		
+		// Für jeden Endpunkt aus den bisherigen Kanten...
+		for (Point p : compareNodeLocations) {
+			
+			// ...bestimme den Winkel der Kante zu der neuen Kante
+			double angle = Math.atan2(p.getY() - origin.getY(), p.getX() - origin.getX())
+					- Math.atan2(dest.getY() - origin.getY(), dest.getX() - origin.getX());
+			
+			// Konvertiere und berechne positiven, kleineren Winkel
+			angle = Math.toDegrees(angle);
+			
+			if (angle < -180)
+				angle += 360;
+			
+			if (angle > 180)
+				angle -= 360;
+			
+			angle = Math.abs(angle);
+			
+			// Wenn momentan betrachtete Kante einen kleineren Winkel als maxDegree hat
+			if (angle < maxDegree)
+				return true;
+		}
+		// Wenn keine bisherige Kante vom Startknoten mit der neuen Kante einen zu kleinen Winkel einschließt
 		return false;
 	}
 

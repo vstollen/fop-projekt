@@ -152,10 +152,13 @@ public class GameMap {
     /**
      * Hier werden die Kanten erzeugt. Dazu wird jede Burg mit den n nächsten verbunden,
      * sofern es keine Überschneidungen mit bisherigen Verbindungen gibt und die Verbindungen
-     * nicht unmittelbar nebeneinander liegen. Wir benutzen n=3 und den Mindestwinkel 15°.
+     * nicht unmittelbar nebeneinander liegen. Wir benutzen n=maxLevel=3 und den Mindestwinkel 15°.
      * Sind hiernach immernoch nicht alle Burgen in einem Graphen, so wird n weiter erhöht.
      */
     private void generateEdges() {
+    	// Anzahl der nächstgelegenen Burgen, zu denen eine Verbindung aufgebaut werden soll
+    	int maxLevel = 3;
+    	
 		ArrayList<Node<Castle>> nodes = new ArrayList<>(castleGraph.getNodes());
 		int amountOfNodes = nodes.size();
     	
@@ -177,7 +180,7 @@ public class GameMap {
     	 * Eine Verbindung wird nur gebildet, wenn sie keine bisherigen schneidet und
     	 * sie mindestens 15°deg von der nächsten Verbindung der selben Burg abweicht.
     	 */
-    	for (int level = 1; level <= 3 || !castleGraph.allNodesConnected(); level++) {
+    	for (int level = 1; level <= maxLevel || !castleGraph.allNodesConnected(); level++) {
     		
     		if (level == amountOfNodes)
     			break;
@@ -188,7 +191,7 @@ public class GameMap {
     			if (hasIntersection(nodeA, nodeB))
     				continue;
     			
-    			if (angleBelow(15.0, nodeA, nodeB))
+    			if (level < maxLevel && angleBelow(15.0, nodeA, nodeB))
     				continue;
     			
     			castleGraph.addEdge(nodeA, nodeB);

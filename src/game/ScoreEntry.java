@@ -82,34 +82,54 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
      * @param line Die zu lesende Zeile
      * @return Ein ScoreEntry-Objekt oder null
      */
-    public static ScoreEntry read(String line) { //TODO be sure that there are no bugs in here
+    public static ScoreEntry read(String line) {
     	
     	// Missing information if there are other invalid data points
-    	
-        try {
-        	String[] entries = line.split(";"); // this whole block can be packed into one line, and is in optionalEntry
-        	SimpleDateFormat dateParser = new SimpleDateFormat();  
-        	
-        	String tempname = entries[0];  // since we only get a string, split, convert and then use to make a ScoreEntry object
-        	Date tempDate = dateParser.parse(entries[1]); 
-        	int tempscore = Integer.parseInt(entries[2]);
-        	String tempGametype = entries[3];
-        	
-        	ScoreEntry finalEntry = new ScoreEntry(tempname, tempscore, tempDate,  tempGametype);
-        	
-        	// optionalEntry is the exact same thing as finalEntry, just with less readability
-        	//ScoreEntry optionalEntry = new ScoreEntry(entries[0], Integer.parseInt(entries[2]), dateParser.parse(entries[1]), entries[4]);
-        	//return optionalEntry;
-        	
-        	return finalEntry;
-        
-        // return null, if any of the given line  contained  invalid information
-        }catch(ParseException parseEx) {
-        	return null;
-        }catch(RuntimeException run) {
-        	return null;
-        	
-        }
+		Pattern scorePattern = Pattern.compile(".*[;][1234567890]*;[0123456789]*;Eroberung"); // actually \d would do the same thing as [0123456789] but my eclipse doesn't compile it
+    	Matcher scorePatternMatcher = scorePattern.matcher(line);
+    	if(scorePatternMatcher.matches()) {
+	    	
+	        try {
+	        	String[] entries = line.split(";"); // divide and assign
+	        	
+	        	String tempname = entries[0];  // since we only get a string, split, convert and then use to make a ScoreEntry object
+	        	Date tempDate = new Date(readLong(entries[1])); 
+	        	int tempscore = Integer.parseInt(entries[2]);
+	        	String tempGametype = entries[3];
+	        	
+	        	ScoreEntry finalEntry = new ScoreEntry(tempname, tempscore, tempDate,  tempGametype);
+	        	
+	        	return finalEntry;
+	        
+	        // return null, if any of the given line  contained  invalid information
+	        }catch(NumberFormatException numbFormEx) { // actually readLong won't throw an exception, because the regex prevents wrong input
+	        	return null;
+	        }catch(RuntimeException run) {
+	        	return null;
+	        	
+	        }
+    	}
+    	return null;
+    }
+    
+    /**
+     * Nimmt einen String der einzig aus Zahlen besteht und gibt ein long mit dem entsprechenden Wert aus.
+     * Dies entspricht also einer coercion von String zu long.
+     * 
+     * @param input die Zeichenfolge deren Numerischen Wert man herausfinden möchte, erlaubt sind Zeichenfolgen die von einer regex mit [0123456789]* anerkannt werden
+     * @return die Zahl die durch die eingegebene Zeichenfolge repräsentiert wird
+     * @throws NumberFormatException, falls in der Zahl andere Zeichen enthalten sind
+     */
+    public static long readLong(String input) throws NumberFormatException {
+    	long sum = 0;
+    	for(int i=0; i<input.length(); i++) {
+    		if(!(47 < input.charAt(i) && input.charAt(i) < 58)) {
+    			throw new NumberFormatException();
+    		} else {
+    			sum += (input.charAt(input.length() -1 - i) - 48)*Math.pow(10, i); // uniCode magic, add all numbers in the input string
+    		}
+    	}
+    	return sum;
     }
     
     public Date getDate() {

@@ -282,7 +282,7 @@ public class GameMap {
      */
     private void generateKingdoms(int kingdomCount) {
         if(kingdomCount > 0 && kingdomCount < castleGraph.getAllValues().size()) {
-            Clustering clustering = new Clustering(castleGraph.getAllValues(), kingdomCount);
+            Clustering clustering = new Clustering(castleGraph.getAllValues(), kingdomCount, this.getSize());
             kingdoms = clustering.getPointsClusters();
         } else {
             kingdoms = new ArrayList<>();

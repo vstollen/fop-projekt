@@ -58,8 +58,33 @@ public abstract class GraphAlgorithm<T> {
      * @return Der nächste abzuarbeitende Knoten oder null
      */
     private AlgorithmNode<T> getSmallestNode() {
-        // TODO: GraphAlgorithm<T>#getSmallestNode()
-        return null;
+        AlgorithmNode<T> smallestNode = null;
+
+        Iterator<Node<T>> nodeIterator = availableNodes.iterator();
+
+        while (nodeIterator.hasNext()) {
+
+            AlgorithmNode<T> nextNode = algorithmNodes.get(nodeIterator.next());
+
+            if (smallestNode == null) {
+                smallestNode = nextNode;
+                continue;
+            }
+            
+            if (nextNode.value == -1) {
+            	continue;
+            }
+
+            if (nextNode.value < smallestNode.value || smallestNode.value == -1) {
+                smallestNode = nextNode;
+            }
+        }
+
+        if (smallestNode != null) {
+            availableNodes.remove(smallestNode.node);
+        }
+
+        return smallestNode;
     }
 
     /**
@@ -78,7 +103,42 @@ public abstract class GraphAlgorithm<T> {
      * @see Edge#getOtherNode(Node)
      */
     public void run() {
-        // TODO: GraphAlgorithm<T>#run()
+
+        AlgorithmNode<T> visitedNode = getSmallestNode();
+
+        while (visitedNode != null) {
+
+        	if (!isPassable(visitedNode.node)) {
+        		visitedNode = getSmallestNode();
+        		continue;
+        	}
+        	
+        	if (visitedNode.value == -1) {
+        		visitedNode = getSmallestNode();
+        		continue;
+        	}
+        
+            for (Edge<T> edge : graph.getEdges(visitedNode.node)) {
+
+                if (!isPassable(edge)) {
+                    continue;
+                }
+
+                Node<T> neighborNode = edge.getOtherNode(visitedNode.node);
+
+                AlgorithmNode<T> neighbor = algorithmNodes.get(neighborNode);
+
+                double alternativePathValue = getValue(edge) + visitedNode.value;
+
+                if (neighbor.value == -1 || alternativePathValue < neighbor.value) {
+                    neighbor.value = alternativePathValue;
+                    neighbor.previous = visitedNode;
+                }
+            }
+
+            visitedNode = getSmallestNode();
+        }
+
     }
 
     /**
@@ -89,8 +149,26 @@ public abstract class GraphAlgorithm<T> {
      * @return eine Liste von Kanten oder null
      */
     public List<Edge<T>> getPath(Node<T> destination) {
-        // TODO: GraphAlgorithm<T>#getPath(Node<T>)
-        return null;
+
+        LinkedList<Edge<T>> inversePath = new LinkedList<>();
+
+        AlgorithmNode<T> currentNode = algorithmNodes.get(destination);
+        AlgorithmNode<T> previousNode = currentNode.previous;
+
+        while (previousNode != null) {
+            inversePath.add(graph.getEdge(currentNode.node, previousNode.node));
+
+            currentNode = previousNode;
+            previousNode = currentNode.previous;
+        }
+
+        if (inversePath.isEmpty()) {
+        	return null;
+        }
+        
+        Collections.reverse(inversePath);
+
+        return inversePath;
     }
 
     /**

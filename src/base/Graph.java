@@ -128,6 +128,9 @@ public class Graph<T> {
      * @return true, wenn alle Knoten erreichbar sind
      */
     public boolean allNodesConnected() {
+    	if (nodes.isEmpty())
+    		return true;
+    	
     	Node<T> root = nodes.get(0);
     	List<Node<T>> reachableNodes = traverseGraph(root, new ArrayList<>());
     	
@@ -149,7 +152,7 @@ public class Graph<T> {
     private List<Node<T>> traverseGraph(Node<T> node, List<Node<T>> visited) {
     	visited.add(node);
     	
-    	List <Node<T>> nextNodes = getEdges(node).stream()
+    	List<Node<T>> nextNodes = getEdges(node).stream()
     			.map(edge -> edge.getOtherNode(node))
     			.collect(Collectors.toCollection(ArrayList::new));
     	

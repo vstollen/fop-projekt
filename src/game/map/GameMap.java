@@ -150,8 +150,10 @@ public class GameMap {
     }
 
     /**
-     * Hier werden die Kanten erzeugt. Dazu werden zunächst alle Burgen durch eine Linie verbunden und anschließend
-     * jede Burg mit allen anderen in einem bestimmten Radius nochmals verbunden.
+     * Hier werden die Kanten erzeugt. Dazu wird jede Burg mit den n nächsten verbunden,
+     * sofern es keine Überschneidungen mit bisherigen Verbindungen gibt und die Verbindungen
+     * nicht unmittelbar nebeneinander liegen. Wir benutzen n=3 und den Mindestwinkel 15°.
+     * Sind hiernach immernoch nicht alle Burgen in einem Graphen, so wird n weiter erhöht.
      */
     private void generateEdges() {
 		ArrayList<Node<Castle>> nodes = new ArrayList<>(castleGraph.getNodes());
@@ -234,7 +236,7 @@ public class GameMap {
 	 * @param maxDegree der maximale Grenzwinkel
 	 * @param nodeA der Startknoten der neuen Verbindung
 	 * @param nodeB der Endknoten der neuen Verbindung
-	 * @return true, wenn eine der bisherigen Kangten von nodeA einen kleineren Winkel als maxDegree
+	 * @return true, wenn eine der bisherigen Kanten von nodeA einen kleineren Winkel als maxDegree
 	 * zu der neuen Kante besitzt
 	 */
 	private boolean angleBelow(double maxDegree, Node<Castle> nodeA, Node<Castle> nodeB) {

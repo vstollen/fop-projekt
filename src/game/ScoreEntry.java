@@ -52,12 +52,23 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
      * @see Date#getTime()
      * @param printWriter der PrintWriter, mit dem der Eintrag geschrieben wird
      */
-    public void write(PrintWriter printWriter) {
-        // TODO: ScoreEntry#write(PrintWriter)
+        public void write(PrintWriter printWriter) { 
+        
+    	StringBuilder bobTheStringBuilder = new StringBuilder();
+    	
+    	bobTheStringBuilder.append(this.getName())  // line format is "Name;Time_as_Unix_timestamp;Score;Mode"
+    					   .append(";")
+    					   .append(this.getDate().getTime())
+    					   .append(";")
+    					   .append(this.getScore())
+    					   .append(";")
+    					   .append(this.getMode());
+    	
+    	printWriter.write(bobTheStringBuilder.toString());
     }
 
     /**
-     * List eine gegebene Zeile ein und wandelt dies in ein ScoreEntry-Objekt um.
+     * Liest eine gegebene Zeile ein und wandelt diese in ein ScoreEntry-Objekt um.
      * Ist das Format der Zeile ungültig oder enthält es ungültige Daten, wird null zurückgegeben.
      * Eine gültige Zeile enthält in der Reihenfolge durch Semikolon getrennt:
      *    den Namen, das Datum als Unix-Timestamp (in Millisekunden), die erreichte Punktzahl, den Spieltypen
@@ -73,8 +84,29 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
      * @return Ein ScoreEntry-Objekt oder null
      */
     public static ScoreEntry read(String line) {
-        // TODO: ScoreEntry#read(String)
-        return null;
+    	// String format is: "<anything without ; and at least 1 sign>;<any sequenze of digits longer 0>;<any sequenze of digits longer 0>;<anything without ; and at least 1 sign>"
+    	if(line.matches("[^;]+;[\\d]+;[\\d]+;[^;]+|Eroberung")) {
+	    	
+	        try {
+	        	String[] entries = line.split(";"); // divide and assign
+	        	
+	        	String tempname = entries[0];  // since we only get a string, split, convert and then use to make a ScoreEntry object
+	        	Date tempDate = new Date(Long.valueOf(entries[1])); 
+	        	int tempscore = Integer.parseInt(entries[2]);
+	        	String tempGametype = entries[3];
+	        	
+	        	ScoreEntry finalEntry = new ScoreEntry(tempname, tempscore, tempDate,  tempGametype);
+	        	
+	        	return finalEntry;
+	        
+	        // return null, if any of the given line  contained  invalid information
+	        } catch(NumberFormatException numbFormEx) { // actually readLong won't throw an exception, because the regex prevents wrong input
+	        	return null;
+	        } catch(RuntimeException run) {
+	        	return null;
+	        }
+    	}
+    	return null;
     }
 
     public Date getDate() {

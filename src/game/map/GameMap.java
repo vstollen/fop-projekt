@@ -5,9 +5,12 @@ import game.GameConstants;
 import gui.Resources;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Diese Klasse representiert das Spielfeld. Sie beinhaltet das Hintergrundbild, welches mit Perlin noise erzeugt wurde,
@@ -147,12 +150,131 @@ public class GameMap {
     }
 
     /**
-     * Hier werden die Kanten erzeugt. Dazu werden zunächst alle Burgen durch eine Linie verbunden und anschließend
-     * jede Burg mit allen anderen in einem bestimmten Radius nochmals verbunden
+     * Hier werden die Kanten erzeugt. Dazu wird jede Burg mit den n nächsten verbunden,
+     * sofern es keine Überschneidungen mit bisherigen Verbindungen gibt und die Verbindungen
+     * nicht unmittelbar nebeneinander liegen. Wir benutzen n=3 und den Mindestwinkel 15°.
+     * Sind hiernach immernoch nicht alle Burgen in einem Graphen, so wird n weiter erhöht.
      */
     private void generateEdges() {
-    	 // TODO: GameMap#generateEdges()
+		ArrayList<Node<Castle>> nodes = new ArrayList<>(castleGraph.getNodes());
+		int amountOfNodes = nodes.size();
+    	
+		// Eine HashMap, die für jede Burg die jeweils nächstgelegenen in einer sortierten Liste enthält
+		HashMap<Node<Castle>, ArrayList<Node<Castle>>> closestNodes = new HashMap<>();
+    	
+		for (Node<Castle> nodeA : castleGraph.getNodes()) {
+			nodes.sort((n1, n2) -> {
+					double p = n1.getValue().distance(nodeA.getValue()) - n2.getValue().distance(nodeA.getValue());
+					return p > 0 ? 1 : -1;
+				}
+			);
+    		closestNodes.put(nodeA, new ArrayList<>(nodes));
+    	}
+    	
+    	/*
+    	 * Erzeuge neue Verbindungen, indem jede Burg mit den n nächstgelegenen verbunden wird.
+    	 * Ist danach noch nicht jede Burg im selben Graphen, so wird n weiter erhöht.
+    	 * Eine Verbindung wird nur gebildet, wenn sie keine bisherigen schneidet und
+    	 * sie mindestens 15°deg von der nächsten Verbindung der selben Burg abweicht.
+    	 */
+    	for (int level = 1; level <= 3 || !castleGraph.allNodesConnected(); level++) {
+    		
+    		if (level == amountOfNodes)
+    			break;
+    		
+    		for (Node<Castle> nodeA : castleGraph.getNodes()) {
+    			Node<Castle> nodeB = closestNodes.get(nodeA).get(level);
+    			
+    			if (hasIntersection(nodeA, nodeB))
+    				continue;
+    			
+    			if (angleBelow(15.0, nodeA, nodeB))
+    				continue;
+    			
+    			castleGraph.addEdge(nodeA, nodeB);
+    		}
+    	}
     }
+
+	/**
+	 * Hier wird die neue Kante mit den bisher im Graphen vorhandenen verglichen.
+	 * Schneidet sie sich mit einer, so wird true zurückgeliefert.
+	 * @param nodeA der Startknoten der neuen Kante
+	 * @param nodeB der Endknoten der neuen Kante
+	 * @return true, wenn die Kante eine bereits vorhandene schneidet
+	 */
+	private boolean hasIntersection(Node<Castle> nodeA, Node<Castle> nodeB) {
+		for (Edge<Castle> edge : castleGraph.getEdges()) {
+			
+			Point nodeAPos = nodeA.getValue().getLocationOnMap();
+			Point nodeBPos = nodeB.getValue().getLocationOnMap();
+			Point nodeCPos = edge.getNodeA().getValue().getLocationOnMap();
+			Point nodeDPos = edge.getNodeB().getValue().getLocationOnMap();
+			
+			if (nodeAPos == nodeCPos || nodeAPos == nodeDPos || nodeBPos == nodeCPos || nodeBPos == nodeDPos)
+				continue;
+			
+			if (Line2D.linesIntersect(
+					nodeAPos.getX(),
+					nodeAPos.getY(),
+					nodeBPos.getX(),
+					nodeBPos.getY(),
+					nodeCPos.getX(),
+					nodeCPos.getY(),
+					nodeDPos.getX(),
+					nodeDPos.getY()))
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Diese Methode erhält die beiden Punkte, zwischen denen eine Kante generiert werden soll.
+	 * Sie betrachtet die bisherigen Kanten von nodeA und vergleicht die Winkel zwischen
+	 * diesen und der neuen Kante.
+	 * Ist einer dieser Winkel kleiner als maxDegree, so wird true zurückgegeben.
+	 * @param maxDegree der maximale Grenzwinkel
+	 * @param nodeA der Startknoten der neuen Verbindung
+	 * @param nodeB der Endknoten der neuen Verbindung
+	 * @return true, wenn eine der bisherigen Kanten von nodeA einen kleineren Winkel als maxDegree
+	 * zu der neuen Kante besitzt
+	 */
+	private boolean angleBelow(double maxDegree, Node<Castle> nodeA, Node<Castle> nodeB) {
+		
+		// Koordinaten der bisherigen Kanten vom Startknoten aus
+		List<Point> compareNodeLocations = castleGraph.getEdges(nodeA).stream()
+    			.map(edge -> edge.getOtherNode(nodeA).getValue().getLocationOnMap())
+    			.collect(Collectors.toCollection(ArrayList::new));
+		
+		// Koordinaten von Startknoten und neuem Endknoten
+		Point origin = nodeA.getValue().getLocationOnMap();
+		Point dest = nodeB.getValue().getLocationOnMap();
+		
+		// Für jeden Endpunkt aus den bisherigen Kanten...
+		for (Point p : compareNodeLocations) {
+			
+			// ...bestimme den Winkel der Kante zu der neuen Kante
+			double angle = Math.atan2(p.getY() - origin.getY(), p.getX() - origin.getX())
+					- Math.atan2(dest.getY() - origin.getY(), dest.getX() - origin.getX());
+			
+			// Konvertiere und berechne positiven, kleineren Winkel
+			angle = Math.toDegrees(angle);
+			
+			if (angle < -180)
+				angle += 360;
+			
+			if (angle > 180)
+				angle -= 360;
+			
+			angle = Math.abs(angle);
+			
+			// Wenn momentan betrachtete Kante einen kleineren Winkel als maxDegree hat
+			if (angle < maxDegree)
+				return true;
+		}
+		// Wenn keine bisherige Kante vom Startknoten mit der neuen Kante einen zu kleinen Winkel einschließt
+		return false;
+	}
 
     /**
      * Hier werden die Burgen in Königreiche unterteilt. Dazu wird der {@link Clustering} Algorithmus aufgerufen.

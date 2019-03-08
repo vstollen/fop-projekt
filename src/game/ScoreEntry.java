@@ -2,6 +2,8 @@ package game;
 
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Diese Klasse stellt einen Eintrag in der Bestenliste dar.

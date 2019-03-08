@@ -56,7 +56,7 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
         
     	StringBuilder bobTheStringBuilder = new StringBuilder();
     	
-    	bobTheStringBuilder.append(this.getName()) // line format is "Name;Time_as_Unix_timestamp;Score;Mode"
+    	bobTheStringBuilder.append(this.getName())  // line format is "Name;Time_as_Unix_timestamp;Score;Mode"
     					   .append(";")
     					   .append(this.getDate().getTime())
     					   .append(";")
@@ -84,8 +84,8 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
      * @return Ein ScoreEntry-Objekt oder null
      */
     public static ScoreEntry read(String line) {
-    	
-    	if(line.matches("[^;]+;[\\d]+;[\\d]+;[^;]+")) {
+    	// String format is: "<anything without ; and at least 1 sign>;<any sequenze of digits longer 0>;<any sequenze of digits longer 0>;<anything without ; and at least 1 sign>"
+    	if(line.matches("[^;]+;[\\d]+;[\\d]+;[^;]+|Eroberung")) {
 	    	
 	        try {
 	        	String[] entries = line.split(";"); // divide and assign

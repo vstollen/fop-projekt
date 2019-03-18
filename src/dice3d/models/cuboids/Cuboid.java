@@ -12,11 +12,11 @@ public class Cuboid {
 	public ArrayList<Vertex> vertices = new ArrayList<Vertex>();
 	public ArrayList<Edge> edges = new ArrayList<Edge>();
 
-	
+
 	public boolean collided = false;
 
 	public Cuboid(double x, double y, double z, int length, int width, int height) {
-		
+
 		Vector corner = new Vector(x, y, z);
 
 		Vertex a = new Vertex(corner.x, corner.y, corner.z);
@@ -121,24 +121,24 @@ public class Cuboid {
 	public void draw(Graphics2D g) {
 		// draw all edges, even inner ones
 		g.setColor(Color.GREEN);
-		
+
 		if(collided) {
 			g.setColor(Color.RED);
 		}
-		 for(Edge e: edges) {
-		 e.draw(g);
-		 }
-		 
-		 g.setColor(Color.BLACK);
-		 for (Vertex point : vertices) {
-		 point.draw(g);
-		 }
+		for(Edge e: edges) {
+			e.draw(g);
+		}
+
+		g.setColor(Color.BLACK);
+		for (Vertex point : vertices) {
+			point.draw(g);
+		}
 	}
 
 	public boolean notMoving() {
 		return false;
 	}
-	
+
 	public void updateCollision(Cuboid d) {
 		collided = false;
 	}

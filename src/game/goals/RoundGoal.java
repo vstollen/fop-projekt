@@ -73,6 +73,11 @@ public class RoundGoal extends Goal {
 		return false;
 	}
 	
+	/**
+	 * Gibt eine Liste mit den Spielern, die noch im Spiel sind zurück
+	 * @param players Alle Spieler, aus denen die Liste herausgesucht werden soll
+	 * @return Die Spieler die noch im Spiel sind
+	 */
 	private List<Player> getActivePlayers(List<Player> players) {
 		LinkedList<Player> activePlayers = new LinkedList<>();
 		

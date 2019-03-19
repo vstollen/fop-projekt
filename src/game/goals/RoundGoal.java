@@ -1,0 +1,84 @@
+package game.goals;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import game.Game;
+import game.Goal;
+import game.Player;
+
+public class RoundGoal extends Goal {
+
+	final private static int maxRounds = 3;
+	
+	private Game game;
+	
+	public RoundGoal() {
+		super("Schnelles Spiel", "Der Spieler Gewinnt, der nach " + maxRounds + " Runden am meisten Punkte hat.");
+	}
+
+	@Override
+	public boolean isCompleted() {
+		game = getGame();
+		
+		if (game.getRound() >= maxRounds) {
+			return true;
+		}
+		
+		List<Player> allPlayers = game.getPlayers();
+		List<Player> activePlayers = getActivePlayers(allPlayers);
+		
+		if (activePlayers.size() == 1) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	@Override
+	public Player getWinner() {
+		game = getGame();
+		
+		Player winner = null;
+		
+		for (Player player : game.getPlayers()) {
+			if (winner == null) {
+				winner = player;
+			}
+			
+			if (player.getPoints() > winner.getPoints()) {
+				winner = player;
+			}
+		}
+		
+		return winner;
+	}
+
+	@Override
+	public boolean hasLost(Player player) {
+		game = getGame();
+		
+		if (game.getRound() < 2) {
+			return false;
+		}
+		
+		if (player.getNumRegions(game) == 0) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private List<Player> getActivePlayers(List<Player> players) {
+		LinkedList<Player> activePlayers = new LinkedList<>();
+		
+		for (Player player : players) {
+			if (!hasLost(player)) {
+				activePlayers.add(player);
+			}
+		}
+		
+		return activePlayers;
+	}
+
+}

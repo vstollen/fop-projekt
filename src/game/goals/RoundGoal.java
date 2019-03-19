@@ -2,6 +2,7 @@ package game.goals;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import game.Game;
 import game.Goal;
@@ -9,7 +10,7 @@ import game.Player;
 
 public class RoundGoal extends Goal {
 
-	final private static int maxRounds = 3;
+	final private static int maxRounds = 10;
 	
 	private Game game;
 	
@@ -21,7 +22,10 @@ public class RoundGoal extends Goal {
 	public boolean isCompleted() {
 		game = getGame();
 		
-		if (game.getRound() >= maxRounds) {
+		Queue<Player> playerQueue = game.getPlayerQueue();
+		Player nextPlayer = playerQueue.peek();
+		
+		if (game.getRound() >= maxRounds && nextPlayer == game.getStartingPlayer()) {
 			return true;
 		}
 		

@@ -241,6 +241,10 @@ public class Game {
             gameInterface.onGameOver(goal.getWinner());
             return;
         }
+        
+        if (round == 1 && allCastlesChosen()) {
+        	startingPlayer = nextPlayer;
+        }
 
         currentPlayer = nextPlayer;
         if(round == 0 || (round == 1 && allCastlesChosen()) || (round > 1 && currentPlayer == startingPlayer)) {
@@ -277,6 +281,14 @@ public class Game {
 
     public Player getCurrentPlayer() {
         return this.currentPlayer;
+    }
+    
+    public Player getStartingPlayer() {
+    	return startingPlayer;
+    }
+    
+    public Queue<Player> getPlayerQueue() {
+    	return playerQueue;
     }
 
     public List<Player> getPlayers() {

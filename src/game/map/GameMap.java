@@ -191,7 +191,7 @@ public class GameMap {
     			if (hasIntersection(nodeA, nodeB))
     				continue;
     			
-    			if (level < maxLevel && angleBelow(15.0, nodeA, nodeB))
+    			if (level <= maxLevel && angleBelow(15.0, nodeA, nodeB))
     				continue;
     			
     			castleGraph.addEdge(nodeA, nodeB);

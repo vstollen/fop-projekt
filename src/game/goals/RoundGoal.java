@@ -1,5 +1,6 @@
 package game.goals;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -55,6 +56,10 @@ public class RoundGoal extends Goal {
 			}
 		}
 		
+		if (isDraw(winner, game.getPlayers())) {
+			return null;
+		}
+		
 		return winner;
 	}
 
@@ -88,6 +93,27 @@ public class RoundGoal extends Goal {
 		}
 		
 		return activePlayers;
+	}
+	
+	/**
+	 * Prüft ob das Spiel unentschieden steht.
+	 * Dazu prüft es, ob es weitere Spieler mit der selben Punktzahl wie winner gibt
+	 * @param winner Ein potentieller Sieger
+	 * @param players Eine Liste aller Mitspieler
+	 * @return Ob das Spiel unentschieden steht
+	 */
+	private boolean isDraw(Player winner, Collection<Player> players) {
+		for (Player player : players) {
+			if (player == winner) {
+				continue;
+			}
+			
+			if (player.getPoints() == winner.getPoints()) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 }

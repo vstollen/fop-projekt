@@ -5,18 +5,37 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import javax.swing.JOptionPane;
+
 import game.Game;
 import game.Goal;
 import game.Player;
 
 public class RoundGoal extends Goal {
 
-	final private static int maxRounds = 10;
+	private int maxRounds = 10;
 	
 	private Game game;
 	
 	public RoundGoal() {
-		super("Schnelles Spiel", "Der Spieler gewinnt, der nach " + maxRounds + " Runden am meisten Punkte hat.");
+		super("Schnelles Spiel", "Der Spieler gewinnt, der nach einer bestimmten Rundenzahl am meisten Punkte hat.");
+	}
+	
+	@Override
+	public void onGameInit() {
+		try {
+			int chosenRounds = Integer.parseInt(JOptionPane.showInputDialog("Wie viele Runden soll gespielt werden?", "10"));
+			
+			if (chosenRounds < 2) {
+				throw new NumberFormatException();
+			}
+			
+			maxRounds = chosenRounds;
+		} catch(NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "Es werden nur Werte von mindestens 2 Runden akzeptiert.\nEs wurden nun " + maxRounds + " Runden ausgewählt.", "Falscher Wert", JOptionPane.WARNING_MESSAGE);
+		}
+		
+		super.onGameInit();
 	}
 
 	@Override

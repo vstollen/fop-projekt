@@ -23,19 +23,35 @@ public class RoundGoal extends Goal {
 	
 	@Override
 	public void onGameInit() {
+		setupMaxRounds();
+		
+		super.onGameInit();
+	}
+	
+	/**
+	 * Lässt den Spieler die Rundenzahl wählen und fängt eventuelle Fehler ab
+	 */
+	private void setupMaxRounds() {
 		try {
-			int chosenRounds = Integer.parseInt(JOptionPane.showInputDialog("Wie viele Runden soll gespielt werden?", "10"));
-			
-			if (chosenRounds < 2) {
-				throw new NumberFormatException();
-			}
-			
-			maxRounds = chosenRounds;
+			chooseMaxRounds();
 		} catch(NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "Es werden nur Werte von mindestens 2 Runden akzeptiert.\nEs wurden nun " + maxRounds + " Runden ausgewählt.", "Falscher Wert", JOptionPane.WARNING_MESSAGE);
 		}
+	}
+	
+	/**
+	 * Lässt den Spieler die Rundenzahl wählen
+	 * @throws NumberFormatException wenn die Eingabe keine Zahl ist
+	 * @throws NumberFormatException wenn die Eingabe kleiner als 2 ist
+	 */
+	private void chooseMaxRounds() {
+		int chosenRounds = Integer.parseInt(JOptionPane.showInputDialog("Wie viele Runden soll gespielt werden?", "10"));
 		
-		super.onGameInit();
+		if (chosenRounds < 2) {
+			throw new NumberFormatException();
+		}
+		
+		maxRounds = chosenRounds;
 	}
 
 	@Override

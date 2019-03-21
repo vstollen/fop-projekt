@@ -27,7 +27,8 @@ public class GameView extends View implements GameInterface {
     private JTextPane txtStats;
     private DicePanel dices;
     private JTextPane gameLog;
-    private JButton button;
+    private JButton primaryActionButton;
+    private JButton jokerButton;
     private Game game;
 
     GameView(GameWindow gameWindow, Game game) {
@@ -62,13 +63,15 @@ public class GameView extends View implements GameInterface {
 
         txtStats.setSize(sidebarWidth, 50 + 20 * game.getPlayers().size());
         dices.setSize(sidebarWidth, 50);
-        scrollLog.setSize(sidebarWidth, h - txtStats.getHeight() - dices.getHeight() - 50 - BUTTON_SIZE.height);
+        scrollLog.setSize(sidebarWidth, h - txtStats.getHeight() - dices.getHeight() - 60 - 2 * BUTTON_SIZE.height);
         scrollLog.revalidate();
         scrollLog.repaint();
         
-        button.setSize(sidebarWidth, BUTTON_SIZE.height);
+        jokerButton.setSize(sidebarWidth, BUTTON_SIZE.height);
+        
+        primaryActionButton.setSize(sidebarWidth, BUTTON_SIZE.height);
 
-        JComponent components[] = { txtStats, dices, scrollLog, button};
+        JComponent components[] = {txtStats, dices, jokerButton, scrollLog, primaryActionButton};
         for(JComponent component : components) {
             component.setLocation(x, y);
             y += 10 + component.getHeight();
@@ -84,14 +87,21 @@ public class GameView extends View implements GameInterface {
         this.txtStats = createTextPane();
         this.txtStats.addStyle("PlayerColors", null);
         this.add(txtStats);
+        
         this.dices = new DicePanel(getWindow().getResources());
         this.dices.setBorder(new LineBorder(Color.BLACK));
         this.add(dices);
+        
+        this.jokerButton = createButton("Joker Einsetzen");
+        this.add(jokerButton);
+        
         this.gameLog = createTextPane();
         this.gameLog.addStyle("PlayerColor", null);
+        
         this.scrollLog = new JScrollPane(gameLog);
         this.add(scrollLog);
-        this.button = createButton("Nächste Runde");
+        
+        this.primaryActionButton = createButton("Nächste Runde");
 
         getWindow().setSize(1080, 780);
         getWindow().setMinimumSize(new Dimension(750, 450));
@@ -99,9 +109,9 @@ public class GameView extends View implements GameInterface {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if(actionEvent.getSource() == button) {
+        if(actionEvent.getSource() == primaryActionButton) {
 
-            switch (button.getText()) {
+            switch (primaryActionButton.getText()) {
                 case "Nächste Runde":
 
                     if (game.getCurrentPlayer() instanceof AI)
@@ -227,7 +237,7 @@ public class GameView extends View implements GameInterface {
         map.clearSelection();
         updateStats();
 
-        button.setText(human ? "Nächste Runde" : "Überspringen");
+        primaryActionButton.setText(human ? "Nächste Runde" : "Überspringen");
     }
 
     @Override
@@ -243,7 +253,7 @@ public class GameView extends View implements GameInterface {
             this.logLine("Spiel vorbei - %PLAYER% gewinnt das Spiel.", winner);
         }
 
-        button.setText("Beenden");
+        primaryActionButton.setText("Beenden");
         updateStats();
     }
 
@@ -305,7 +315,7 @@ public class GameView extends View implements GameInterface {
 
     @Override
     public void onAttackStarted(Castle source, Castle target, int troopCount) {
-        button.setText("Überspringen");
+        primaryActionButton.setText("Überspringen");
         logLine("%PLAYER% greift " + target.getName() + " mit " + troopCount + " Truppen an.", source.getOwner());
     }
 
@@ -313,6 +323,6 @@ public class GameView extends View implements GameInterface {
     public void onAttackStopped() {
         map.reset();
         updateStats();
-        button.setText("Nächste Runde");
+        primaryActionButton.setText("Nächste Runde");
     }
 }

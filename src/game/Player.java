@@ -11,12 +11,14 @@ import java.util.stream.Collectors;
 public abstract class Player {
 
     private final String name;
+    private final Team team;
     private Color color;
     private int points;
     private int remainingTroops;
 
     protected Player(String name, Color color) {
         this.name = name;
+        this.team = new Team(this);
         this.points = 0;
         this.color = color;
         this.remainingTroops = 0;
@@ -50,6 +52,10 @@ public abstract class Player {
     public String getName() {
         return this.name;
     }
+
+    public Team getTeam() {
+		return this.team;
+	}
 
     public int getPoints() {
         return points;
@@ -85,4 +91,5 @@ public abstract class Player {
         this.remainingTroops = 0;
         this.points = 0;
     }
+
 }

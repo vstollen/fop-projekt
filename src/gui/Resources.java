@@ -138,7 +138,15 @@ public class Resources {
      * @throws IOException Eine IOException wird geworfen, wenn Probleme beim Schreiben auftreten.
      */
     private void saveScoreEntries() throws IOException {
-        // TODO: Resources#saveScoreEntries()
+    	PrintWriter out = new PrintWriter("highscores.txt");
+    	
+    	for (ScoreEntry entry : scoreEntries) {
+    		System.out.println(entry.getName());
+    		entry.write(out);
+    	}
+    	
+    	out.flush();
+    	out.close();
     }
 
     /**

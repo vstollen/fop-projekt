@@ -207,6 +207,7 @@ public class GameMenu extends View {
                 // Set Goal
                 Goal goal = GameConstants.GAME_GOALS[goalIndex];
                 GameView gameView = new GameView(getWindow(), game);
+                goal.onGameInit();
                 game.setMapSize(MapSize.values()[mapSize]);
                 game.setGoal(goal);
                 game.start(gameView);

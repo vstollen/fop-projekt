@@ -43,6 +43,10 @@ public class Game {
         this.goal.setGame(this);
     }
 
+    public Goal getGoal() {
+    	return this.goal;
+    }
+
     public int getRound() {
         return round;
     }

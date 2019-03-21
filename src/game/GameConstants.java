@@ -30,7 +30,8 @@ public class GameConstants {
 
     public static final Goal GAME_GOALS[] = {
         new ConquerGoal(),
-        new RoundGoal()
+        new RoundGoal(),
+        new TeamGoal()
         // TODO: Add more Goals
     };
 

@@ -195,8 +195,8 @@ public abstract class GraphAlgorithm<T> {
     protected abstract boolean isPassable(Edge<T> edge);
 
     /**
-     * Gibt an, ob eine Knoten passierbar ist.
-     * @param node Eine Knoten
+     * Gibt an, ob ein Knoten passierbar ist.
+     * @param node Ein Knoten
      * @return true, wenn der Knoten passierbar ist.
     */
     protected abstract boolean isPassable(Node<T> node);

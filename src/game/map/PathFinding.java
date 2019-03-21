@@ -13,7 +13,7 @@ import java.util.List;
 public class PathFinding extends GraphAlgorithm<Castle> {
 
     private MapPanel.Action action;
-    private Player currentPlayer;
+    protected Player currentPlayer;
 
     public PathFinding(Graph<Castle> graph, Castle sourceCastle, MapPanel.Action action, Player currentPlayer) {
         super(graph, graph.getNode(sourceCastle));

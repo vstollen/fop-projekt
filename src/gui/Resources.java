@@ -144,14 +144,33 @@ public class Resources {
     /**
      * Lädt den Highscore-Table aus der Datei "highscores.txt".
      * Dabei wird die Liste {@link #scoreEntries} neu erzeugt und befüllt.
-     * Beachte dabei, dass die Liste nach dem Einlen absteigend nach den Punktzahlen sortiert sein muss.
+     * Beachte dabei, dass die Liste nach dem Einlesen absteigend nach den Punktzahlen sortiert sein muss.
      * Sollte eine Exception auftreten, kann diese ausgegeben werden, sie sollte aber nicht weitergegeben werden,
      * da sonst das Laden der restlichen Resourcen abgebrochen wird ({@link #load()}).
      * @see ScoreEntry#read(String)
      * @see #addScoreEntry(ScoreEntry)
      */
     private void loadScoreEntries() {
-        // TODO: Resources#loadScoreEntries()
+    	scoreEntries = new LinkedList<>();
+    	
+    	InputStream is = Resources.class.getClassLoader().getResourceAsStream("highscores.txt");
+    	if (is == null) {
+    		return;
+    	}
+    	InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+    	
+    	try (BufferedReader br = new BufferedReader(isr)) {
+    		String line;
+    		
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+				ScoreEntry entry = ScoreEntry.read(line);
+				addScoreEntry(entry);
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     /**

@@ -18,8 +18,15 @@ public abstract class Goal {
     public abstract boolean isCompleted();
     public abstract Player getWinner();
     public abstract boolean hasLost(Player player);
-
-    public final  String getDescription() {
+    
+    /**
+     * Beinhaltet Funktionalitäten, die unmittelbar vor dem Spielstart ausgeführt werden sollen
+     */
+    public void onGameInit() {
+    	
+    }
+    
+    public final String getDescription() {
         return this.description;
     }
 

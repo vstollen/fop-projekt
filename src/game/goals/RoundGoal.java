@@ -13,7 +13,7 @@ import game.Player;
 
 public class RoundGoal extends Goal {
 
-	private int maxRounds = 10;
+	private int maxRounds = 1;
 	
 	private Game game;
 	
@@ -33,12 +33,9 @@ public class RoundGoal extends Goal {
 	 */
 	private void setupMaxRounds() {
 		
-		boolean maxRoundsSet = false;
-		
-		while (!maxRoundsSet) {
+		while (maxRounds < 2) {
 			try {
 				chooseMaxRounds();
-				maxRoundsSet = true;
 			} catch(NumberFormatException e) {
 				JOptionPane.showMessageDialog(null, "Es werden nur Werte von mindestens 2 Runden akzeptiert.\nBitte gib einen anderen Wert ein.", "Falscher Wert", JOptionPane.WARNING_MESSAGE);
 			}

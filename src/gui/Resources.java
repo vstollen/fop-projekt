@@ -141,7 +141,6 @@ public class Resources {
     	PrintWriter out = new PrintWriter("highscores.txt");
     	
     	for (ScoreEntry entry : scoreEntries) {
-    		System.out.println(entry.getName());
     		entry.write(out);
     	}
     	
@@ -169,7 +168,7 @@ public class Resources {
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
 				ScoreEntry entry = ScoreEntry.read(line);
-				addScoreEntry(entry);
+				if (entry != null) addScoreEntry(entry);
 			}
 			
 		} catch (IOException e) {

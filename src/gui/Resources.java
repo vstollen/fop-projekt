@@ -161,7 +161,7 @@ public class Resources {
     	scoreEntries = new LinkedList<>();
     	
     	try (FileReader fr = new FileReader("highscores.txt");
-    		 BufferedReader br = new BufferedReader(fr)) {
+    		BufferedReader br = new BufferedReader(fr)) {
     		
     		String line;
     		

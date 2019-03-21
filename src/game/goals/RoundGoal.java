@@ -32,10 +32,16 @@ public class RoundGoal extends Goal {
 	 * Lässt den Spieler die Rundenzahl wählen und fängt eventuelle Fehler ab
 	 */
 	private void setupMaxRounds() {
-		try {
-			chooseMaxRounds();
-		} catch(NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "Es werden nur Werte von mindestens 2 Runden akzeptiert.\nEs wurden nun " + maxRounds + " Runden ausgewählt.", "Falscher Wert", JOptionPane.WARNING_MESSAGE);
+		
+		boolean maxRoundsSet = false;
+		
+		while (!maxRoundsSet) {
+			try {
+				chooseMaxRounds();
+				maxRoundsSet = true;
+			} catch(NumberFormatException e) {
+				JOptionPane.showMessageDialog(null, "Es werden nur Werte von mindestens 2 Runden akzeptiert.\nBitte gib einen anderen Wert ein.", "Falscher Wert", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 	}
 	

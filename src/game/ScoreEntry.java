@@ -62,7 +62,8 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
     					   .append(";")
     					   .append(this.getScore())
     					   .append(";")
-    					   .append(this.getMode());
+    					   .append(this.getMode())
+    					   .append("\n");
     	
     	printWriter.write(bobTheStringBuilder.toString());
     }

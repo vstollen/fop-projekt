@@ -19,7 +19,7 @@ public abstract class Goal {
     public abstract Player getWinner();
     public abstract boolean hasLost(Player player);
 
-    public final  String getDescription() {
+    public final String getDescription() {
         return this.description;
     }
 

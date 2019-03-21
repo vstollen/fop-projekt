@@ -153,13 +153,9 @@ public class Resources {
     private void loadScoreEntries() {
     	scoreEntries = new LinkedList<>();
     	
-    	InputStream is = Resources.class.getClassLoader().getResourceAsStream("highscores.txt");
-    	if (is == null) {
-    		return;
-    	}
-    	InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
-    	
-    	try (BufferedReader br = new BufferedReader(isr)) {
+    	try (FileReader fr = new FileReader("highscores.txt");
+    		 BufferedReader br = new BufferedReader(fr)) {
+    		
     		String line;
     		
 			while ((line = br.readLine()) != null) {

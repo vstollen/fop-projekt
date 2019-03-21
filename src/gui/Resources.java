@@ -144,7 +144,8 @@ public class Resources {
     		entry.write(out);
     	}
     	
-    	out.flush();
+    	// Flush und prüfe, ob ein Fehler aufgetreten ist
+    	if (out.checkError()) throw new IOException();
     	out.close();
     }
 

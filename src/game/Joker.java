@@ -4,11 +4,9 @@ public abstract class Joker {
 	
 	private Game game;
 	private final String name;
-	private final String hint;
 	
-	public Joker(String name, String hint) {
+	public Joker(String name) {
 		this.name = name;
-		this.hint = hint;
 	}
 	
 	public void setGame(Game game) {
@@ -28,10 +26,6 @@ public abstract class Joker {
 	
 	public final String getName() {
 		return name;
-	}
-	
-	public final String getHint() {
-		return hint;
 	}
 	
 	protected Game getGame() {

@@ -1,6 +1,7 @@
 package game;
 
 import game.goals.*;
+import game.jokers.JokerDummy;
 import game.players.*;
 
 import java.awt.*;
@@ -38,5 +39,9 @@ public class GameConstants {
         Human.class,
         BasicAI.class,
         // TODO: Add more Player types, like different AIs
+    };
+    
+    public static final Joker JOKERS[] = {
+    	new JokerDummy("JokerDummy")
     };
 }

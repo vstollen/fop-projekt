@@ -62,7 +62,8 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
     					   .append(";")
     					   .append(this.getScore())
     					   .append(";")
-    					   .append(this.getMode());
+    					   .append(this.getMode())
+    					   .append("\n");
     	
     	printWriter.write(bobTheStringBuilder.toString());
     }
@@ -85,8 +86,16 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
      */
     public static ScoreEntry read(String line) {
     	// String format is: "<anything without ; and at least 1 sign>;<any sequenze of digits longer 0>;<any sequenze of digits longer 0>;<anything without ; and at least 1 sign>"
-    	if(line.matches("[^;]+;[\\d]+;[\\d]+;[^;]+|Eroberung")) {
-	    	
+    	String format = "[^;]+;[\\d]+;[\\d]+;";
+    	
+    	boolean matches = false;
+    	for (Goal goal : GameConstants.GAME_GOALS) {
+    		if (line.matches(format + goal.getName())) {
+    			matches = true;
+    		}
+    	}
+    	
+    	if(matches) {
 	        try {
 	        	String[] entries = line.split(";"); // divide and assign
 	        	

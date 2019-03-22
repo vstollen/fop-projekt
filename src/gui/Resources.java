@@ -138,20 +138,43 @@ public class Resources {
      * @throws IOException Eine IOException wird geworfen, wenn Probleme beim Schreiben auftreten.
      */
     private void saveScoreEntries() throws IOException {
-        // TODO: Resources#saveScoreEntries()
+    	PrintWriter out = new PrintWriter("highscores.txt");
+    	
+    	for (ScoreEntry entry : scoreEntries) {
+    		entry.write(out);
+    	}
+    	
+    	// Flush und prüfe, ob ein Fehler aufgetreten ist
+    	if (out.checkError()) throw new IOException();
+    	out.close();
     }
 
     /**
      * Lädt den Highscore-Table aus der Datei "highscores.txt".
      * Dabei wird die Liste {@link #scoreEntries} neu erzeugt und befüllt.
-     * Beachte dabei, dass die Liste nach dem Einlen absteigend nach den Punktzahlen sortiert sein muss.
+     * Beachte dabei, dass die Liste nach dem Einlesen absteigend nach den Punktzahlen sortiert sein muss.
      * Sollte eine Exception auftreten, kann diese ausgegeben werden, sie sollte aber nicht weitergegeben werden,
      * da sonst das Laden der restlichen Resourcen abgebrochen wird ({@link #load()}).
      * @see ScoreEntry#read(String)
      * @see #addScoreEntry(ScoreEntry)
      */
     private void loadScoreEntries() {
-        // TODO: Resources#loadScoreEntries()
+    	scoreEntries = new LinkedList<>();
+    	
+    	try (FileReader fr = new FileReader("highscores.txt");
+    		BufferedReader br = new BufferedReader(fr)) {
+    		
+    		String line;
+    		
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+				ScoreEntry entry = ScoreEntry.read(line);
+				if (entry != null) addScoreEntry(entry);
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     /**

@@ -12,7 +12,9 @@ import javax.swing.text.StyledDocument;
 
 import game.AI;
 import game.Game;
+import game.GameConstants;
 import game.GameInterface;
+import game.Joker;
 import game.Player;
 import game.map.Castle;
 import gui.GameWindow;
@@ -26,11 +28,14 @@ public class GameView extends View implements GameInterface {
     private JScrollPane scrollLog;
     private JTextPane txtStats;
     private DicePanel dices;
+    private JList<String> jokerList;
+    private JButton jokerButton;
     private JTextPane gameLog;
     private JButton primaryActionButton;
-    private JButton jokerButton;
     private Game game;
 
+    private DefaultListModel<String> jokerListModel;
+    
     GameView(GameWindow gameWindow, Game game) {
         super(gameWindow);
         this.game = game;
@@ -63,15 +68,17 @@ public class GameView extends View implements GameInterface {
 
         txtStats.setSize(sidebarWidth, 50 + 20 * game.getPlayers().size());
         dices.setSize(sidebarWidth, 50);
-        scrollLog.setSize(sidebarWidth, h - txtStats.getHeight() - dices.getHeight() - 60 - 2 * BUTTON_SIZE.height);
+        scrollLog.setSize(sidebarWidth, h - txtStats.getHeight() - dices.getHeight() - 70 - 150 - 2 * BUTTON_SIZE.height);
         scrollLog.revalidate();
         scrollLog.repaint();
+        
+        jokerList.setSize(sidebarWidth, 150);
         
         jokerButton.setSize(sidebarWidth, BUTTON_SIZE.height);
         
         primaryActionButton.setSize(sidebarWidth, BUTTON_SIZE.height);
 
-        JComponent components[] = {txtStats, dices, jokerButton, scrollLog, primaryActionButton};
+        JComponent components[] = {txtStats, dices, jokerList, jokerButton, scrollLog, primaryActionButton};
         for(JComponent component : components) {
             component.setLocation(x, y);
             y += 10 + component.getHeight();
@@ -91,6 +98,11 @@ public class GameView extends View implements GameInterface {
         this.dices = new DicePanel(getWindow().getResources());
         this.dices.setBorder(new LineBorder(Color.BLACK));
         this.add(dices);
+        
+        this.jokerList = new JList<>();
+        this.jokerListModel = new DefaultListModel<>();
+        this.jokerList.setModel(jokerListModel);
+        this.add(jokerList);
         
         this.jokerButton = createButton("Joker Einsetzen");
         this.add(jokerButton);
@@ -236,6 +248,7 @@ public class GameView extends View implements GameInterface {
 
         map.clearSelection();
         updateStats();
+        updateJokers();
 
         primaryActionButton.setText(human ? "Nächste Runde" : "Überspringen");
     }
@@ -324,5 +337,19 @@ public class GameView extends View implements GameInterface {
         map.reset();
         updateStats();
         primaryActionButton.setText("Nächste Runde");
+    }
+    
+    /**
+     * Updated die Joker
+     */
+    private void updateJokers() {
+    	
+    	for (Joker joker : GameConstants.JOKERS) {
+    		jokerListModel.clear();
+    		
+    		if (joker.isUsable()) {
+    			jokerListModel.addElement(joker.getName());
+    		}
+    	}
     }
 }

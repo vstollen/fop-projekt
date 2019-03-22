@@ -15,7 +15,15 @@ public abstract class Joker {
 		this.game = game;
 	}
 
-	public abstract boolean isActive();
+	/**
+	 * Gibt zurück, ob der Joker aktuell nutzbar ist
+	 * @return true wenn der Joker nutzbar ist
+	 */
+	public abstract boolean isUsable();
+	
+	/**
+	 * Wird ausgeführt, wenn der Joker ausgewählt wird
+	 */
 	public abstract void onInvocation();
 	
 	public final String getName() {

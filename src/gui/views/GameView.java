@@ -30,6 +30,7 @@ public class GameView extends View implements GameInterface {
     private JTextPane txtStats;
     private DicePanel dices;
     private JList<String> jokerList;
+    private JScrollPane scrollingJokers;
     private JButton jokerButton;
     private JTextPane gameLog;
     private JButton primaryActionButton;
@@ -73,13 +74,13 @@ public class GameView extends View implements GameInterface {
         scrollLog.revalidate();
         scrollLog.repaint();
         
-        jokerList.setSize(sidebarWidth, 150);
+        scrollingJokers.setSize(sidebarWidth, 150);
         
         jokerButton.setSize(sidebarWidth, BUTTON_SIZE.height);
         
         primaryActionButton.setSize(sidebarWidth, BUTTON_SIZE.height);
 
-        JComponent components[] = {txtStats, dices, jokerList, jokerButton, scrollLog, primaryActionButton};
+        JComponent components[] = {txtStats, dices, scrollingJokers, jokerButton, scrollLog, primaryActionButton};
         for(JComponent component : components) {
             component.setLocation(x, y);
             y += 10 + component.getHeight();
@@ -103,7 +104,8 @@ public class GameView extends View implements GameInterface {
         this.jokerList = new JList<>();
         this.jokerListModel = new DefaultListModel<>();
         this.jokerList.setModel(jokerListModel);
-        this.add(jokerList);
+        this.scrollingJokers = new JScrollPane(jokerList);
+        this.add(scrollingJokers);
         
         this.jokerButton = createButton("Joker Einsetzen");
         this.add(jokerButton);

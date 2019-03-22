@@ -164,6 +164,8 @@ public class GameView extends View implements GameInterface {
 
                     break;
             }
+        } else if (actionEvent.getSource() == jokerButton) {
+        	invokeJoker();
         }
     }
 
@@ -351,5 +353,23 @@ public class GameView extends View implements GameInterface {
     			jokerListModel.addElement(joker.getName());
     		}
     	}
+    }
+    
+    /**
+     * Führt den ausgewählen Joker aus
+     */
+    private void invokeJoker() {
+    	Joker selectedJoker = getSelectedJoker();
+    	selectedJoker.onInvocation();
+    }
+    
+    /**
+     * Findet den aktuell ausgewählten Joker
+     * @return Der aktuell ausgewählte Joker
+     */
+    private Joker getSelectedJoker() {
+    	int selectedJokerIndex = jokerList.getSelectedIndex();
+    	
+    	return GameConstants.JOKERS[selectedJokerIndex];
     }
 }

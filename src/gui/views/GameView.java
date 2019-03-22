@@ -2,6 +2,7 @@ package gui.views;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -346,8 +347,9 @@ public class GameView extends View implements GameInterface {
      */
     private void updateJokers() {
     	
+		jokerListModel.clear();
+    	
     	for (Joker joker : GameConstants.JOKERS) {
-    		jokerListModel.clear();
     		
     		if (joker.isUsable()) {
     			jokerListModel.addElement(joker.getName());
@@ -360,16 +362,33 @@ public class GameView extends View implements GameInterface {
      */
     private void invokeJoker() {
     	Joker selectedJoker = getSelectedJoker();
-    	selectedJoker.onInvocation();
+    	
+    	if (selectedJoker != null) {
+        	selectedJoker.onInvocation();	
+    	}
+    	
+    	updateJokers();
     }
     
     /**
      * Findet den aktuell ausgewählten Joker
-     * @return Der aktuell ausgewählte Joker
+     * @return Der aktuell ausgewählte Joker, null falls kein Joker ausgewählt ist
      */
     private Joker getSelectedJoker() {
     	int selectedJokerIndex = jokerList.getSelectedIndex();
     	
-    	return GameConstants.JOKERS[selectedJokerIndex];
+    	if (selectedJokerIndex < 0) {
+    		return null;
+    	}
+    	
+    	ArrayList<Joker> usableJokers = new ArrayList<>();
+    	
+    	for (Joker joker : GameConstants.JOKERS) {
+    		if (joker.isUsable()) {
+        		usableJokers.add(joker);
+    		}
+    	}
+    	
+    	return usableJokers.get(selectedJokerIndex);
     }
 }

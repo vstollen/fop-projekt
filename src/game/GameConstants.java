@@ -42,6 +42,9 @@ public class GameConstants {
     };
     
     public static final Joker JOKERS[] = {
-    	new JokerDummy("JokerDummy")
+    	new JokerDummy("Dummy Truppenbonus"),
+    	new JokerDummy("Dummy Übernahme"),
+    	new JokerDummy("Dummy Aussetzen"),
+    	new JokerDummy("Dummy Tunnel")
     };
 }

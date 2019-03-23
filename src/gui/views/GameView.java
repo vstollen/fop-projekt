@@ -3,6 +3,7 @@ package gui.views;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -316,6 +317,7 @@ public class GameView extends View implements GameInterface {
     @Override
     public void onUpdate() {
         updateStats();
+        updateJokers();
         map.repaint();
     }
 
@@ -360,13 +362,32 @@ public class GameView extends View implements GameInterface {
      * Updated die Joker Liste und zeigt nur nutzbare Joker an.
      */
     private void updateJokers() {
+    	Enumeration<String> oldElementsEnum = jokerListModel.elements();
+    	ArrayList<String> oldElements = new ArrayList<>();
+    	while (oldElementsEnum.hasMoreElements()) {
+    		oldElements.add(oldElementsEnum.nextElement());
+    	}
+    	
+    	int selectedIndex = jokerList.getSelectedIndex();
+    	String selectedJokerName = "";
+    	
+    	if (selectedIndex >= 0) {
+    		selectedJokerName = oldElements.get(selectedIndex);
+    	}
     	
 		jokerListModel.clear();
     	
     	for (Joker joker : GameConstants.JOKERS) {
     		
+    		joker.update();
+    		
     		if (joker.isUsable()) {
     			jokerListModel.addElement(joker.getName());
+    			
+    			if (joker.getName().equals(selectedJokerName)) {
+    				int newJokerIndex = jokerListModel.size() - 1;
+    				jokerList.setSelectedIndex(newJokerIndex);
+    			}
     		}
     	}
     	

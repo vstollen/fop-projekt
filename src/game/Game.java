@@ -163,7 +163,7 @@ public class Game {
         return gameInterface.onRoll(player, dices, fastForward);
     }
 
-    private boolean allCastlesChosen() {
+    public boolean allCastlesChosen() {
         return gameMap.getCastles().stream().noneMatch(c -> c.getOwner() == null);
     }
 
@@ -302,6 +302,17 @@ public class Game {
 
     public boolean isOver() {
         return this.isOver;
+    }
+    
+    public int getTotalTroopCount() {
+    	int totalTroopCount = 0;
+    	List<Castle> allCastles = gameMap.getCastles();
+    	
+    	for (Castle castle : allCastles) {
+    		totalTroopCount += castle.getTroopCount();
+    	}
+    	
+    	return totalTroopCount;
     }
     
     private void setupJokers() {

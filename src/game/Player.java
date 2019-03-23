@@ -85,4 +85,14 @@ public abstract class Player {
         this.remainingTroops = 0;
         this.points = 0;
     }
+    
+    public int getTotalTroopCount(Game game) {
+    	int totalTroopCount = remainingTroops;
+    	
+    	for (Castle ownCastle : getCastles(game)) {
+    		totalTroopCount += ownCastle.getTroopCount();
+    	}
+    	
+    	return totalTroopCount;
+    }
 }

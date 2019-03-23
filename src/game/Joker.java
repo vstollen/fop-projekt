@@ -29,6 +29,13 @@ public abstract class Joker {
 	 */
 	public abstract void invoke();
 	
+	/**
+	 * Wird nach größeren Ereignissen im Spiel ausgeführt (Nach Angriffen, etc.)
+	 */
+	public void update() {
+		
+	}
+	
 	public final String getName() {
 		return name;
 	}

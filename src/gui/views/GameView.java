@@ -2,9 +2,12 @@ package gui.views;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -12,7 +15,9 @@ import javax.swing.text.StyledDocument;
 
 import game.AI;
 import game.Game;
+import game.GameConstants;
 import game.GameInterface;
+import game.Joker;
 import game.Player;
 import game.Team;
 import game.map.Castle;
@@ -27,10 +32,19 @@ public class GameView extends View implements GameInterface {
     private JScrollPane scrollLog;
     private JTextPane txtStats;
     private DicePanel dices;
+    private JList<String> jokerList;
+    private JScrollPane scrollingJokers;
+    private JTextPane jokerHint;
+    private JButton jokerButton;
     private JTextPane gameLog;
-    private JButton button;
+    private JButton primaryActionButton;
     private Game game;
 
+    private DefaultListModel<String> jokerListModel;
+    
+    private static final int jokerListHeight = 75;
+    private static final int jokerHintHeight = 75;
+    
     GameView(GameWindow gameWindow, Game game) {
         super(gameWindow);
         this.game = game;
@@ -63,13 +77,18 @@ public class GameView extends View implements GameInterface {
 
         txtStats.setSize(sidebarWidth, 50 + 20 * game.getPlayers().size());
         dices.setSize(sidebarWidth, 50);
-        scrollLog.setSize(sidebarWidth, h - txtStats.getHeight() - dices.getHeight() - 50 - BUTTON_SIZE.height);
+        scrollLog.setSize(sidebarWidth, h - txtStats.getHeight() - dices.getHeight() - 80 - jokerListHeight - jokerHintHeight- 2 * BUTTON_SIZE.height);
         scrollLog.revalidate();
         scrollLog.repaint();
         
-        button.setSize(sidebarWidth, BUTTON_SIZE.height);
+        scrollingJokers.setSize(sidebarWidth, jokerListHeight);
+        jokerHint.setSize(sidebarWidth, jokerHintHeight);
+        
+        jokerButton.setSize(sidebarWidth, BUTTON_SIZE.height);
+        
+        primaryActionButton.setSize(sidebarWidth, BUTTON_SIZE.height);
 
-        JComponent components[] = { txtStats, dices, scrollLog, button};
+        JComponent components[] = {txtStats, dices, scrollingJokers, jokerHint, jokerButton, scrollLog, primaryActionButton};
         for(JComponent component : components) {
             component.setLocation(x, y);
             y += 10 + component.getHeight();
@@ -85,24 +104,41 @@ public class GameView extends View implements GameInterface {
         this.txtStats = createTextPane();
         this.txtStats.addStyle("PlayerColors", null);
         this.add(txtStats);
+        
         this.dices = new DicePanel(getWindow().getResources());
         this.dices.setBorder(new LineBorder(Color.BLACK));
         this.add(dices);
+        
+        this.jokerList = new JList<>();
+        this.jokerList.addListSelectionListener(e -> updateJokerHint());
+        this.jokerListModel = new DefaultListModel<>();
+        this.jokerList.setModel(jokerListModel);
+        this.scrollingJokers = new JScrollPane(jokerList);
+        this.add(scrollingJokers);
+        
+        this.jokerButton = createButton("Joker Einsetzen");
+        this.add(jokerButton);
+        
+        this.jokerHint = createTextPane();
+        this.add(jokerHint);
+        
         this.gameLog = createTextPane();
         this.gameLog.addStyle("PlayerColor", null);
+        
         this.scrollLog = new JScrollPane(gameLog);
         this.add(scrollLog);
-        this.button = createButton("Nächste Runde");
+        
+        this.primaryActionButton = createButton("Nächste Runde");
 
         getWindow().setSize(1080, 780);
-        getWindow().setMinimumSize(new Dimension(750, 450));
+        getWindow().setMinimumSize(new Dimension(750, 480 + jokerListHeight + jokerHintHeight + BUTTON_SIZE.height));
     }
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if(actionEvent.getSource() == button) {
+        if(actionEvent.getSource() == primaryActionButton) {
 
-            switch (button.getText()) {
+            switch (primaryActionButton.getText()) {
                 case "Nächste Runde":
 
                     if (game.getCurrentPlayer() instanceof AI)
@@ -143,6 +179,8 @@ public class GameView extends View implements GameInterface {
 
                     break;
             }
+        } else if (actionEvent.getSource() == jokerButton) {
+        	invokeJoker();
         }
     }
 
@@ -227,8 +265,9 @@ public class GameView extends View implements GameInterface {
 
         map.clearSelection();
         updateStats();
+        updateJokers();
 
-        button.setText(human ? "Nächste Runde" : "Überspringen");
+        primaryActionButton.setText(human ? "Nächste Runde" : "Überspringen");
     }
 
     @Override
@@ -307,7 +346,7 @@ public class GameView extends View implements GameInterface {
 
     @Override
     public void onAttackStarted(Castle source, Castle target, int troopCount) {
-        button.setText("Überspringen");
+        primaryActionButton.setText("Überspringen");
         logLine("%PLAYER% greift " + target.getName() + " mit " + troopCount + " Truppen an.", source.getOwner());
     }
 
@@ -315,6 +354,68 @@ public class GameView extends View implements GameInterface {
     public void onAttackStopped() {
         map.reset();
         updateStats();
-        button.setText("Nächste Runde");
+        primaryActionButton.setText("Nächste Runde");
+    }
+    
+    /**
+     * Updated die Joker
+     */
+    private void updateJokers() {
+    	
+		jokerListModel.clear();
+    	
+    	for (Joker joker : GameConstants.JOKERS) {
+    		
+    		if (joker.isUsable()) {
+    			jokerListModel.addElement(joker.getName());
+    		}
+    	}
+    }
+    
+    private void updateJokerHint() {
+    	Joker selectedJoker = getSelectedJoker();
+    	
+    	if (selectedJoker == null) {
+    		jokerHint.setText("");
+    		return;
+    	}
+    	
+    	String hint = selectedJoker.getHint();
+    	jokerHint.setText(hint);
+    }
+    
+    /**
+     * Führt den ausgewählen Joker aus
+     */
+    private void invokeJoker() {
+    	Joker selectedJoker = getSelectedJoker();
+    	
+    	if (selectedJoker != null) {
+        	selectedJoker.onInvocation();	
+    	}
+    	
+    	updateJokers();
+    }
+    
+    /**
+     * Findet den aktuell ausgewählten Joker
+     * @return Der aktuell ausgewählte Joker, null falls kein Joker ausgewählt ist
+     */
+    private Joker getSelectedJoker() {
+    	int selectedJokerIndex = jokerList.getSelectedIndex();
+    	
+    	if (selectedJokerIndex < 0) {
+    		return null;
+    	}
+    	
+    	ArrayList<Joker> usableJokers = new ArrayList<>();
+    	
+    	for (Joker joker : GameConstants.JOKERS) {
+    		if (joker.isUsable()) {
+        		usableJokers.add(joker);
+    		}
+    	}
+    	
+    	return usableJokers.get(selectedJokerIndex);
     }
 }

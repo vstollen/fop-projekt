@@ -86,6 +86,7 @@ public class Game {
             throw new IllegalArgumentException("Kein Spielziel gesetzt");
 
         this.generateMap();
+        setupJokers();
 
         // Create random player order
         this.gameInterface = gameInterface;
@@ -307,5 +308,11 @@ public class Game {
 
     public boolean isOver() {
         return this.isOver;
+    }
+    
+    private void setupJokers() {
+    	for (Joker joker : GameConstants.JOKERS) {
+    		joker.setGame(this);
+    	}
     }
 }

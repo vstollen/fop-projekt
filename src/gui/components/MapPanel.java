@@ -14,7 +14,6 @@ import game.AI;
 import game.Game;
 import game.GameConstants;
 import game.map.PathFinding;
-import game.map.TeamPathFinding;
 import game.Player;
 import game.map.Castle;
 import game.map.GameMap;
@@ -191,11 +190,7 @@ public class MapPanel extends JScrollPane {
 
                     if(currentAction != Action.NONE) {
                         if(lastAction != currentAction) {
-                        	if (game.getGoal().getName().equals("Teams")) {
-                        		pathFinding = new TeamPathFinding(game.getMap().getGraph(), selectedCastle, currentAction, currentPlayer);
-                        	} else {
-                        		pathFinding = new PathFinding(game.getMap().getGraph(), selectedCastle, currentAction, currentPlayer);
-                        	}
+                        	pathFinding = new PathFinding(game.getMap().getGraph(), selectedCastle, currentAction, currentPlayer);
                             pathFinding.run();
                         }
 

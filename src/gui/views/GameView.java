@@ -180,6 +180,7 @@ public class GameView extends View implements GameInterface {
             }
         } else if (actionEvent.getSource() == jokerButton) {
         	invokeJoker();
+        	updateStats();
         }
     }
 

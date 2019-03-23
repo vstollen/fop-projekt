@@ -63,6 +63,11 @@ public class JokerTroopbonus extends Joker {
 		super.update();
 	}
 	
+	/**
+	 * Berechnet die Anzahl von Bonustruppen, die player zum aktuellen Zeitpunkt erhalten sollte
+	 * @param player Spieler für den die Zahl der Bonustruppen berechnet werden soll
+	 * @return Die Zahl der Bonustruppen für player
+	 */
 	private int getBonusTroops(Player player) {
 		Game game = getGame();
 		GameMap gameMap = game.getMap();

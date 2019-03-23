@@ -130,7 +130,7 @@ public class GameView extends View implements GameInterface {
         this.primaryActionButton = createButton("Nächste Runde");
 
         getWindow().setSize(1080, 780);
-        getWindow().setMinimumSize(new Dimension(750, 450));
+        getWindow().setMinimumSize(new Dimension(750, 480 + jokerListHeight + jokerHintHeight + BUTTON_SIZE.height));
     }
 
     @Override

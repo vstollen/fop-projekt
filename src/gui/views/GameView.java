@@ -356,7 +356,7 @@ public class GameView extends View implements GameInterface {
     }
     
     /**
-     * Updated die Joker
+     * Updated die Joker Liste und zeigt nur nutzbare Joker an.
      */
     private void updateJokers() {
     	
@@ -368,8 +368,13 @@ public class GameView extends View implements GameInterface {
     			jokerListModel.addElement(joker.getName());
     		}
     	}
+    	
+    	updateJokerHint();
     }
     
+    /**
+     * Setzt den passenden Hinweis zum aktuell ausgewählten Joker
+     */
     private void updateJokerHint() {
     	Joker selectedJoker = getSelectedJoker();
     	

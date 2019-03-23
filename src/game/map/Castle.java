@@ -51,8 +51,8 @@ public class Castle {
      */
     public void moveTroops(Castle target, int troops) {
 
-        // Troops can only be moved to own regions
-        if(target.owner != this.owner)
+        // Troops can only be moved to own team regions
+        if(target.owner.getTeam() != this.owner.getTeam())
             return;
 
         // At least one unit must remain in the source region

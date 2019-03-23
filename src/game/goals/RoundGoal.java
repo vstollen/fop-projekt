@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import game.Game;
 import game.Goal;
 import game.Player;
+import game.Team;
 
 public class RoundGoal extends Goal {
 
@@ -79,7 +80,7 @@ public class RoundGoal extends Goal {
 	}
 
 	@Override
-	public Player getWinner() {
+	public Team getWinnerTeam() {
 		game = getGame();
 		
 		Player winner = null;
@@ -98,7 +99,7 @@ public class RoundGoal extends Goal {
 			return null;
 		}
 		
-		return winner;
+		return winner.getTeam();
 	}
 
 	@Override
@@ -142,7 +143,7 @@ public class RoundGoal extends Goal {
 	 */
 	private boolean isDraw(Player winner, Collection<Player> players) {
 		for (Player player : players) {
-			if (player == winner) {
+			if (player.getTeam() == winner.getTeam()) {
 				continue;
 			}
 			

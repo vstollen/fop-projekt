@@ -13,7 +13,7 @@ import java.util.List;
 public class PathFinding extends GraphAlgorithm<Castle> {
 
     private MapPanel.Action action;
-    protected Player currentPlayer;
+    private Player currentPlayer;
 
     public PathFinding(Graph<Castle> graph, Castle sourceCastle, MapPanel.Action action, Player currentPlayer) {
         super(graph, graph.getNode(sourceCastle));
@@ -35,7 +35,7 @@ public class PathFinding extends GraphAlgorithm<Castle> {
         Castle castleB = edge.getNodeB().getValue();
 
         // One of the regions should belong to the current player
-        if(castleA.getOwner() != currentPlayer && castleB.getOwner() != currentPlayer)
+        if(castleA.getOwner().getTeam() != currentPlayer.getTeam() && castleB.getOwner().getTeam() != currentPlayer.getTeam())
             return false;
 
         if(action == MapPanel.Action.ATTACKING) {
@@ -47,7 +47,7 @@ public class PathFinding extends GraphAlgorithm<Castle> {
                 return true;
 
             // Else both regions should belong to the current player
-            return castleA.getOwner() == castleB.getOwner() && castleA.getOwner() == currentPlayer;
+            return castleA.getOwner().getTeam() == castleB.getOwner().getTeam() && castleA.getOwner().getTeam() == currentPlayer.getTeam();
         } else {
             return false;
         }
@@ -56,7 +56,7 @@ public class PathFinding extends GraphAlgorithm<Castle> {
 
     @Override
     protected boolean isPassable(Node<Castle> node) {
-        return node.getValue().getOwner() == currentPlayer;
+        return node.getValue().getOwner().getTeam() == currentPlayer.getTeam();
     }
 
     public List<Edge<Castle>> getPath(Castle targetCastle) {

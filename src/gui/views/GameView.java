@@ -236,15 +236,16 @@ public class GameView extends View implements GameInterface {
     }
 
     @Override
-    public void onGameOver(Player winner) {
-        if(winner == null) {
-            this.logLine("Spiel vorbei - Unentschieden.");
-        } else {
-            this.logLine("Spiel vorbei - %PLAYER% gewinnt das Spiel.", winner);
-        }
+    public void onGameOver(Team winnerTeam) {
+    	if(winnerTeam == null) {
+    		this.logLine("Spiel vorbei - Unentschieden.");
+    	} else {
+    		for (Player winner : winnerTeam.getMembers())
+    			this.logLine("Spiel vorbei - %PLAYER% gewinnt das Spiel.", winner);
+    	}
 
-        button.setText("Beenden");
-        updateStats();
+    	primaryActionButton.setText("Beenden");
+    	updateStats();
     }
 
     @Override

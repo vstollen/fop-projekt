@@ -110,7 +110,7 @@ public class Game {
         if(attackThread != null)
             return attackThread;
 
-        if(source.getOwner() == target.getOwner() || troopCount < 1)
+        if(source.getOwner().getTeam() == target.getOwner().getTeam() || troopCount < 1)
             return null;
 
         attackThread = new AttackThread(this, source, target, troopCount);
@@ -150,7 +150,7 @@ public class Game {
     }
 
     public void moveTroops(Castle source, Castle destination, int troopCount) {
-        if(troopCount >= source.getTroopCount() || source.getOwner() != destination.getOwner())
+        if(troopCount >= source.getTroopCount() || source.getOwner().getTeam() != destination.getOwner().getTeam())
             return;
 
         source.moveTroops(destination, troopCount);
@@ -206,17 +206,19 @@ public class Game {
 
     public void endGame() {
         isOver = true;
-        Player winner = goal.getWinner();
+        Team winnerTeam = goal.getWinnerTeam();
 
-        if(winner != null)
-            addScore(goal.getWinner(), 150);
+        if(winnerTeam != null) {
+        	for (Player winner : winnerTeam.getMembers())
+        		addScore(winner, 150);
+        }
 
         Resources resources = Resources.getInstance();
         for(Player player : players) {
             resources.addScoreEntry(new ScoreEntry(player, goal));
         }
 
-        gameInterface.onGameOver(winner);
+        gameInterface.onGameOver(winnerTeam);
     }
 
     public void nextTurn() {
@@ -242,7 +244,7 @@ public class Game {
 
         if(nextPlayer == null) {
             isOver = true;
-            gameInterface.onGameOver(goal.getWinner());
+            gameInterface.onGameOver(goal.getWinnerTeam());
             return;
         }
         

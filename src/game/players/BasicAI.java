@@ -50,11 +50,16 @@ public class BasicAI extends AI {
                 Node<Castle> node = graph.getNode(castle);
                 for(Edge<Castle> edge : graph.getEdges(node)) {
                     Castle otherCastle = edge.getOtherNode(node).getValue();
-                    if(otherCastle.getOwner() != this) {
+                    if(otherCastle.getOwner().getTeam() != this.getTeam()) {
                         castleNearEnemy.add(castle);
                         break;
                     }
                 }
+            }
+
+            // If no enemy castles are nearby, idle
+            if (castleNearEnemy.isEmpty()) {
+            	return;
             }
 
             while(this.getRemainingTroops() > 0) {
@@ -83,7 +88,7 @@ public class BasicAI extends AI {
                     Node<Castle> node = graph.getNode(castle);
                     for (Edge<Castle> edge : graph.getEdges(node)) {
                         Castle otherCastle = edge.getOtherNode(node).getValue();
-                        if (otherCastle.getOwner() != this && castle.getTroopCount() >= otherCastle.getTroopCount()) {
+                        if (otherCastle.getOwner().getTeam() != this.getTeam() && castle.getTroopCount() >= otherCastle.getTroopCount()) {
                             AttackThread attackThread = game.startAttack(castle, otherCastle, castle.getTroopCount());
                             if(fastForward)
                                 attackThread.fastForward();

@@ -215,7 +215,7 @@ public class MapPanel extends JScrollPane {
                             setCursor(Cursor.getDefaultCursor());
                             gameView.updateStats();
                         }
-                    } else if(currentAction == Action.ATTACKING && pathFinding.getPath(nextCastle) != null && nextCastle.getOwner() != selectedCastle.getOwner()) {
+                    } else if(currentAction == Action.ATTACKING && pathFinding.getPath(nextCastle) != null && nextCastle.getOwner().getTeam() != selectedCastle.getOwner().getTeam()) {
                         NumberDialog nd = new NumberDialog("Mit wie vielen Truppen möchtest du angreifen?", 1, selectedCastle.getTroopCount(), selectedCastle.getTroopCount()  - 1);
                         if(nd.showDialog(MapPanel.this)) {
                             game.startAttack(selectedCastle, nextCastle, nd.getValue());
@@ -265,7 +265,7 @@ public class MapPanel extends JScrollPane {
                 if(currentAction == Action.MOVING || currentAction == Action.ATTACKING) {
                     targetCastle = getRegion(mousePos);
                     if(targetCastle != null) {
-                        if(currentAction != Action.ATTACKING || targetCastle.getOwner() != selectedCastle.getOwner()) {
+                        if(currentAction != Action.ATTACKING || targetCastle.getOwner().getTeam() != selectedCastle.getOwner().getTeam()) {
                             highlightedEdges = pathFinding.getPath(targetCastle);
                             repaint();
                         } else {

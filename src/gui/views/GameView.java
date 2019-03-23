@@ -362,11 +362,7 @@ public class GameView extends View implements GameInterface {
      * Updated die Joker Liste und zeigt nur nutzbare Joker an.
      */
     private void updateJokers() {
-    	Enumeration<String> oldElementsEnum = jokerListModel.elements();
-    	ArrayList<String> oldElements = new ArrayList<>();
-    	while (oldElementsEnum.hasMoreElements()) {
-    		oldElements.add(oldElementsEnum.nextElement());
-    	}
+    	ArrayList<String> oldElements = getCurrentJokerNames();
     	
     	int selectedIndex = jokerList.getSelectedIndex();
     	String selectedJokerName = "";
@@ -377,21 +373,31 @@ public class GameView extends View implements GameInterface {
     	
 		jokerListModel.clear();
     	
+		fillJokerList(selectedJokerName);
+    	updateJokerHint();
+    }
+    
+    /**
+     * Füllt die Joker Liste mit nutzbaren Jokern.
+     * Wählt zusätzlich den Joker mit dem Namen selectedJokerName aus, falls vorhanden.
+     * @param selectedJokerName Name des auszuwählenden Jokers
+     */
+    private void fillJokerList(String selectedJokerName) {
     	for (Joker joker : GameConstants.JOKERS) {
     		
     		joker.update();
     		
+    		String jokerName = joker.getName();
+    		
     		if (joker.isUsable()) {
-    			jokerListModel.addElement(joker.getName());
+    			jokerListModel.addElement(jokerName);
     			
-    			if (joker.getName().equals(selectedJokerName)) {
+    			if (jokerName.equals(selectedJokerName)) {
     				int newJokerIndex = jokerListModel.size() - 1;
     				jokerList.setSelectedIndex(newJokerIndex);
     			}
     		}
     	}
-    	
-    	updateJokerHint();
     }
     
     /**
@@ -442,5 +448,21 @@ public class GameView extends View implements GameInterface {
     	}
     	
     	return usableJokers.get(selectedJokerIndex);
+    }
+    
+    /**
+     * Bildet eine Liste aus den Joker Namen aktuell angezeigten Joker
+     * @return Eine Liste der Namen der aktuell angezeigten Joker
+     */
+    private ArrayList<String> getCurrentJokerNames() {
+    	ArrayList<String> currentJokers = new ArrayList<>();
+    	currentJokers.ensureCapacity(jokerListModel.getSize());
+    	
+    	Enumeration<String> jokerListElements = jokerListModel.elements();
+    	while(jokerListElements.hasMoreElements()) {
+    		currentJokers.add(jokerListElements.nextElement());
+    	}
+    	
+    	return currentJokers;
     }
 }

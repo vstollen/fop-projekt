@@ -44,7 +44,6 @@ public class JokerTroopbonus extends Joker {
 	@Override
 	public void invoke() {
 		Game game = getGame();
-		
 		Player currentPlayer = game.getCurrentPlayer();
 		
 		int bonusTroops = getBonusTroops(currentPlayer);

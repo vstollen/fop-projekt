@@ -6,8 +6,8 @@ public class JokerDummy extends Joker {
 
 	private boolean isUsed = false;
 	
-	public JokerDummy(String name) {
-		super(name);
+	public JokerDummy(String name, String hint) {
+		super(name, hint);
 	}
 
 	@Override

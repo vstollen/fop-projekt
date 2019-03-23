@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -31,12 +33,16 @@ public class GameView extends View implements GameInterface {
     private DicePanel dices;
     private JList<String> jokerList;
     private JScrollPane scrollingJokers;
+    private JTextPane jokerHint;
     private JButton jokerButton;
     private JTextPane gameLog;
     private JButton primaryActionButton;
     private Game game;
 
     private DefaultListModel<String> jokerListModel;
+    
+    private static final int jokerListHeight = 75;
+    private static final int jokerHintHeight = 75;
     
     GameView(GameWindow gameWindow, Game game) {
         super(gameWindow);
@@ -70,17 +76,18 @@ public class GameView extends View implements GameInterface {
 
         txtStats.setSize(sidebarWidth, 50 + 20 * game.getPlayers().size());
         dices.setSize(sidebarWidth, 50);
-        scrollLog.setSize(sidebarWidth, h - txtStats.getHeight() - dices.getHeight() - 70 - 150 - 2 * BUTTON_SIZE.height);
+        scrollLog.setSize(sidebarWidth, h - txtStats.getHeight() - dices.getHeight() - 80 - jokerListHeight - jokerHintHeight- 2 * BUTTON_SIZE.height);
         scrollLog.revalidate();
         scrollLog.repaint();
         
-        scrollingJokers.setSize(sidebarWidth, 150);
+        scrollingJokers.setSize(sidebarWidth, jokerListHeight);
+        jokerHint.setSize(sidebarWidth, jokerHintHeight);
         
         jokerButton.setSize(sidebarWidth, BUTTON_SIZE.height);
         
         primaryActionButton.setSize(sidebarWidth, BUTTON_SIZE.height);
 
-        JComponent components[] = {txtStats, dices, scrollingJokers, jokerButton, scrollLog, primaryActionButton};
+        JComponent components[] = {txtStats, dices, scrollingJokers, jokerHint, jokerButton, scrollLog, primaryActionButton};
         for(JComponent component : components) {
             component.setLocation(x, y);
             y += 10 + component.getHeight();
@@ -102,6 +109,7 @@ public class GameView extends View implements GameInterface {
         this.add(dices);
         
         this.jokerList = new JList<>();
+        this.jokerList.addListSelectionListener(e -> updateJokerHint());
         this.jokerListModel = new DefaultListModel<>();
         this.jokerList.setModel(jokerListModel);
         this.scrollingJokers = new JScrollPane(jokerList);
@@ -109,6 +117,9 @@ public class GameView extends View implements GameInterface {
         
         this.jokerButton = createButton("Joker Einsetzen");
         this.add(jokerButton);
+        
+        this.jokerHint = createTextPane();
+        this.add(jokerHint);
         
         this.gameLog = createTextPane();
         this.gameLog.addStyle("PlayerColor", null);
@@ -357,6 +368,18 @@ public class GameView extends View implements GameInterface {
     			jokerListModel.addElement(joker.getName());
     		}
     	}
+    }
+    
+    private void updateJokerHint() {
+    	Joker selectedJoker = getSelectedJoker();
+    	
+    	if (selectedJoker == null) {
+    		jokerHint.setText("");
+    		return;
+    	}
+    	
+    	String hint = selectedJoker.getHint();
+    	jokerHint.setText(hint);
     }
     
     /**

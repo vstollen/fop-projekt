@@ -14,6 +14,7 @@ import game.AI;
 import game.Game;
 import game.GameInterface;
 import game.Player;
+import game.Team;
 import game.map.Castle;
 import gui.GameWindow;
 import gui.View;

@@ -24,7 +24,7 @@ public abstract class Joker {
 	/**
 	 * Wird ausgeführt, wenn der Joker ausgewählt wird
 	 */
-	public abstract void onInvocation();
+	public abstract void invoke();
 	
 	public final String getName() {
 		return name;

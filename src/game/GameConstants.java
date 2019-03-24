@@ -1,6 +1,8 @@
 package game;
 
 import game.goals.*;
+import game.jokers.DummyJoker;
+import game.jokers.TroopbonusJoker;
 import game.players.*;
 
 import java.awt.*;
@@ -30,8 +32,7 @@ public class GameConstants {
 
     public static final Goal GAME_GOALS[] = {
         new ConquerGoal(),
-        new RoundGoal(),
-        new TeamGoal()
+        new RoundGoal()
         // TODO: Add more Goals
     };
 
@@ -39,5 +40,12 @@ public class GameConstants {
         Human.class,
         BasicAI.class,
         // TODO: Add more Player types, like different AIs
+    };
+    
+    public static final Joker JOKERS[] = {
+    	new TroopbonusJoker(),
+    	new DummyJoker("Dummy Übernahme", "Übernahme"),
+    	new DummyJoker("Dummy Aussetzen", "Aussetzen"),
+    	new DummyJoker("Dummy Tunnel", "Tunnel")
     };
 }

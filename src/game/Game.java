@@ -88,6 +88,7 @@ public class Game {
             throw new IllegalArgumentException("Kein Spielziel gesetzt");
 
         this.generateMap();
+        setupJokers();
 
         // Create random player order
         this.gameInterface = gameInterface;
@@ -112,7 +113,7 @@ public class Game {
         if(attackThread != null)
             return attackThread;
 
-        if(source.getOwner() == target.getOwner() || troopCount < 1)
+        if(source.getOwner().getTeam() == target.getOwner().getTeam() || troopCount < 1)
             return null;
 
         attackThread = new AttackThread(this, source, target, troopCount);
@@ -152,7 +153,7 @@ public class Game {
     }
 
     public void moveTroops(Castle source, Castle destination, int troopCount) {
-        if(troopCount >= source.getTroopCount() || source.getOwner() != destination.getOwner())
+        if(troopCount >= source.getTroopCount() || source.getOwner().getTeam() != destination.getOwner().getTeam())
             return;
 
         source.moveTroops(destination, troopCount);
@@ -168,7 +169,7 @@ public class Game {
         return gameInterface.onRoll(player, dices, fastForward);
     }
 
-    private boolean allCastlesChosen() {
+    public boolean allCastlesChosen() {
         return gameMap.getCastles().stream().noneMatch(c -> c.getOwner() == null);
     }
 
@@ -239,8 +240,10 @@ public class Game {
         isOver = true;
         Player winner = goal.getWinner();
 
-        if(winner != null)
-            addScore(goal.getWinner(), 150);
+        if(winner != null) {
+        	for (Player p : winner.getTeam().getMembers())
+        		addScore(p, 150);
+        }
 
         Resources resources = Resources.getInstance();
         for(Player player : players) {
@@ -343,5 +346,31 @@ public class Game {
 
     public boolean isOver() {
         return this.isOver;
+    }
+    
+    /**
+     * Berechnet die gesamte Anzahl an verfügbaren Truppen.
+     * Zählt sowohl Truppen auf Burgen, als auch unverteilte Truppen.
+     * @return Die gesamte Truppenanzahl.
+     */
+    public int getTotalTroopCount() {
+    	int totalTroopCount = 0;
+    	List<Castle> allCastles = gameMap.getCastles();
+    	
+    	for (Castle castle : allCastles) {
+    		totalTroopCount += castle.getTroopCount();
+    	}
+    	
+    	for (Player player : players) {
+    		totalTroopCount += player.getRemainingTroops();
+    	}
+    	
+    	return totalTroopCount;
+    }
+    
+    private void setupJokers() {
+    	for (Joker joker : GameConstants.JOKERS) {
+    		joker.setGame(this);
+    	}
     }
 }

@@ -25,6 +25,7 @@ public class GameMenu extends View {
     private JTextArea lblGoalDescription;
 
     private NumberChooser playerCount;
+    private JCheckBox teamsCheck;
     private JComboBox mapSize;
     private JComboBox goal;
     private JComponent[][] playerConfig;
@@ -52,14 +53,15 @@ public class GameMenu extends View {
         offsetX = (getWidth() - 2*columnWidth - 25) / 2 + (columnWidth - 350) / 2;
         lblPlayerCount.setLocation(offsetX, offsetY + 2);
         playerCount.setLocation(offsetX + lblPlayerCount.getWidth() + 10, offsetY);
+        teamsCheck.setLocation(offsetX + lblPlayerCount.getWidth() + 10 + playerCount.getWidth() + 10, offsetY);
         offsetY += 50;
 
         for(int i = 0; i < GameConstants.MAX_PLAYERS; i++) {
             int tempOffsetX = offsetX;
-            for(JComponent c : playerConfig[i]) {
-                c.setLocation(tempOffsetX, offsetY);
-                tempOffsetX += c.getWidth() + 10;
-                c.setEnabled(i < playerCount.getValue());
+            for(int j = 0; j < playerConfig[i].length; j++) {
+            	playerConfig[i][j].setLocation(tempOffsetX, offsetY);
+            	tempOffsetX += playerConfig[i][j].getWidth() + 10;
+            	playerConfig[i][j].setEnabled(i < playerCount.getValue() && (j == 4 ? teamsCheck.isSelected() : true));
             }
 
             offsetY += 40;
@@ -94,25 +96,40 @@ public class GameMenu extends View {
         playerCount.setSize(125, 25);
         playerCount.addValueListener((oldValue, newValue) -> onResize());
         add(playerCount);
+        
+        // Team Checkbox
+        teamsCheck = new JCheckBox("Teams");
+        teamsCheck.setSize(75, 25);
+        teamsCheck.addActionListener((check) -> onResize());
+        add(teamsCheck);
 
         // Player rows:
-        // [Number] [Color] [Name] [Human/AI] (Team?)
+        // [Number] [Color] [Name] [Human/AI] [Team]
+        Vector<String> availableTeams = new Vector<>();
+        for(int i = 0; i < GameConstants.MAX_PLAYERS; i++)
+        	availableTeams.add(String.format("Team %d", i + 1));
+
         Vector<String> playerTypes = new Vector<>();
         for(Class<?> c : GameConstants.PLAYER_TYPES)
             playerTypes.add(c.getSimpleName());
 
         playerConfig = new JComponent[GameConstants.MAX_PLAYERS][];
         for(int i = 0; i < GameConstants.MAX_PLAYERS; i++) {
+        	JComboBox<String> teamSelection = new JComboBox<>(availableTeams);
+        	teamSelection.setSelectedIndex(i);
+        	
             playerConfig[i] = new JComponent[] {
                 createLabel(String.format("%d.", i + 1),16),
                 new ColorChooserButton(GameConstants.PLAYER_COLORS[i]),
                 new JTextField(String.format("Spieler %d", i + 1)),
-                new JComboBox<>(playerTypes)
+                new JComboBox<>(playerTypes),
+                teamSelection
             };
 
             playerConfig[i][1].setSize(25, 25);
-            playerConfig[i][2].setSize(200, 25);
-            playerConfig[i][3].setSize(125, 25);
+            playerConfig[i][2].setSize(125, 25);
+            playerConfig[i][3].setSize(100, 25);
+            playerConfig[i][4].setSize(100, 25);
 
             for(JComponent c : playerConfig[i])
                 add(c);
@@ -178,6 +195,12 @@ public class GameMenu extends View {
                     return;
                 }
 
+                // Create Teams
+                Team[] teamList = new Team[playerCount];
+                for (int i = 0; i < playerCount; i++) {
+                	teamList[i] = new Team();
+                }
+
                 // Create Players
                 Game game = new Game();
                 for (int i = 0; i < playerCount; i++) {
@@ -189,9 +212,14 @@ public class GameMenu extends View {
 
                     Color color = ((ColorChooserButton) playerConfig[i][1]).getSelectedColor();
                     int playerType = ((JComboBox) playerConfig[i][3]).getSelectedIndex();
+                    int teamNumber = ((JComboBox) playerConfig[i][4]).getSelectedIndex();
 
                     if (playerType < 0 || playerType >= GameConstants.PLAYER_TYPES.length) {
                         showErrorMessage(String.format("Bitte geben Sie einen gültigen Spielertyp für Spieler %d an.", i + 1), "Ungültige Eingaben");
+                        return;
+                    }
+                    if (teamNumber < 0 || teamNumber >= GameConstants.MAX_PLAYERS) {
+                        showErrorMessage(String.format("Bitte geben Sie eine gültige Teamnummer für Spieler %d an.", i + 1), "Ungültige Eingaben");
                         return;
                     }
 
@@ -200,6 +228,9 @@ public class GameMenu extends View {
                         showErrorMessage(String.format("Fehler beim Erstellen von Spieler %d", i + 1), "Unbekannter Fehler");
                         return;
                     }
+
+                    Team team = teamsCheck.isSelected() ? teamList[teamNumber] : new Team();
+                    player.setTeam(team);
 
                     game.addPlayer(player);
                 }

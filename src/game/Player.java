@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public abstract class Player {
 
     private final String name;
-    private final Team team;
+    private Team team;
     private Color color;
     private int points;
     private int remainingTroops;
@@ -20,7 +20,7 @@ public abstract class Player {
 
     protected Player(String name, Color color) {
         this.name = name;
-        this.team = new Team(this);
+        this.team = null;
         this.points = 0;
         this.color = color;
         this.remainingTroops = 0;
@@ -54,6 +54,10 @@ public abstract class Player {
 
     public String getName() {
         return this.name;
+    }
+
+    public void setTeam(Team newTeam) {
+    	this.team = newTeam.addPlayer(this);
     }
 
     public Team getTeam() {
@@ -116,6 +120,22 @@ public abstract class Player {
     public void reset() {
         this.remainingTroops = 0;
         this.points = 0;
+    }
+
+    /**
+     * Berechnet die gesamte Anzahl von Truppen in Besitz des Spielers.
+     * Dazu zählen Truppen auf Burgen und unverteilte Truppen
+     * @param game
+     * @return Die Anzahl von Truppen in Besitz des Spielers
+     */
+    public int getTotalTroopCount(Game game) {
+    	int totalTroopCount = remainingTroops;
+    	
+    	for (Castle ownCastle : getCastles(game)) {
+    		totalTroopCount += ownCastle.getTroopCount();
+    	}
+    	
+    	return totalTroopCount;
     }
 
 }

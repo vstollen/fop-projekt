@@ -169,15 +169,40 @@ public class Game {
     private boolean allCastlesChosen() {
         return gameMap.getCastles().stream().noneMatch(c -> c.getOwner() == null);
     }
-
+    
+    public boolean allFlagsDistributed() {
+    	return this.getPlayers().stream().allMatch(c -> c.getFlagCastle() != null);
+    }
+    
     public AttackThread getAttackThread() {
         return this.attackThread;
     }
 
     public void chooseCastle(Castle castle, Player player) {
-        if(castle.getOwner() != null || player.getRemainingTroops() == 0)
+        if(allCastlesChosen() &&
+    	   castle.getOwner() == player && 
+    	   player.getFlagCastle() == null &&
+    	   this.getGoal().getName() == "Capture the Flag" &&
+    	   !this.allFlagsDistributed()) {
+    		
+    		try {
+				player.setFlagCastle(castle);
+				castle.makeFlagCastle(player);
+				castle.addTroops(player.getRemainingTroops());
+				player.removeTroops(player.getRemainingTroops());
+				nextTurn();
+				
+			} catch (hasFlagCastleException | alreadyFlagCastleException ex) {
+				System.out.println(ex.getMessage());
+				ex.printStackTrace();
+				nextTurn();
+			}
+    		
+    	}
+    	
+        if(castle.getOwner() != null || player.getRemainingTroops() == 0) {
             return;
-
+        }
         gameInterface.onCastleChosen(castle, player);
         player.removeTroops(1);
         castle.setOwner(currentPlayer);
@@ -246,12 +271,17 @@ public class Game {
             return;
         }
         
-        if (round == 1 && allCastlesChosen()) {
+         if ( (round == 1 && allCastlesChosen() && this.getGoal().getName() != "Capture the Flag" ) ||
+        		(allFlagsDistributed() && this.getGoal().getName() == "Capture the Flag")
+        		) {
         	startingPlayer = nextPlayer;
         }
 
         currentPlayer = nextPlayer;
-        if(round == 0 || (round == 1 && allCastlesChosen()) || (round > 1 && currentPlayer == startingPlayer)) {
+        if(round == 0 || (round == 1 && allCastlesChosen() && this.getGoal().getName() != "Capture the Flag") ||
+          (round > 1 && currentPlayer == startingPlayer) ||
+          (this.getGoal().getName() == "Capture the Flag" && this.getPlayers().stream().allMatch(c -> c.getFlagCastle() != null))) {
+
             round++;
             gameInterface.onNewRound(round);
         }
@@ -259,8 +289,10 @@ public class Game {
         int numRegions = currentPlayer.getNumRegions(this);
 
         int addTroops;
-        if(round == 1)
-            addTroops = GameConstants.CASTLES_AT_BEGINNING;
+        if(round == 1) {
+            addTroops = GameConstants.CASTLES_AT_BEGINNING;  // TODO decide if more troops are needed for the FlagCastle
+            /* if(allCastlesChosen() && this.getRound() == 1 && this.goal.getName() == "Capture the Flag")
+            	addTroops += x; */ // x = whatever many - 3 troops are fitting for being dumped on the flagcastle
         else {
             addTroops = Math.max(3, numRegions / GameConstants.TROOPS_PER_ROUND_DIVISOR);
             addScore(currentPlayer, addTroops * 5);

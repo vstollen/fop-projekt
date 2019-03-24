@@ -111,5 +111,10 @@ public abstract class Player {
     	
     	return totalTroopCount;
     }
+    
+    @Override
+    public String toString() {
+    	return name;
+    }
 
 }

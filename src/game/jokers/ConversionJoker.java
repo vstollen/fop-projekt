@@ -6,18 +6,18 @@ import game.Game;
 import game.Joker;
 import game.Player;
 
-public class JokerConversion extends Joker {
+public class ConversionJoker extends Joker {
 
 	private int maxInvocationsPerPlayer;
 	private HashMap<Player, Integer> invocationsLeft = new HashMap<>();
 	
 	private static final String hint = "Der nächste Angriff konvertiert die Burg des Gegners und bekehrt die darauf liegenden Truppen.";
 
-	public JokerConversion() {
+	public ConversionJoker() {
 		this(1);
 	}
 
-	public JokerConversion(int invocations) {
+	public ConversionJoker(int invocations) {
 		super("Konversion", hint);
 		maxInvocationsPerPlayer = invocations;
 	}
@@ -35,6 +35,10 @@ public class JokerConversion extends Joker {
 			invocationsLeft.put(currentPlayer, maxInvocationsPerPlayer);
 		}
 		
+		if (currentPlayer.isInstantAttackWin()) {
+			return false;
+		}
+		
 		return invocationsLeft.get(currentPlayer) > 0;
 	}
 
@@ -43,7 +47,7 @@ public class JokerConversion extends Joker {
 		Game game = getGame();
 		Player currentPlayer = game.getCurrentPlayer();
 		
-		currentPlayer.setInstantWin(true);
+		currentPlayer.setInstantAttackWin(true);
 		
 		int playerInvocationsLeft = invocationsLeft.get(currentPlayer) - 1;
 		invocationsLeft.put(currentPlayer, playerInvocationsLeft);

@@ -14,14 +14,14 @@ public abstract class Player {
     private Color color;
     private int points;
     private int remainingTroops;
-	private boolean instantWin;
+	private boolean instantAttackWin;
 
     protected Player(String name, Color color) {
         this.name = name;
         this.points = 0;
         this.color = color;
         this.remainingTroops = 0;
-        this.instantWin = false;
+        this.instantAttackWin = false;
     }
 
     public int getRemainingTroops() {
@@ -83,12 +83,12 @@ public abstract class Player {
         return game.getMap().getCastles().stream().filter(c -> c.getOwner() == this).collect(Collectors.toList());
     }
 
-    public boolean isInstantWin() {
-		return instantWin;
+    public boolean isInstantAttackWin() {
+		return instantAttackWin;
 	}
 
-	public void setInstantWin(boolean instantWin) {
-		this.instantWin = instantWin;
+	public void setInstantAttackWin(boolean instantAttackWin) {
+		this.instantAttackWin = instantAttackWin;
 	}
 
 	public void reset() {

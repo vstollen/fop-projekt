@@ -1,6 +1,7 @@
 package game;
 
 import game.goals.*;
+import game.jokers.ConversionJoker;
 import game.jokers.JokerDummy;
 import game.jokers.JokerTroopbonus;
 import game.players.*;
@@ -44,6 +45,7 @@ public class GameConstants {
     
     public static final Joker JOKERS[] = {
     	new JokerTroopbonus(),
+    	new ConversionJoker(),
     	new JokerDummy("Dummy Übernahme", "Übernahme"),
     	new JokerDummy("Dummy Aussetzen", "Aussetzen"),
     	new JokerDummy("Dummy Tunnel", "Tunnel")

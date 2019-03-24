@@ -9,7 +9,16 @@ import game.Goal;
 import game.Player;
 import game.map.Castle;
 
-
+/**
+ * Eine Klasse für den beliebten Spielmodus "Capture the Flag" in dem jeder Spieler nach der Auswahl
+ * der Burgen eine seiner Burgen wählt in der seine Flagge aufbewahrt werden soll.
+ * Diese zuletzt gewählte Burg wird mit zusätzlichen Truppen versehen und kann nur über einen Angriff weniger als
+ * 3 Truppen halten.
+ * Es ist nicht möglich über die Truppenbewegung unter 3 Truppen in der Burg zurückzulassen.
+ * 
+ * @author Felix Graner
+ *
+ */
 public class CaptureTheFlagGoal extends Goal {
 	
 	public CaptureTheFlagGoal() {

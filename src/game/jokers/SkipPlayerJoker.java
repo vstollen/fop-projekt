@@ -83,9 +83,8 @@ public class SkipPlayerJoker extends Joker {
 		
 		List<Player> opponents = getOpponents(currentPlayer);
 		
-		// Should not happen
 		if (opponents.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Es gibt keine Gegner.");
+			JOptionPane.showMessageDialog(null, "Aktuell kannst du keinen Spieler Aussetzen lassen.\nMan kann nur Gegner, die nicht bereits aussetzen müssen aussetzen lassen.");
 			return null;
 		}
 
@@ -114,6 +113,10 @@ public class SkipPlayerJoker extends Joker {
 
 		for (Player player : game.getPlayers()) {
 			if (goal.hasLost(player)) {
+				continue;
+			}
+			
+			if (skippedPlayers.contains(player)) {
 				continue;
 			}
 			

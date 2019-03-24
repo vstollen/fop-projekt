@@ -15,6 +15,7 @@ public abstract class Player {
     private Color color;
     private int points;
     private int remainingTroops;
+    private Castle flagCastle;
 
     protected Player(String name, Color color) {
         this.name = name;
@@ -22,6 +23,7 @@ public abstract class Player {
         this.points = 0;
         this.color = color;
         this.remainingTroops = 0;
+	this.flagCastle = null;
     }
 
     public int getRemainingTroops() {
@@ -85,6 +87,19 @@ public abstract class Player {
 
     public List<Castle> getCastles(Game game) {
         return game.getMap().getCastles().stream().filter(c -> c.getOwner() == this).collect(Collectors.toList());
+    }
+	
+    public Castle getFlagCastle() {
+    	return this.flagCastle;
+    }
+    
+    public void setFlagCastle(Castle castle) throws hasFlagCastleException {
+    	if(this.flagCastle == null) {
+    		this.flagCastle = castle;
+    	}
+    	else {
+    		throw new hasFlagCastleException(this.flagCastle);
+    	}
     }
 
     public void reset() {

@@ -2,6 +2,12 @@ package gameExceptions;
 
 import game.map.Castle;
 
+/**
+ * Eine Exception die genutzt werden kann, falls ein Spieler schon eine Flagburg besitzt
+ * 
+ * @author Felix Graner
+ *
+ */
 public class hasFlagCastleException extends Exception {
 	
 	/**

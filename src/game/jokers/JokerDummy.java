@@ -16,7 +16,7 @@ public class JokerDummy extends Joker {
 	}
 
 	@Override
-	public void onInvocation() {
+	public void invoke() {
 		System.out.println("Joker " + getName() + " genutzt.");
 		isUsed = true;
 	}

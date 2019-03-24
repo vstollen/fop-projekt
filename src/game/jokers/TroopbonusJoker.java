@@ -9,18 +9,18 @@ import game.Player;
 import game.map.Castle;
 import game.map.GameMap;
 
-public class JokerTroopbonus extends Joker {
+public class TroopbonusJoker extends Joker {
 
 	private int maxInvocationsPerPlayer;
 	private HashMap<Player, Integer> invocationsLeft = new HashMap<>();
 	
 	private static final String hintTemplate = "+%d Truppen\n-------------------\nDer Spieler erhält Truppen abhängig von seiner aktuellen Spielstärke.\nSchwache Spieler erhalten mehr Truppen, starke Spieler erhalten weniger Truppen.";
 	
-	public JokerTroopbonus() {
+	public TroopbonusJoker() {
 		this(1);
 	}
 	
-	public JokerTroopbonus(int invocations) {
+	public TroopbonusJoker(int invocations) {
 		super("Truppenbonus", String.format(hintTemplate, 0));
 		maxInvocationsPerPlayer = invocations;
 	}

@@ -2,11 +2,11 @@ package game.jokers;
 
 import game.Joker;
 
-public class JokerDummy extends Joker {
+public class DummyJoker extends Joker {
 
 	private boolean isUsed = false;
 	
-	public JokerDummy(String name, String hint) {
+	public DummyJoker(String name, String hint) {
 		super(name, hint);
 	}
 

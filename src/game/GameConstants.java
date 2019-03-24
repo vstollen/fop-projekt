@@ -4,8 +4,8 @@ import java.awt.Color;
 
 import game.goals.ConquerGoal;
 import game.goals.RoundGoal;
-import game.jokers.JokerDummy;
-import game.jokers.JokerTroopbonus;
+import game.jokers.DummyJoker;
+import game.jokers.TroopbonusJoker;
 import game.jokers.SkipPlayerJoker;
 import game.players.BasicAI;
 import game.players.Human;
@@ -46,9 +46,9 @@ public class GameConstants {
     };
     
     public static final Joker JOKERS[] = {
-    	new JokerTroopbonus(),
-    	new JokerDummy("Dummy Übernahme", "Übernahme"),
+    	new TroopbonusJoker(),
+    	new DummyJoker("Dummy Übernahme", "Übernahme"),
     	new SkipPlayerJoker(),
-    	new JokerDummy("Dummy Tunnel", "Tunnel")
+    	new DummyJoker("Dummy Tunnel", "Tunnel")
     };
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import game.Game;
+import game.Goal;
 import game.Joker;
 import game.Player;
 
@@ -73,6 +74,11 @@ public class SkipPlayerJoker extends Joker {
 		return false;
 	}
 
+	/**
+	 * Öffnet ein Fenster um einen Gegner auszuwählen.
+	 * @param currentPlayer Der Spieler, der Gegner auswählen soll
+	 * @return Den ausgewählten Gegner
+	 */
 	private Player selectOpponent(Player currentPlayer) {
 		
 		List<Player> opponents = getOpponents(currentPlayer);
@@ -95,12 +101,22 @@ public class SkipPlayerJoker extends Joker {
 		return selectedOpponent;
 	}
 
+	/**
+	 * Bildet eine Liste aller Spieler, die nicht mit currentPlayer verbüdet sind.
+	 * @param currentPlayer Der Spieler dessen Gegner gesucht werden
+	 * @return Einer Liste aller Gegner von currentPlayer
+	 */
 	private List<Player> getOpponents(Player currentPlayer) {
 		Game game = getGame();
-
+		Goal goal = game.getGoal();
+		
 		ArrayList<Player> opponents = new ArrayList<>();
 
 		for (Player player : game.getPlayers()) {
+			if (goal.hasLost(player)) {
+				continue;
+			}
+			
 			if (player.getTeam() != currentPlayer.getTeam()) {
 				opponents.add(player);
 			}

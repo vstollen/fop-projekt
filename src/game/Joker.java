@@ -4,7 +4,7 @@ public abstract class Joker {
 	
 	private Game game;
 	private final String name;
-	private final String hint;
+	private String hint;
 	
 	public Joker(String name, String hint) {
 		this.name = name;
@@ -15,6 +15,9 @@ public abstract class Joker {
 		this.game = game;
 	}
 
+	public void setHint(String hint) {
+		this.hint = hint;
+	}
 	/**
 	 * Gibt zurück, ob der Joker aktuell nutzbar ist
 	 * @return true wenn der Joker nutzbar ist
@@ -24,7 +27,14 @@ public abstract class Joker {
 	/**
 	 * Wird ausgeführt, wenn der Joker ausgewählt wird
 	 */
-	public abstract void onInvocation();
+	public abstract void invoke();
+	
+	/**
+	 * Wird nach größeren Ereignissen im Spiel ausgeführt (Nach Angriffen, etc.)
+	 */
+	public void update() {
+		
+	}
 	
 	public final String getName() {
 		return name;

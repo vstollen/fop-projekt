@@ -88,11 +88,21 @@ public abstract class Player {
     public List<Castle> getCastles(Game game) {
         return game.getMap().getCastles().stream().filter(c -> c.getOwner() == this).collect(Collectors.toList());
     }
-	
+    
+    /**
+     * 
+     * @return die Flagburg des Spielers
+     */
     public Castle getFlagCastle() {
     	return this.flagCastle;
     }
     
+    /**
+     * Weist dem Spieler eine Burg zu in dem seine Flagge aufbewahrt wird
+     * 
+     * @param castle die Burg die als Flagburg verwendet werden soll
+     * @throws hasFlagCastleException falls dem Spieler schon eine Flagburg zugewiesen ist
+     */
     public void setFlagCastle(Castle castle) throws hasFlagCastleException {
     	if(this.flagCastle == null) {
     		this.flagCastle = castle;

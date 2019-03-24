@@ -87,10 +87,10 @@ public abstract class Player {
     }
     
     /**
-     * Berechnet die gesamte Anzahl von Truppen in besitz des Spielers.
+     * Berechnet die gesamte Anzahl von Truppen in Besitz des Spielers.
      * Dazu zählen Truppen auf Burgen und unverteilte Truppen
      * @param game
-     * @return Die Anzahl von Truppen in besitz des Spielers
+     * @return Die Anzahl von Truppen in Besitz des Spielers
      */
     public int getTotalTroopCount(Game game) {
     	int totalTroopCount = remainingTroops;

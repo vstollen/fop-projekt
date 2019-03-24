@@ -49,8 +49,8 @@ public class JokerTroopbonus extends Joker {
 		int bonusTroops = getBonusTroops(currentPlayer);
 		currentPlayer.addTroops(bonusTroops);
 		
-		int playersInvocationsLeft = invocationsLeft.get(currentPlayer) - 1;
-		invocationsLeft.put(currentPlayer, playersInvocationsLeft);
+		int playerInvocationsLeft = invocationsLeft.get(currentPlayer) - 1;
+		invocationsLeft.put(currentPlayer, playerInvocationsLeft);
 	}
 	
 	@Override

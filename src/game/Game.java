@@ -7,6 +7,7 @@ import game.map.Kingdom;
 import game.map.GameMap;
 import game.map.MapSize;
 import gui.AttackThread;
+import gui.ConvertThread;
 import gui.Resources;
 
 public class Game {
@@ -110,9 +111,16 @@ public class Game {
         if(source.getOwner() == target.getOwner() || troopCount < 1)
             return null;
 
-        attackThread = new AttackThread(this, source, target, troopCount);
+        if (source.getOwner().isInstantAttackWin()) {
+        	attackThread = new ConvertThread(this, source, target, troopCount);
+        	gameInterface.onConversionStarted(source, target, troopCount);
+        } else {
+        	attackThread = new AttackThread(this, source, target, troopCount);
+        	gameInterface.onAttackStarted(source, target, troopCount);
+        }
+
         attackThread.start();
-        gameInterface.onAttackStarted(source, target, troopCount);
+        gameInterface.onUpdate();
         return attackThread;
     }
 
@@ -123,14 +131,6 @@ public class Game {
 
         Player attacker = attackerCastle.getOwner();
         Player defender = defenderCastle.getOwner();
-
-        if(attacker.isInstantWin()) {
-        	attacker.setInstantWin(false);
-        	defenderCastle.setOwner(attacker);
-        	gameInterface.onConquer(defenderCastle, attacker);
-        	gameInterface.onUpdate();
-        	return;
-        }
 
         for(int i = 0; i < Math.min(rollAttacker.length, rollDefender.length); i++) {
             if(rollAttackerSorted[i] > rollDefenderSorted[i]) {

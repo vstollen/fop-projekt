@@ -109,6 +109,10 @@ public class GameView extends View implements GameInterface {
 
                     if (game.getCurrentPlayer().getRemainingTroops() > 0) {
                         if (game.getRound() == 1) {
+                            if(game.allCastlesChosen() && !game.allFlagsDistributed() && game.getGoal().getName() == "Capture the Flag") {
+                        		JOptionPane.showMessageDialog(this, "Ohne Flagburg wird das nichts mein Freund", "Flagburg wählen", JOptionPane.WARNING_MESSAGE);
+                        		return;
+                        	}
                             int troops = game.getCurrentPlayer().getRemainingTroops();
                             JOptionPane.showMessageDialog(this, String.format("Du musst noch %s auswählen.",
                                 troops == 1 ? "eine Burg" : troops + " Burgen"),
@@ -210,7 +214,11 @@ public class GameView extends View implements GameInterface {
 
     @Override
     public void onCastleChosen(Castle castle, Player player) {
-        logLine("%PLAYER% wählt "  + castle.getName() + ".", player);
+        if(game.allCastlesChosen()) {  // If allCastlesChosen() --> there is only picking flagCastles, only occurs in CTF
+    		logLine("%PLAYER% wählt "  + castle.getName() + " als Flagburg.", player);
+    	} else {
+    		logLine("%PLAYER% wählt "  + castle.getName() + ".", player);
+    	}
         updateStats();
         map.repaint();
     }
@@ -218,10 +226,12 @@ public class GameView extends View implements GameInterface {
     @Override
     public void onNextTurn(Player currentPlayer, int troopsGot, boolean human) {
         this.logLine("%PLAYER% ist am Zug.", currentPlayer);
-
-        if(game.getRound() == 1)
+        
+        if(game.getRound() == 1 && game.getGoal().getName() == "Capture the Flag" && game.allCastlesChosen()) {
+        	this.logLine("%PLAYER% muss eine Flagburg wählen", currentPlayer);
+        } else if (game.getRound() == 1) {
             this.logLine("%PLAYER% muss " + troopsGot + " Burgen auswählen.", currentPlayer);
-        else
+        } else
             this.logLine("%PLAYER% erhält " + troopsGot + " Truppen.", currentPlayer);
 
         map.clearSelection();
@@ -268,7 +278,11 @@ public class GameView extends View implements GameInterface {
 
     @Override
     public void onConquer(Castle castle, Player player) {
-        logLine("%PLAYER% erobert " + castle.getName(), player);
+        if(castle.isFlagCastle()) {
+    		logLine("%PLAYER% erobert " + castle.getName() + " und somit die Flagge von " + castle.getFlagOwner().getName() + ".", player);
+    	} else {
+    		logLine("%PLAYER% erobert " + castle.getName(), player);
+    	}
         updateStats();
         map.repaint();
     }

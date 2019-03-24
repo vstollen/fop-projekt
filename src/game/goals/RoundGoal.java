@@ -80,7 +80,7 @@ public class RoundGoal extends Goal {
 	}
 
 	@Override
-	public Team getWinnerTeam() {
+	public Player getWinner() {
 		game = getGame();
 		
 		Player winner = null;
@@ -99,7 +99,7 @@ public class RoundGoal extends Goal {
 			return null;
 		}
 		
-		return winner.getTeam();
+		return winner;
 	}
 
 	@Override

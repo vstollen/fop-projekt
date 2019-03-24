@@ -9,7 +9,7 @@ public interface GameInterface {
     void onCastleChosen(Castle castle, Player player);
     void onNextTurn(Player currentPlayer, int troopsGot, boolean human);
     void onNewRound(int round);
-    void onGameOver(Team winnerTeam);
+    void onGameOver(Player winner);
     void onGameStarted(Game game);
     void onConquer(Castle castle, Player player);
     void onUpdate();

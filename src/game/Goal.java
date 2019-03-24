@@ -16,7 +16,7 @@ public abstract class Goal {
     }
 
     public abstract boolean isCompleted();
-    public abstract Team getWinnerTeam();
+    public abstract Player getWinner();
     public abstract boolean hasLost(Player player);
     
     /**

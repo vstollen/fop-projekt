@@ -207,11 +207,11 @@ public class Game {
 
     public void endGame() {
         isOver = true;
-        Team winnerTeam = goal.getWinnerTeam();
+        Player winner = goal.getWinner();
 
-        if(winnerTeam != null) {
-        	for (Player winner : winnerTeam.getMembers())
-        		addScore(winner, 150);
+        if(winner != null) {
+        	for (Player p : winner.getTeam().getMembers())
+        		addScore(p, 150);
         }
 
         Resources resources = Resources.getInstance();
@@ -219,7 +219,7 @@ public class Game {
             resources.addScoreEntry(new ScoreEntry(player, goal));
         }
 
-        gameInterface.onGameOver(winnerTeam);
+        gameInterface.onGameOver(winner);
     }
 
     public void nextTurn() {
@@ -245,7 +245,7 @@ public class Game {
 
         if(nextPlayer == null) {
             isOver = true;
-            gameInterface.onGameOver(goal.getWinnerTeam());
+            gameInterface.onGameOver(goal.getWinner());
             return;
         }
         

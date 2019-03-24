@@ -14,11 +14,11 @@ public class ConquerGoal extends Goal {
 
     @Override
     public boolean isCompleted() {
-        return this.getWinnerTeam() != null;
+        return this.getWinner() != null;
     }
 
     @Override
-    public Team getWinnerTeam() {
+    public Player getWinner() {
         Game game = this.getGame();
         if(game.getRound() < 2)
             return null;
@@ -33,7 +33,7 @@ public class ConquerGoal extends Goal {
                 return null;
         }
 
-        return p.getTeam();
+        return p;
     }
 
     @Override

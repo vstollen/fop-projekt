@@ -224,7 +224,7 @@ public class GameView extends View implements GameInterface {
         gameLog.setCaretPosition(gameLog.getDocument().getLength());
     }
 
-    private void logLine(String line, Player... playerFormat) {
+    public void logLine(String line, Player... playerFormat) {
 
         StyledDocument doc = this.gameLog.getStyledDocument();
         Style style = this.gameLog.getStyle("PlayerColor");

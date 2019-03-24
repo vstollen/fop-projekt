@@ -8,6 +8,7 @@ import game.map.GameMap;
 import game.map.MapSize;
 import gui.AttackThread;
 import gui.Resources;
+import gui.views.GameView;
 
 public class Game {
 
@@ -258,6 +259,16 @@ public class Game {
             round++;
             gameInterface.onNewRound(round);
         }
+        
+        if (shouldSkipTurn()) {
+        	if (gameInterface instanceof GameView) {
+        		GameView gameView = (GameView) gameInterface;
+        		gameView.logLine("%PLAYER% wird übersprungen.", currentPlayer);
+        	}
+        	
+        	nextTurn();
+        	return;
+        }
 
         int numRegions = currentPlayer.getNumRegions(this);
 
@@ -330,9 +341,27 @@ public class Game {
     	return totalTroopCount;
     }
     
+    /**
+     * Bereitet die Joker auf das Spiel vor
+     */
     private void setupJokers() {
     	for (Joker joker : GameConstants.JOKERS) {
     		joker.setGame(this);
     	}
+    }
+    
+    /**
+     * Bewerted, ob der aktuelle Zug übersprungen werden sollte
+     * @return true, wenn der aktuelle Zug übersprungen werden sollte
+     */
+    private boolean shouldSkipTurn() {
+    	
+    	for (Joker joker : GameConstants.JOKERS) {
+    		if (joker.shouldSkipTurn()) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
     }
 }

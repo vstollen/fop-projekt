@@ -43,7 +43,7 @@ public class GameView extends View implements GameInterface {
     private DefaultListModel<String> jokerListModel;
     
     private static final int jokerListHeight = 75;
-    private static final int jokerHintHeight = 75;
+    private static final int jokerHintHeight = 100;
     
     GameView(GameWindow gameWindow, Game game) {
         super(gameWindow);

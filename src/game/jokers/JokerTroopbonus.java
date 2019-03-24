@@ -14,7 +14,7 @@ public class JokerTroopbonus extends Joker {
 	private int maxInvocationsPerPlayer;
 	private HashMap<Player, Integer> invocationsLeft = new HashMap<>();
 	
-	private static final String hintTemplate = "Der Spieler erhält Truppen abhängig von seiner aktuellen Spielstärke.\nSchwache Spieler erhalten mehr Truppen, starke Spieler erhalten weniger Truppen.\nAktuell: %d";
+	private static final String hintTemplate = "+%d Truppen\n-------------------\nDer Spieler erhält Truppen abhängig von seiner aktuellen Spielstärke.\nSchwache Spieler erhalten mehr Truppen, starke Spieler erhalten weniger Truppen.";
 	
 	public JokerTroopbonus() {
 		this(1);

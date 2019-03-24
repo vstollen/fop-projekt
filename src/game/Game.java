@@ -169,7 +169,11 @@ public class Game {
     private boolean allCastlesChosen() {
         return gameMap.getCastles().stream().noneMatch(c -> c.getOwner() == null);
     }
-    
+
+    /**
+    *
+    * @return true, wenn jeder Spieler eine Flagburg gewählt hat
+    */
     public boolean allFlagsDistributed() {
     	return this.getPlayers().stream().allMatch(c -> c.getFlagCastle() != null);
     }

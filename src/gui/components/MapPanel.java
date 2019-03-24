@@ -247,7 +247,11 @@ public class MapPanel extends JScrollPane {
                 if (canChooseCastle()) {
                     Rectangle iconCheck = getBoundsIconCheck(castlePos);
                     if (iconCheck.contains(mousePos)) {
-                        setToolTipText("Diese Burg besetzen");
+                        if(game.getGoal().getName() == "Capture the Flag" && game.allCastlesChosen()) {
+                    		setToolTipText("Diese Burg als Flagburg besetzten");
+                    	} else {
+                    		setToolTipText("Diese Burg besetzen");
+                    	}
                         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                         return;
                     }
@@ -297,16 +301,34 @@ public class MapPanel extends JScrollPane {
     private boolean canChooseCastle() {
         if (selectedCastle == null)
             return false;
-
-        return game.getCurrentPlayer() instanceof Human &&
-                game.getCurrentPlayer().getRemainingTroops() > 0 &&
-                game.getRound() == 1 &&
-                selectedCastle.getOwner() == null;
+        
+        Player currentPlayer = game.getCurrentPlayer();
+        
+        Boolean tempBool = currentPlayer instanceof Human &&
+        				   currentPlayer.getRemainingTroops() > 0 &&
+        				   game.getRound() == 1 &&
+        				   selectedCastle.getOwner() == null;
+        
+        if(game.getGoal().getName() == "Capture the Flag" && 
+        		currentPlayer.getFlagCastle() == null &&
+        		currentPlayer instanceof Human &&
+        		game.getRound() == 1 &&
+        		game.allCastlesChosen() &&
+        		selectedCastle.getOwner() == currentPlayer) {
+        	tempBool = true;
+        }
+        return tempBool;
     }
 
     private boolean canAttack() {
         if(selectedCastle == null)
             return false;
+        
+        if(selectedCastle.isFlagCastle()) {
+        	return game.getCurrentPlayer() instanceof Human &&
+        		   selectedCastle.getOwner() == game.getCurrentPlayer() &&
+        		   selectedCastle.getTroopCount() > 3;
+        }
 
         return game.getCurrentPlayer() instanceof Human &&
                selectedCastle.getOwner() == game.getCurrentPlayer() &&
@@ -455,7 +477,10 @@ public class MapPanel extends JScrollPane {
                     Point location = translate(selectedCastle.getLocationOnMap());
                     g.setColor(selectedCastle.getOwner() == null ? Color.WHITE : selectedCastle.getOwner().getColor());
                     g.drawRect(location.x - 5, location.y - 5, CASTLE_SIZE + 10, CASTLE_SIZE + 10);
-
+                    if(selectedCastle.isFlagCastle()) {
+                    	g.drawRect(location.x, location.y, CASTLE_SIZE, CASTLE_SIZE);  // Schreibe Rhomboid oder sonstige verschoenerung
+                    }
+    
                     if(canPerformAction()) {
                         if (canChooseCastle()) {
                             BufferedImage icon = resources.getCheckIcon();
@@ -463,7 +488,9 @@ public class MapPanel extends JScrollPane {
                             g.drawImage(icon, bounds.x, bounds.y, ICON_SIZE, ICON_SIZE, null);
                         } else if (selectedCastle.getOwner() == game.getCurrentPlayer() && game.getRound() > 1) {
                             boolean hasTroops = game.getCurrentPlayer().getRemainingTroops() > 0;
-                            boolean canMove = selectedCastle.getTroopCount() > 1;
+                            boolean canMove = game.getGoal().getName() == "Capture the Flag" ? selectedCastle.isFlagCastle() ?  // falls CTF und Flagburg, Troopcount >3 
+                            											  	selectedCastle.getTroopCount() > 3 : selectedCastle.getTroopCount() > 1 
+                            											  : selectedCastle.getTroopCount() > 1 ;
 
                             BufferedImage plusIcon = hasTroops ? resources.getPlusIcon() : resources.getPlusIconDeactivated();
                             BufferedImage swordsIcon = resources.getSwordsIcon();

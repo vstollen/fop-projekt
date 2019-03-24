@@ -23,7 +23,7 @@ public class Team {
 	}
 
 	/**
-	 * Fügt einen Spieler dem Team hinzu
+	 * Fügt dem Team einen Spieler hinzu
 	 * @param player der hinzuzufügende Spieler
 	 * @return das Team des Spielers
 	 */

@@ -34,7 +34,7 @@ public class PathFinding extends GraphAlgorithm<Castle> {
         Castle castleA = edge.getNodeA().getValue();
         Castle castleB = edge.getNodeB().getValue();
 
-        // One of the regions should belong to the current player
+        // One of the regions should belong to the current player's team
         if(castleA.getOwner().getTeam() != currentPlayer.getTeam() && castleB.getOwner().getTeam() != currentPlayer.getTeam())
             return false;
 
@@ -46,7 +46,7 @@ public class PathFinding extends GraphAlgorithm<Castle> {
             if(castleA.getOwner() == null || castleB.getOwner() == null)
                 return true;
 
-            // Else both regions should belong to the current player
+            // Else both regions should belong to the current player's team
             return castleA.getOwner().getTeam() == castleB.getOwner().getTeam() && castleA.getOwner().getTeam() == currentPlayer.getTeam();
         } else {
             return false;

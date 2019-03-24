@@ -43,6 +43,10 @@ public class Game {
         this.goal.setGame(this);
     }
 
+    public Goal getGoal() {
+    	return this.goal;
+    }
+
     public int getRound() {
         return round;
     }
@@ -107,7 +111,7 @@ public class Game {
         if(attackThread != null)
             return attackThread;
 
-        if(source.getOwner() == target.getOwner() || troopCount < 1)
+        if(source.getOwner().getTeam() == target.getOwner().getTeam() || troopCount < 1)
             return null;
 
         attackThread = new AttackThread(this, source, target, troopCount);
@@ -147,7 +151,7 @@ public class Game {
     }
 
     public void moveTroops(Castle source, Castle destination, int troopCount) {
-        if(troopCount >= source.getTroopCount() || source.getOwner() != destination.getOwner())
+        if(troopCount >= source.getTroopCount() || source.getOwner().getTeam() != destination.getOwner().getTeam())
             return;
 
         source.moveTroops(destination, troopCount);
@@ -205,8 +209,10 @@ public class Game {
         isOver = true;
         Player winner = goal.getWinner();
 
-        if(winner != null)
-            addScore(goal.getWinner(), 150);
+        if(winner != null) {
+        	for (Player p : winner.getTeam().getMembers())
+        		addScore(p, 150);
+        }
 
         Resources resources = Resources.getInstance();
         for(Player player : players) {

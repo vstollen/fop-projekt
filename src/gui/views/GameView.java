@@ -20,6 +20,7 @@ import game.GameConstants;
 import game.GameInterface;
 import game.Joker;
 import game.Player;
+import game.Team;
 import game.map.Castle;
 import gui.GameWindow;
 import gui.View;
@@ -278,14 +279,15 @@ public class GameView extends View implements GameInterface {
 
     @Override
     public void onGameOver(Player winner) {
-        if(winner == null) {
-            this.logLine("Spiel vorbei - Unentschieden.");
-        } else {
-            this.logLine("Spiel vorbei - %PLAYER% gewinnt das Spiel.", winner);
-        }
+    	if(winner == null) {
+    		this.logLine("Spiel vorbei - Unentschieden.");
+    	} else {
+    		for (Player p : winner.getTeam().getMembers())
+    			this.logLine("Spiel vorbei - %PLAYER% gewinnt das Spiel.", p);
+    	}
 
-        primaryActionButton.setText("Beenden");
-        updateStats();
+    	primaryActionButton.setText("Beenden");
+    	updateStats();
     }
 
     @Override

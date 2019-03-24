@@ -43,7 +43,7 @@ public class JokerConversion extends Joker {
 		Game game = getGame();
 		Player currentPlayer = game.getCurrentPlayer();
 		
-		// TODO Joker actions
+		currentPlayer.setInstantWin(true);
 		
 		int playerInvocationsLeft = invocationsLeft.get(currentPlayer) - 1;
 		invocationsLeft.put(currentPlayer, playerInvocationsLeft);

@@ -124,6 +124,14 @@ public class Game {
         Player attacker = attackerCastle.getOwner();
         Player defender = defenderCastle.getOwner();
 
+        if(attacker.isInstantWin()) {
+        	attacker.setInstantWin(false);
+        	defenderCastle.setOwner(attacker);
+        	gameInterface.onConquer(defenderCastle, attacker);
+        	gameInterface.onUpdate();
+        	return;
+        }
+
         for(int i = 0; i < Math.min(rollAttacker.length, rollDefender.length); i++) {
             if(rollAttackerSorted[i] > rollDefenderSorted[i]) {
                 defenderCastle.removeTroops(1);

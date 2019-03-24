@@ -47,10 +47,20 @@ public class Castle {
         return this.troopCount;
     }
     
+    /**
+     * 
+     * @return true, falls die Burg als Flagburg ausgewählt wurde
+     */
     public Boolean isFlagCastle() {
     	return this.flagCastle;
     }
     
+    /**
+     * Weist einer Burg einen Spieler zu, der seine Flagge in der Burg versteckt
+     * 
+     * @param player, der Spieler dessen Flagge in der Burg versteckt wird
+     * @throws alreadyFlagCastleException, falls die Burg schon eine Flagge hält
+     */
     public void makeFlagCastle(Player player) throws alreadyFlagCastleException {
     	if(!this.flagCastle) {
     		this.flagCastle = true;
@@ -60,6 +70,10 @@ public class Castle {
     	}
     }
     
+    /**
+     * 
+     * @return Player, den Spieler der seine Flagge in der Burg versteckt hatte
+     */
     public Player getFlagOwner() {
     	return this.flagOwner;    	
     }

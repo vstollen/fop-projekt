@@ -392,6 +392,8 @@ public class GameView extends View implements GameInterface {
         	selectedJoker.onInvocation();	
     	}
     	
+    	logLine(selectedJoker.getLogMessage(), game.getCurrentPlayer());
+    	
     	updateJokers();
     }
     

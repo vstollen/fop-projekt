@@ -34,6 +34,15 @@ public abstract class Joker {
 		return hint;
 	}
 	
+	/**
+	 * Gibt eine Log Nachricht für den Joker aus
+	 * @return passende Log Nachricht
+	 */
+	public String getLogMessage() {
+		// %%PLAYER%% wird von der logLine() Methode durch den passenden Spieler ersetzt
+		return String.format("%%PLAYER%% hat den Joker %s ausgelöst.", name);
+	}
+	
 	protected Game getGame() {
 		return game;
 	}

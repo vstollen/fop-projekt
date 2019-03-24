@@ -1,8 +1,8 @@
 package game;
 
 import game.goals.*;
-import game.jokers.JokerDummy;
-import game.jokers.JokerTroopbonus;
+import game.jokers.DummyJoker;
+import game.jokers.TroopbonusJoker;
 import game.players.*;
 
 import java.awt.*;
@@ -43,9 +43,9 @@ public class GameConstants {
     };
     
     public static final Joker JOKERS[] = {
-    	new JokerTroopbonus(),
-    	new JokerDummy("Dummy Übernahme", "Übernahme"),
-    	new JokerDummy("Dummy Aussetzen", "Aussetzen"),
-    	new JokerDummy("Dummy Tunnel", "Tunnel")
+    	new TroopbonusJoker(),
+    	new DummyJoker("Dummy Übernahme", "Übernahme"),
+    	new DummyJoker("Dummy Aussetzen", "Aussetzen"),
+    	new DummyJoker("Dummy Tunnel", "Tunnel")
     };
 }

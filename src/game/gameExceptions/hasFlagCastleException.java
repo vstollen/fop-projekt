@@ -1,4 +1,4 @@
-package gameExceptions;
+package game.gameExceptions;
 
 import game.map.Castle;
 

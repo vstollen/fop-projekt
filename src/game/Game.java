@@ -2,6 +2,8 @@ package game;
 
 import java.util.*;
 
+import game.gameExceptions.alreadyFlagCastleException;
+import game.gameExceptions.hasFlagCastleException;
 import game.map.Castle;
 import game.map.Kingdom;
 import game.map.GameMap;
@@ -297,7 +299,7 @@ public class Game {
             addTroops = GameConstants.CASTLES_AT_BEGINNING;  // TODO decide if more troops are needed for the FlagCastle
             /* if(allCastlesChosen() && this.getRound() == 1 && this.goal.getName() == "Capture the Flag")
             	addTroops += x; */ // x = whatever many - 3 troops are fitting for being dumped on the flagcastle
-        else {
+        } else {
             addTroops = Math.max(3, numRegions / GameConstants.TROOPS_PER_ROUND_DIVISOR);
             addScore(currentPlayer, addTroops * 5);
 

@@ -1,4 +1,4 @@
-package gameExceptions;
+package game.gameExceptions;
 
 /**
  * Eine Exception die genutzt werden kann, falls eine Burg schon eine Flagge beherbergt.

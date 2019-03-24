@@ -1,5 +1,6 @@
 package game;
 
+import game.gameExceptions.hasFlagCastleException;
 import game.map.Castle;
 
 import java.awt.Color;

@@ -1,6 +1,7 @@
 package game.map;
 
 import game.Player;
+import game.gameExceptions.alreadyFlagCastleException;
 
 import java.awt.*;
 

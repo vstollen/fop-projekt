@@ -451,7 +451,7 @@ public class GameView extends View implements GameInterface {
     }
     
     /**
-     * Bildet eine Liste aus den Joker Namen aktuell angezeigten Joker
+     * Bildet eine Liste aus den Joker Namen aller aktuell angezeigten Joker
      * @return Eine Liste der Namen der aktuell angezeigten Joker
      */
     private ArrayList<String> getCurrentJokerNames() {

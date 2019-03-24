@@ -17,6 +17,8 @@ public class Castle {
     private Kingdom kingdom;
     private Point location;
     private String name;
+    private Boolean flagCastle;
+    private Player flagOwner;
 
     /**
      * Eine neue Burg erstellen
@@ -29,6 +31,8 @@ public class Castle {
         this.owner = null;
         this.kingdom = null;
         this.name = name;
+        this.flagCastle = false;
+        this.flagOwner = null;
     }
 
     public Player getOwner() {
@@ -41,6 +45,23 @@ public class Castle {
 
     public int getTroopCount() {
         return this.troopCount;
+    }
+    
+    public Boolean isFlagCastle() {
+    	return this.flagCastle;
+    }
+    
+    public void makeFlagCastle(Player player) throws alreadyFlagCastleException {
+    	if(!this.flagCastle) {
+    		this.flagCastle = true;
+    		this.flagOwner = player;
+    	} else {
+    		throw new alreadyFlagCastleException();
+    	}
+    }
+    
+    public Player getFlagOwner() {
+    	return this.flagOwner;    	
     }
 
     /**
@@ -58,6 +79,10 @@ public class Castle {
         // At least one unit must remain in the source region
         if(this.troopCount - troops < 1)
             return;
+        
+        // FlagCastles need 3 troops remaining
+        if(this.isFlagCastle() && this.troopCount - troops < 3)
+        	return;
 
         this.troopCount -= troops;
         target.troopCount += troops;

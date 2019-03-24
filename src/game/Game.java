@@ -167,7 +167,7 @@ public class Game {
         return gameInterface.onRoll(player, dices, fastForward);
     }
 
-    private boolean allCastlesChosen() {
+    public boolean allCastlesChosen() {
         return gameMap.getCastles().stream().noneMatch(c -> c.getOwner() == null);
     }
 
@@ -308,6 +308,26 @@ public class Game {
 
     public boolean isOver() {
         return this.isOver;
+    }
+    
+    /**
+     * Berechnet die gesamte Anzahl an verfügbaren Truppen.
+     * Zählt sowohl Truppen auf Burgen, als auch unverteilte Truppen.
+     * @return Die gesamte Truppenanzahl.
+     */
+    public int getTotalTroopCount() {
+    	int totalTroopCount = 0;
+    	List<Castle> allCastles = gameMap.getCastles();
+    	
+    	for (Castle castle : allCastles) {
+    		totalTroopCount += castle.getTroopCount();
+    	}
+    	
+    	for (Player player : players) {
+    		totalTroopCount += player.getRemainingTroops();
+    	}
+    	
+    	return totalTroopCount;
     }
     
     private void setupJokers() {

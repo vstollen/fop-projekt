@@ -3,6 +3,7 @@ package gui.views;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -43,7 +44,7 @@ public class GameView extends View implements GameInterface {
     private DefaultListModel<String> jokerListModel;
     
     private static final int jokerListHeight = 75;
-    private static final int jokerHintHeight = 75;
+    private static final int jokerHintHeight = 100;
     
     GameView(GameWindow gameWindow, Game game) {
         super(gameWindow);
@@ -181,6 +182,7 @@ public class GameView extends View implements GameInterface {
             }
         } else if (actionEvent.getSource() == jokerButton) {
         	invokeJoker();
+        	updateStats();
         }
     }
 
@@ -317,6 +319,7 @@ public class GameView extends View implements GameInterface {
     @Override
     public void onUpdate() {
         updateStats();
+        updateJokers();
         map.repaint();
     }
 
@@ -358,20 +361,50 @@ public class GameView extends View implements GameInterface {
     }
     
     /**
-     * Updated die Joker
+     * Updated die Joker-Liste und zeigt nur nutzbare Joker an.
      */
     private void updateJokers() {
+    	ArrayList<String> oldElements = getCurrentJokerNames();
+    	
+    	int selectedIndex = jokerList.getSelectedIndex();
+    	String selectedJokerName = "";
+    	
+    	if (selectedIndex >= 0) {
+    		selectedJokerName = oldElements.get(selectedIndex);
+    	}
     	
 		jokerListModel.clear();
     	
+		fillJokerList(selectedJokerName);
+    	updateJokerHint();
+    }
+    
+    /**
+     * Füllt die Joker Liste mit nutzbaren Jokern.
+     * Wählt zusätzlich den Joker mit dem Namen selectedJokerName aus, falls vorhanden.
+     * @param selectedJokerName Name des auszuwählenden Jokers
+     */
+    private void fillJokerList(String selectedJokerName) {
     	for (Joker joker : GameConstants.JOKERS) {
     		
+    		joker.update();
+    		
+    		String jokerName = joker.getName();
+    		
     		if (joker.isUsable()) {
-    			jokerListModel.addElement(joker.getName());
+    			jokerListModel.addElement(jokerName);
+    			
+    			if (jokerName.equals(selectedJokerName)) {
+    				int newJokerIndex = jokerListModel.size() - 1;
+    				jokerList.setSelectedIndex(newJokerIndex);
+    			}
     		}
     	}
     }
     
+    /**
+     * Setzt den passenden Hinweis zum aktuell ausgewählten Joker
+     */
     private void updateJokerHint() {
     	Joker selectedJoker = getSelectedJoker();
     	
@@ -391,8 +424,10 @@ public class GameView extends View implements GameInterface {
     	Joker selectedJoker = getSelectedJoker();
     	
     	if (selectedJoker != null) {
-        	selectedJoker.onInvocation();	
+        	selectedJoker.invoke();	
     	}
+    	
+    	logLine(selectedJoker.getLogMessage(), game.getCurrentPlayer());
     	
     	updateJokers();
     }
@@ -417,5 +452,21 @@ public class GameView extends View implements GameInterface {
     	}
     	
     	return usableJokers.get(selectedJokerIndex);
+    }
+    
+    /**
+     * Bildet eine Liste aus den Joker Namen aller aktuell angezeigten Joker
+     * @return Eine Liste der Namen der aktuell angezeigten Joker
+     */
+    private ArrayList<String> getCurrentJokerNames() {
+    	ArrayList<String> currentJokers = new ArrayList<>();
+    	currentJokers.ensureCapacity(jokerListModel.getSize());
+    	
+    	Enumeration<String> jokerListElements = jokerListModel.elements();
+    	while(jokerListElements.hasMoreElements()) {
+    		currentJokers.add(jokerListElements.nextElement());
+    	}
+    	
+    	return currentJokers;
     }
 }

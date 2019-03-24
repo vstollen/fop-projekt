@@ -96,4 +96,20 @@ public abstract class Player {
         this.points = 0;
     }
 
+    /**
+     * Berechnet die gesamte Anzahl von Truppen in Besitz des Spielers.
+     * Dazu zählen Truppen auf Burgen und unverteilte Truppen
+     * @param game
+     * @return Die Anzahl von Truppen in Besitz des Spielers
+     */
+    public int getTotalTroopCount(Game game) {
+    	int totalTroopCount = remainingTroops;
+    	
+    	for (Castle ownCastle : getCastles(game)) {
+    		totalTroopCount += ownCastle.getTroopCount();
+    	}
+    	
+    	return totalTroopCount;
+    }
+
 }

@@ -285,6 +285,16 @@ public class Game {
 
         playerQueue.add(currentPlayer);
     }
+    
+    /**
+     * Fügt dem Spielfeld eine Kante hinzu
+     * 
+     * @param startCastle, das erste Ende der Kante
+     * @param destCastle, das zweite Ende der Kante
+     */
+    public void addEdge(Castle startCastle, Castle destCastle) {
+    	this.gameMap.addEdge(startCastle, destCastle);
+    }
 
     public Player getCurrentPlayer() {
         return this.currentPlayer;

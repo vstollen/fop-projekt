@@ -1,5 +1,7 @@
 package game;
 
+import gui.components.MapPanel;
+
 public abstract class Joker {
 	
 	private Game game;

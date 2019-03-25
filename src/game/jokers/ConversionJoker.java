@@ -22,6 +22,14 @@ public class ConversionJoker extends Joker {
 		maxInvocationsPerPlayer = invocations;
 	}
 
+	/**
+	 * Setze die Anzahl, wie oft ein Spieler diesen Joker einsetzen kann
+	 * @param maxInvocationsPerPlayer die neue Anzahl maximaler Einsätze
+	 */
+	public void setMaxInvocations(int maxInvocationsPerPlayer) {
+		this.maxInvocationsPerPlayer = maxInvocationsPerPlayer;
+	}
+
 	@Override
 	public boolean isUsable() {
 		Game game = getGame();

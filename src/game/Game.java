@@ -355,6 +355,11 @@ public class Game {
      */
     private void setupJokers() {
     	for (Joker joker : GameConstants.JOKERS) {
+    		if (joker instanceof game.jokers.ConversionJoker) {
+    			int mapSizeMultiplier = this.mapSize.ordinal() + 1;
+    			int maxInvocations = GameConstants.CONVERSION_JOKER_INVOCATION_MULTIPLIER * mapSizeMultiplier;
+    			((game.jokers.ConversionJoker) joker).setMaxInvocations(maxInvocations);
+    		}
     		joker.setGame(this);
     	}
     }

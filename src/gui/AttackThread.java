@@ -6,12 +6,12 @@ import game.map.Castle;
 
 public class AttackThread extends Thread {
 
-    private Castle attackerCastle, defenderCastle;
-    private Player attacker, defender;
-    private int troopAttackCount;
-    private Game game;
-    private boolean fastForward;
-    private Player winner;
+    protected Castle attackerCastle, defenderCastle;
+    protected Player attacker, defender;
+    protected int troopAttackCount;
+    protected Game game;
+    protected boolean fastForward;
+    protected Player winner;
 
     public AttackThread(Game game, Castle attackerCastle, Castle defenderCastle, int troopAttackCount) {
         this.attackerCastle = attackerCastle;

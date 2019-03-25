@@ -7,6 +7,7 @@ import game.map.Kingdom;
 import game.map.GameMap;
 import game.map.MapSize;
 import gui.AttackThread;
+import gui.ConvertThread;
 import gui.Resources;
 import gui.views.GameView;
 
@@ -115,9 +116,16 @@ public class Game {
         if(source.getOwner().getTeam() == target.getOwner().getTeam() || troopCount < 1)
             return null;
 
-        attackThread = new AttackThread(this, source, target, troopCount);
+        if (source.getOwner().isInstantAttackWin()) {
+        	attackThread = new ConvertThread(this, source, target, troopCount);
+        	gameInterface.onConversionStarted(source, target, troopCount);
+        } else {
+        	attackThread = new AttackThread(this, source, target, troopCount);
+        	gameInterface.onAttackStarted(source, target, troopCount);
+        }
+
         attackThread.start();
-        gameInterface.onAttackStarted(source, target, troopCount);
+        gameInterface.onUpdate();
         return attackThread;
     }
 
@@ -347,6 +355,11 @@ public class Game {
      */
     private void setupJokers() {
     	for (Joker joker : GameConstants.JOKERS) {
+    		if (joker instanceof game.jokers.ConversionJoker) {
+    			int mapSizeMultiplier = this.mapSize.ordinal() + 1;
+    			int maxInvocations = GameConstants.CONVERSION_JOKER_INVOCATION_MULTIPLIER * mapSizeMultiplier;
+    			((game.jokers.ConversionJoker) joker).setMaxInvocations(maxInvocations);
+    		}
     		joker.setGame(this);
     	}
     }

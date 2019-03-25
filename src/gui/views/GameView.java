@@ -359,6 +359,15 @@ public class GameView extends View implements GameInterface {
     }
 
     @Override
+    public void onConversionStarted(Castle source, Castle target, int troopCount) {
+    	if (target.isFlagCastle()) {
+    		logLine(target.getName() + " hat die Flagge von %PLAYER% und lässt sich nicht konvertieren!", target.getFlagOwner());
+    	} else {
+    		logLine("%PLAYER% konvertiert " + target.getName() + " mit " + troopCount + " Truppen.", source.getOwner());
+    	}
+    }
+
+    @Override
     public void onAttackStopped() {
         map.reset();
         updateStats();
@@ -418,6 +427,7 @@ public class GameView extends View implements GameInterface {
     		return;
     	}
     	
+    	selectedJoker.update();
     	String hint = selectedJoker.getHint();
     	jokerHint.setText(hint);
     }

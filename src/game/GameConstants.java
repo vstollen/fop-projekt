@@ -1,11 +1,14 @@
 package game;
 
-import game.goals.*;
+import java.awt.Color;
+
+import game.goals.ConquerGoal;
+import game.goals.RoundGoal;
 import game.jokers.DummyJoker;
 import game.jokers.TroopbonusJoker;
-import game.players.*;
-
-import java.awt.*;
+import game.jokers.SkipPlayerJoker;
+import game.players.BasicAI;
+import game.players.Human;
 
 public class GameConstants {
 
@@ -45,7 +48,7 @@ public class GameConstants {
     public static final Joker JOKERS[] = {
     	new TroopbonusJoker(),
     	new DummyJoker("Dummy Übernahme", "Übernahme"),
-    	new DummyJoker("Dummy Aussetzen", "Aussetzen"),
+    	new SkipPlayerJoker(),
     	new DummyJoker("Dummy Tunnel", "Tunnel")
     };
 }

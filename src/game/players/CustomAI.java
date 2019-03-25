@@ -27,11 +27,14 @@ public class CustomAI extends AI {
 		int round = game.getRound();
 		
 		if (round == 1) {
-			chooseCastle();
+			chooseCastles();
+			return;
 		}
+		
+		distributeTroops();
 	}
 	
-	private void chooseCastle() throws InterruptedException {
+	private void chooseCastles() throws InterruptedException {
 		List<Kingdom> smallestKingdoms = getKingdomsSortedBySize();
 		Collection<Castle> freeCastles = getFreeCastles();
 		
@@ -51,6 +54,17 @@ public class CustomAI extends AI {
             	break;
             }
         }
+	}
+	
+	private void distributeTroops() {
+		List<Castle> ownedCastles = this.getCastles(game);
+		int remainingTroops = getRemainingTroops();
+		
+		if (ownedCastles.isEmpty()) {
+			return;
+		}
+		
+		ownedCastles.get(0).addTroops(remainingTroops);
 	}
 	
 	private List<Kingdom> getKingdomsSortedBySize() {

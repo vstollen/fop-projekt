@@ -355,7 +355,11 @@ public class GameView extends View implements GameInterface {
 
     @Override
     public void onConversionStarted(Castle source, Castle target, int troopCount) {
-    	logLine("%PLAYER% konvertiert " + target.getName() + " mit " + troopCount + " Truppen.", source.getOwner());
+    	if (target.isFlagCastle()) {
+    		logLine(target.getName() + " hat die Flagge von %PLAYER% und lässt sich nicht konvertieren!", target.getFlagOwner());
+    	} else {
+    		logLine("%PLAYER% konvertiert " + target.getName() + " mit " + troopCount + " Truppen.", source.getOwner());
+    	}
     }
 
     @Override

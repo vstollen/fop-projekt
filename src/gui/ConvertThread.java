@@ -11,11 +11,14 @@ public class ConvertThread extends AttackThread {
 
 	@Override
 	public void run() {
-		attacker.setInstantAttackWin(false);
+		if (!defenderCastle.isFlagCastle()) {
+			
+			attacker.setInstantAttackWin(false);
 
-		attackerCastle.removeTroops(troopAttackCount);
-		defenderCastle.setOwner(attacker);
-		defenderCastle.addTroops(troopAttackCount);
+			attackerCastle.removeTroops(troopAttackCount);
+			defenderCastle.setOwner(attacker);
+			defenderCastle.addTroops(troopAttackCount);
+		}
 
 		game.stopAttack();
 	}

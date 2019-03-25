@@ -1,14 +1,20 @@
 package gui.views;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import javax.swing.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -20,7 +26,6 @@ import game.GameConstants;
 import game.GameInterface;
 import game.Joker;
 import game.Player;
-import game.Team;
 import game.map.Castle;
 import gui.GameWindow;
 import gui.View;
@@ -299,7 +304,7 @@ public class GameView extends View implements GameInterface {
 
         Dimension mapSize = game.getMap().getSize();
         Dimension panelSize = mapPanelSize();
-        if(mapSize.getWidth() > panelSize.getWidth() || mapSize.getHeight() > panelSize.getHeight()) {
+        if(mapSize.getWidth() > panelSize.getWidth() - sidebarWidth() || mapSize.getHeight() > panelSize.getHeight()) {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             int newWidth  = Math.min(screenSize.width, mapSize.width) + getWidth() - panelSize.width + 50;
             int newHeight = Math.min(screenSize.height, mapSize.height) + getHeight() - panelSize.height + 50;

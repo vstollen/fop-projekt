@@ -59,6 +59,7 @@ public class MapPanel extends JScrollPane {
         this.setAutoscrolls(true);
         this.resources = resources;
         this.currentAction = Action.NONE;
+        this.justTriedTunneling = false;
 
         this.getActionMap().put("Escape", new AbstractAction("Escape") {
             @Override

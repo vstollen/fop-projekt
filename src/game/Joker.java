@@ -84,5 +84,8 @@ public abstract class Joker {
 	 * Erhöht die Anzahl der verbliebenen Nutzungen des Jokers für den Spieler
 	 * @param currentPlayer der Spieler der die Jokernutzung erhält
 	 */
-	public abstract void grantInvocation(Player currentPlayer);
+	public void grantInvocation(Player currentPlayer) {
+		
+	}
+	
 }

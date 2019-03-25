@@ -11,14 +11,14 @@ public class ConversionJoker extends Joker {
 	private int maxInvocationsPerPlayer;
 	private HashMap<Player, Integer> invocationsLeft = new HashMap<>();
 	
-	private static final String hint = "Der nächste Angriff konvertiert die Burg des Gegners und bekehrt die darauf liegenden Truppen.";
+	private static final String hintTemplate = "Verbleibend: %d\n-------------------\nDer nächste Angriff konvertiert die Burg des Gegners und bekehrt die darauf liegenden Truppen.\nNicht einsetzbar auf Hauptburgen im Capture the Flag-Modus.";
 
 	public ConversionJoker() {
 		this(1);
 	}
 
 	public ConversionJoker(int invocations) {
-		super("Konversion", hint);
+		super("Konversion", String.format(hintTemplate, 0));
 		maxInvocationsPerPlayer = invocations;
 	}
 
@@ -59,6 +59,19 @@ public class ConversionJoker extends Joker {
 		
 		int playerInvocationsLeft = invocationsLeft.get(currentPlayer) - 1;
 		invocationsLeft.put(currentPlayer, playerInvocationsLeft);
+	}
+
+	@Override
+	public void update() {
+		Game game = getGame();
+		Player currentPlayer = game.getCurrentPlayer();
+		
+		if (!invocationsLeft.containsKey(currentPlayer)) {
+			invocationsLeft.put(currentPlayer, maxInvocationsPerPlayer);
+		}
+		
+		setHint(String.format(hintTemplate, invocationsLeft.get(currentPlayer)));
+		super.update();
 	}
 
 }

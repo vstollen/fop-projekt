@@ -176,9 +176,13 @@ public class Game {
 
     /**
     *
-    * @return true, wenn jeder Spieler eine Flagburg gewählt hat
+    * @return true, wenn jeder Spieler eine Flagburg gewählt hat, oder der Spielmodus nicht "Capture the Flag ist"
     */
     public boolean allFlagsDistributed() {
+    	if (!(getGoal() instanceof CaptureTheFlagGoal)) {
+    		return true;
+    	}
+    	
     	return this.getPlayers().stream().allMatch(c -> c.getFlagCastle() != null);
     }
     
@@ -307,16 +311,13 @@ public class Game {
             return;
         }
         
-         if ( (round == 1 && allCastlesChosen() && this.getGoal().getName() != "Capture the Flag" ) ||
-        		(allFlagsDistributed() && this.getGoal().getName() == "Capture the Flag")
-        		) {
+         if (round == 1 && allCastlesChosen() && allFlagsDistributed()) {
         	startingPlayer = nextPlayer;
         }
 
         currentPlayer = nextPlayer;
-        if(round == 0 || (round == 1 && allCastlesChosen() && this.getGoal().getName() != "Capture the Flag") ||
-          (round > 1 && currentPlayer == startingPlayer) ||
-          (this.getGoal().getName() == "Capture the Flag" && this.getPlayers().stream().allMatch(c -> c.getFlagCastle() != null))) {
+        if(round == 0 || (round == 1 && allCastlesChosen() && allFlagsDistributed()) ||
+          (round > 1 && currentPlayer == startingPlayer)) {
 
             round++;
             gameInterface.onNewRound(round);

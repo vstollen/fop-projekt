@@ -28,30 +28,44 @@ public class CaptureTheFlagGoal extends Goal {
 	@Override
 	public boolean isCompleted() {
 		Game game = this.getGame();
+		if(game.getRound() < 2)
+			return false;
+		
 		List<Castle> flagDefenders = game.getMap().getCastles().stream().filter(c -> c.isFlagCastle())
 		.filter(g -> g.getFlagOwner() == g.getOwner()).collect(Collectors.toList());
-		if(flagDefenders.size() == 1 && game.getRound() > 1)
-			return true;
-		return false;
+		
+		Player p = null;
+		for(Castle c : flagDefenders) {
+			if(p == null)
+				p = c.getOwner();
+			else if(p.getTeam() != c.getOwner().getTeam())
+				return false;
+		}
+		
+		return true;
 	}
 
 	@Override
 	public Player getWinner() {
 		Game game = this.getGame();
-		if(game.getRound() < 2) {
+		if(game.getRound() < 2)
             return null;
-		} else {
-			List<Castle> flagCastles = game.getMap().getCastles().stream().filter(c -> c.isFlagCastle()).collect(Collectors.toList());
-			ArrayList<Player> winners = new ArrayList<Player>();
-			for(Castle castle:flagCastles) {  // Kann man wahrscheinlich auch direkt als filter auf den Stream werfen
-				if(castle.getFlagOwner() == castle.getOwner())
-					winners.add(castle.getFlagOwner());
+            
+		List<Castle> flagCastles = game.getMap().getCastles().stream().filter(c -> c.isFlagCastle()).collect(Collectors.toList());
+		
+		ArrayList<Player> winners = new ArrayList<Player>();
+		for(Castle castle:flagCastles) {  // Kann man wahrscheinlich auch direkt als filter auf den Stream werfen
+			if(castle.getFlagOwner() == castle.getOwner())
+				winners.add(castle.getFlagOwner());
+		}
+		
+		if(winners.size() > 0) {
+			Player p = winners.remove(0);
+			for(Player g : winners) {
+				if(p.getTeam() != g.getTeam())
+					return null;
 			}
-			if(winners.size()>1)
-				return null;
-			else if(winners.size() == 1)
-				return winners.get(0);
-				
+			return p;
 		}
 		
 		return null;

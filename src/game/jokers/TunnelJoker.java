@@ -52,5 +52,9 @@ public class TunnelJoker extends Joker {
 		map.repaint();
 		tunnelsLeft.put(game.getCurrentPlayer(), tunnelsLeft.get(game.getCurrentPlayer()) -1);  // One invoke less
 	}
+	
+	public void grantInvocation(Player player) {
+		this.tunnelsLeft.put(player, tunnelsLeft.get(player) + 1);
+	}
 
 }

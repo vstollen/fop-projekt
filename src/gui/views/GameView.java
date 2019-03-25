@@ -378,7 +378,7 @@ public class GameView extends View implements GameInterface {
     /**
      * Updated die Joker-Liste und zeigt nur nutzbare Joker an.
      */
-    private void updateJokers() {
+    public void updateJokers() {
     	ArrayList<String> oldElements = getCurrentJokerNames();
     	
     	int selectedIndex = jokerList.getSelectedIndex();

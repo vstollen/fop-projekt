@@ -71,4 +71,6 @@ public abstract class Joker {
 	public void setMapPanel(MapPanel map) {
 		this.map = map;
 	}
+
+	public abstract void grantInvocation(Player currentPlayer);
 }

@@ -46,6 +46,7 @@ public class MapPanel extends JScrollPane {
     private PathFinding pathFinding;
     private List<Edge<Castle>> highlightedEdges;
     private Castle targetCastle;
+    private Boolean justTriedTunneling;
 
     public MapPanel(GameView gameView, Resources resources) {
         super();
@@ -208,6 +209,11 @@ public class MapPanel extends JScrollPane {
                         currentAction = Action.NONE;
                         selectedCastle = nextCastle;
                         setCursor(Cursor.getDefaultCursor());
+                        if(justTriedTunneling) {
+                        	GameConstants.getJokerByName("Tunnel").grantInvocation(game.getCurrentPlayer());
+                        	justTriedTunneling = !justTriedTunneling;
+                        	gameView.updateJokers();
+                        }
                     } else if(currentAction == Action.MOVING && pathFinding.getPath(nextCastle) != null) {
                         NumberDialog nd = new NumberDialog("Wie viele Truppen möchtest du verschieben?", 1, selectedCastle.getTroopCount() - 1, 1);
                         if(nd.showDialog(MapPanel.this)) {
@@ -226,6 +232,7 @@ public class MapPanel extends JScrollPane {
                             currentAction = Action.NONE;
                         }
                     } else if(currentAction == Action.TUNNELING){
+                    	justTriedTunneling = true;
                     	if(selectedCastle == null) {
                     		selectedCastle = nextCastle;
                     		pathFinding = new PathFinding(game.getMap().getGraph(), selectedCastle, currentAction, currentPlayer);
@@ -235,10 +242,14 @@ public class MapPanel extends JScrollPane {
                     		int temp = map.getEdges().size();
                     		game.addEdge(selectedCastle, nextCastle);
                     		if(temp != map.getEdges().size()) {  // Player is forced to generate an edge or discard his joker through pressing escape
-                    			currentAction = Action.NONE;
-	                    		highlightedEdges.clear();
+	                    		justTriedTunneling = false;
+	                    		reset();
 	                    		repaint();
                     		}
+                    		selectedCastle = null;
+                    		if(highlightedEdges != null)
+                    			highlightedEdges.clear();
+                    		repaint();
                     	}
                     		
                     }else {

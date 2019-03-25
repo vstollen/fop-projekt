@@ -48,4 +48,12 @@ public class GameConstants {
     	new SkipPlayerJoker(),
     	new TunnelJoker()
     };
+    
+    public static Joker getJokerByName(String name) {
+    	for(Joker joker:JOKERS) {
+    		if(joker.getName() == name)
+    			return joker;
+    	}
+    	return null;
+    }
 }

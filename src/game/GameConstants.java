@@ -8,6 +8,7 @@ import game.jokers.DummyJoker;
 import game.jokers.TroopbonusJoker;
 import game.jokers.SkipPlayerJoker;
 import game.players.BasicAI;
+import game.players.CustomAI;
 import game.players.Human;
 
 public class GameConstants {
@@ -42,6 +43,7 @@ public class GameConstants {
     public static final Class<?> PLAYER_TYPES[] = {
         Human.class,
         BasicAI.class,
+        CustomAI.class
         // TODO: Add more Player types, like different AIs
     };
     

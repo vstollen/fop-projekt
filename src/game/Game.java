@@ -266,6 +266,7 @@ public class Game {
         		gameView.logLine("%PLAYER% wird übersprungen.", currentPlayer);
         	}
         	
+        	playerQueue.add(currentPlayer);
         	nextTurn();
         	return;
         }

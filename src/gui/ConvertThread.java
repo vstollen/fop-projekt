@@ -14,10 +14,22 @@ public class ConvertThread extends AttackThread {
 		if (!defenderCastle.isFlagCastle()) {
 			
 			attacker.setInstantAttackWin(false);
-
-			attackerCastle.removeTroops(troopAttackCount);
 			defenderCastle.setOwner(attacker);
-			defenderCastle.addTroops(troopAttackCount);
+
+			int moveUntil = Math.max(1, attackerCastle.getTroopCount() - troopAttackCount);
+
+			try {
+				super.sleep(1500);
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
+
+			while (attackerCastle.getTroopCount() > moveUntil) {
+				attackerCastle.removeTroops(1);
+				defenderCastle.addTroops(1);
+			}
+
+			winner = attacker;
 		}
 
 		game.stopAttack();

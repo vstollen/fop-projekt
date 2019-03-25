@@ -9,6 +9,7 @@ import game.map.MapSize;
 import gui.AttackThread;
 import gui.ConvertThread;
 import gui.Resources;
+import gui.views.GameView;
 
 public class Game {
 
@@ -42,6 +43,10 @@ public class Game {
     public void setGoal(Goal goal) {
         this.goal = goal;
         this.goal.setGame(this);
+    }
+
+    public Goal getGoal() {
+    	return this.goal;
     }
 
     public int getRound() {
@@ -108,7 +113,7 @@ public class Game {
         if(attackThread != null)
             return attackThread;
 
-        if(source.getOwner() == target.getOwner() || troopCount < 1)
+        if(source.getOwner().getTeam() == target.getOwner().getTeam() || troopCount < 1)
             return null;
 
         if (source.getOwner().isInstantAttackWin()) {
@@ -155,7 +160,7 @@ public class Game {
     }
 
     public void moveTroops(Castle source, Castle destination, int troopCount) {
-        if(troopCount >= source.getTroopCount() || source.getOwner() != destination.getOwner())
+        if(troopCount >= source.getTroopCount() || source.getOwner().getTeam() != destination.getOwner().getTeam())
             return;
 
         source.moveTroops(destination, troopCount);
@@ -213,8 +218,10 @@ public class Game {
         isOver = true;
         Player winner = goal.getWinner();
 
-        if(winner != null)
-            addScore(goal.getWinner(), 150);
+        if(winner != null) {
+        	for (Player p : winner.getTeam().getMembers())
+        		addScore(p, 150);
+        }
 
         Resources resources = Resources.getInstance();
         for(Player player : players) {
@@ -259,6 +266,17 @@ public class Game {
         if(round == 0 || (round == 1 && allCastlesChosen()) || (round > 1 && currentPlayer == startingPlayer)) {
             round++;
             gameInterface.onNewRound(round);
+        }
+        
+        if (shouldSkipTurn()) {
+        	if (gameInterface instanceof GameView) {
+        		GameView gameView = (GameView) gameInterface;
+        		gameView.logLine("%PLAYER% wird übersprungen.", currentPlayer);
+        	}
+        	
+        	playerQueue.add(currentPlayer);
+        	nextTurn();
+        	return;
         }
 
         int numRegions = currentPlayer.getNumRegions(this);
@@ -332,9 +350,27 @@ public class Game {
     	return totalTroopCount;
     }
     
+    /**
+     * Bereitet die Joker auf das Spiel vor
+     */
     private void setupJokers() {
     	for (Joker joker : GameConstants.JOKERS) {
     		joker.setGame(this);
     	}
+    }
+    
+    /**
+     * Bewertet, ob der aktuelle Zug übersprungen werden sollte
+     * @return true, wenn der aktuelle Zug übersprungen werden sollte
+     */
+    private boolean shouldSkipTurn() {
+    	
+    	for (Joker joker : GameConstants.JOKERS) {
+    		if (joker.shouldSkipTurn()) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
     }
 }

@@ -3,6 +3,7 @@ package game.goals;
 import game.Game;
 import game.Goal;
 import game.Player;
+import game.Team;
 import game.map.Castle;
 
 public class ConquerGoal extends Goal {
@@ -28,7 +29,7 @@ public class ConquerGoal extends Goal {
                 return null;
             else if(p == null)
                 p = c.getOwner();
-            else if(p != c.getOwner())
+            else if(p.getTeam() != c.getOwner().getTeam())
                 return null;
         }
 

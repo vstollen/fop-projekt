@@ -20,6 +20,7 @@ import game.GameConstants;
 import game.GameInterface;
 import game.Joker;
 import game.Player;
+import game.Team;
 import game.map.Castle;
 import gui.GameWindow;
 import gui.View;
@@ -223,7 +224,7 @@ public class GameView extends View implements GameInterface {
         gameLog.setCaretPosition(gameLog.getDocument().getLength());
     }
 
-    private void logLine(String line, Player... playerFormat) {
+    public void logLine(String line, Player... playerFormat) {
 
         StyledDocument doc = this.gameLog.getStyledDocument();
         Style style = this.gameLog.getStyle("PlayerColor");
@@ -278,14 +279,15 @@ public class GameView extends View implements GameInterface {
 
     @Override
     public void onGameOver(Player winner) {
-        if(winner == null) {
-            this.logLine("Spiel vorbei - Unentschieden.");
-        } else {
-            this.logLine("Spiel vorbei - %PLAYER% gewinnt das Spiel.", winner);
-        }
+    	if(winner == null) {
+    		this.logLine("Spiel vorbei - Unentschieden.");
+    	} else {
+    		for (Player p : winner.getTeam().getMembers())
+    			this.logLine("Spiel vorbei - %PLAYER% gewinnt das Spiel.", p);
+    	}
 
-        primaryActionButton.setText("Beenden");
-        updateStats();
+    	primaryActionButton.setText("Beenden");
+    	updateStats();
     }
 
     @Override
@@ -428,9 +430,8 @@ public class GameView extends View implements GameInterface {
     	
     	if (selectedJoker != null) {
         	selectedJoker.invoke();	
+        	logLine(selectedJoker.getLogMessage(), game.getCurrentPlayer());
     	}
-    	
-    	logLine(selectedJoker.getLogMessage(), game.getCurrentPlayer());
     	
     	updateJokers();
     }

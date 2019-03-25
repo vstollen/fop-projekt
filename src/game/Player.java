@@ -24,7 +24,7 @@ public abstract class Player {
         this.points = 0;
         this.color = color;
         this.remainingTroops = 0;
-	this.flagCastle = null;
+        this.flagCastle = null;
     }
 
     public int getRemainingTroops() {
@@ -109,10 +109,9 @@ public abstract class Player {
      * @throws hasFlagCastleException falls dem Spieler schon eine Flagburg zugewiesen ist
      */
     public void setFlagCastle(Castle castle) throws hasFlagCastleException {
-    	if(this.flagCastle == null) {
+    	if (this.flagCastle == null) {
     		this.flagCastle = castle;
-    	}
-    	else {
+    	} else {
     		throw new hasFlagCastleException(this.flagCastle);
     	}
     }

@@ -32,7 +32,7 @@ public class CaptureTheFlagGoal extends Goal {
 			return false;
 		
 		List<Castle> flagDefenders = game.getMap().getCastles().stream().filter(c -> c.isFlagCastle())
-		.filter(g -> g.getFlagOwner() == g.getOwner()).collect(Collectors.toList());
+				.filter(g -> g.getFlagOwner() == g.getOwner()).collect(Collectors.toList());
 		
 		Player p = null;
 		for(Castle c : flagDefenders) {
@@ -49,12 +49,12 @@ public class CaptureTheFlagGoal extends Goal {
 	public Player getWinner() {
 		Game game = this.getGame();
 		if(game.getRound() < 2)
-            return null;
+			return null;
             
 		List<Castle> flagCastles = game.getMap().getCastles().stream().filter(c -> c.isFlagCastle()).collect(Collectors.toList());
 		
-		ArrayList<Player> winners = new ArrayList<Player>();
-		for(Castle castle:flagCastles) {  // Kann man wahrscheinlich auch direkt als filter auf den Stream werfen
+		ArrayList<Player> winners = new ArrayList<>();
+		for (Castle castle : flagCastles) {
 			if(castle.getFlagOwner() == castle.getOwner())
 				winners.add(castle.getFlagOwner());
 		}

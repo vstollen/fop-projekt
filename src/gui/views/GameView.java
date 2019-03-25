@@ -21,6 +21,7 @@ import game.GameInterface;
 import game.Joker;
 import game.Player;
 import game.Team;
+import game.goals.CaptureTheFlagGoal;
 import game.map.Castle;
 import gui.GameWindow;
 import gui.View;
@@ -147,7 +148,7 @@ public class GameView extends View implements GameInterface {
 
                     if (game.getCurrentPlayer().getRemainingTroops() > 0) {
                         if (game.getRound() == 1) {
-                            if(game.allCastlesChosen() && !game.allFlagsDistributed() && game.getGoal().getName() == "Capture the Flag") {
+                            if(game.allCastlesChosen() && !game.allFlagsDistributed() && game.getGoal() instanceof CaptureTheFlagGoal) {
                         		JOptionPane.showMessageDialog(this, "Ohne Flagburg wird das nichts mein Freund", "Flagburg wählen", JOptionPane.WARNING_MESSAGE);
                         		return;
                         	}
@@ -268,7 +269,7 @@ public class GameView extends View implements GameInterface {
     public void onNextTurn(Player currentPlayer, int troopsGot, boolean human) {
         this.logLine("%PLAYER% ist am Zug.", currentPlayer);
         
-        if(game.getRound() == 1 && game.getGoal().getName() == "Capture the Flag" && game.allCastlesChosen()) {
+        if(game.getRound() == 1 && game.getGoal() instanceof CaptureTheFlagGoal && game.allCastlesChosen()) {
         	this.logLine("%PLAYER% muss eine Flagburg wählen", currentPlayer);
         } else if (game.getRound() == 1) {
             this.logLine("%PLAYER% muss " + troopsGot + " Burgen auswählen.", currentPlayer);

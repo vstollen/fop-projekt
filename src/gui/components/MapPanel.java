@@ -234,7 +234,7 @@ public class MapPanel extends JScrollPane {
                     	} else if(selectedCastle != nextCastle) {
                     		game.addEdge(selectedCastle, nextCastle);
                     		currentAction = Action.NONE;
-                    		highlightedEdges.clear(); //TODO
+                    		highlightedEdges.clear();
                     		repaint();
                     	}
                     		

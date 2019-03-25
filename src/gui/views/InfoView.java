@@ -23,7 +23,21 @@ public class InfoView extends View {
             "Anschließend wird eine Karte generiert. In der ersten Runde müssen abwechselnd 3 Burgen ausgewählt werden. Nachdem alle Burgen " +
             "verteilt wurden, beginnt das eigentliche Spiel. Sie haben die Möglichkeit neue Truppen auf Ihre Burgen aufzuteilen, Truppen zwischen " +
             "Ihren Burgen zu bewegen sowie andere Burgen anzugreifen. Bei der Standardmission 'Eroberung' gewinnt der Spieler, der zuerst alle Burgen " +
-            "eingenommen hat.";
+            "eingenommen hat.\n\n" +
+            "Schnelles Spiel:\n"+
+            "Es wird ein Fenster geöffnet in dem festgelegt wird nach wie vielen Runden das Spiel beendet wird.\nGewonnen hat dann der Spieler mit den meisten " +
+            "Punkten, beziehungsweise dessen Team.\n\n" +
+            "Capture the Flag:\n" +
+            "Nach dem Wählen der Burgen wird noch eine der Burgen aus dem vorhandenen Besitz gewählt in der die Flagge des Spielers aufgestellt wird.\n" +
+            "Dabei ist zu beachten, dass immer mindestens 3 Truppen in der Burg zurückbleiben müssen um die Flagge zu verteidigen.\n" +
+            "Wird die Burg mit der Flagge von einem gegnerischen Spieler erobert hat der Spieler sofort verloren.\n Der Gewinner ist somit derjenige, der " +
+            "am Ende noch seine Flagburg hält.\n " +
+            "Wenn in dem Spielmodus Teams ausgewählt sind gewinnt das Team das am Ende den Gewinnspieler enthält." 
+            
+            
+            
+            
+            ;
 
     private JButton btnBack;
     private JTextPane txtInfo;

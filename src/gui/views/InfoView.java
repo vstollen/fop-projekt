@@ -72,6 +72,8 @@ public class InfoView extends View {
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
+        
+        getWindow().setSize(600, 750);
     }
 
     @Override

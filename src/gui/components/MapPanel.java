@@ -544,4 +544,12 @@ public class MapPanel extends JScrollPane {
         setCursor(Cursor.getDefaultCursor());
         repaint();
     }
+    
+    /**
+     * Erlaube die Veränderung der Spielhandlung von außen
+     * @param action die neue momentane Handlung
+     */
+    public void setCurrentAction(Action action) {
+    	this.currentAction = action;
+    }
 }

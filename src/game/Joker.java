@@ -39,6 +39,14 @@ public abstract class Joker {
 		
 	}
 	
+	/**
+	 * Gibt zurück, ob der aktuelle Zug übersprungen werden sollte
+	 * @return true, wenn der aktuelle Zug übersprungen werden sollte
+	 */
+	public boolean shouldSkipTurn() {
+		return false;
+	}
+	
 	public final String getName() {
 		return name;
 	}

@@ -1,12 +1,10 @@
 package game;
 
-import game.goals.*;
-import game.jokers.DummyJoker;
-import game.jokers.TroopbonusJoker;
-import game.jokers.TunnelJoker;
-import game.players.*;
+import java.awt.Color;
 
-import java.awt.*;
+import game.goals.*;
+import game.jokers.*;
+import game.players.*;
 
 public class GameConstants {
 
@@ -17,6 +15,7 @@ public class GameConstants {
     public static final int CASTLES_NUMBER_MULTIPLIER = 7;
     public static final int CASTLES_AT_BEGINNING = 3;
     public static final int TROOPS_PER_ROUND_DIVISOR = 3;
+    public static final int CONVERSION_JOKER_INVOCATION_MULTIPLIER = 1;
 
     public static final Color COLOR_WATER = Color.BLUE;
     public static final Color COLOR_SAND  = new Color(210, 170, 109);
@@ -45,8 +44,8 @@ public class GameConstants {
     
     public static final Joker JOKERS[] = {
     	new TroopbonusJoker(),
-    	new DummyJoker("Dummy Übernahme", "Übernahme"),
-    	new DummyJoker("Dummy Aussetzen", "Aussetzen"),
+    	new ConversionJoker(),
+    	new SkipPlayerJoker(),
     	new TunnelJoker()
     };
 }

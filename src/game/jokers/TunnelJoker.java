@@ -35,10 +35,15 @@ public class TunnelJoker extends Joker {
 		return tunnelsLeft.get(player) > 0;
 	}
 	
+	/**
+	 * Die Anzahl der Invocations die je nach Karten und Spielergröße ausgeführt werden können
+	 * @return 
+	 */
 	private Integer getNumberOfInvocations() {
 		return Math.max(game.getMap().getCastles().size()/25, 1);  // min 1, max 3 Tunnel, durch |Castles| abhängig von allem
 	}
 	
+	@Override
 	public void setMapPanel(MapPanel map) {
 		this.map = map;
 	}
@@ -53,6 +58,7 @@ public class TunnelJoker extends Joker {
 		tunnelsLeft.put(game.getCurrentPlayer(), tunnelsLeft.get(game.getCurrentPlayer()) -1);  // One invoke less
 	}
 	
+	@Override
 	public void grantInvocation(Player player) {
 		this.tunnelsLeft.put(player, tunnelsLeft.get(player) + 1);
 	}

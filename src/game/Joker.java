@@ -64,13 +64,25 @@ public abstract class Joker {
 		return String.format("%%PLAYER%% hat den Joker %s ausgelöst.", name);
 	}
 	
+	/**
+	 * Gibt das Spiel zurück auf dem der Joker sitzt
+	 * @return das Spiel des Jokers
+	 */
 	protected Game getGame() {
 		return game;
 	}
 	
+	/**
+	 * Setzt ein MapPanel als Attribut, so dass darauf agiert werden kann
+	 * @param map das MapPanel auf dem der Joker verwendet wird
+	 */
 	public void setMapPanel(MapPanel map) {
 		this.map = map;
 	}
 
+	/**
+	 * Erhöht die Anzahl der verbliebenen Nutzungen des Jokers für den Spieler
+	 * @param currentPlayer der Spieler der die Jokernutzung erhält
+	 */
 	public abstract void grantInvocation(Player currentPlayer);
 }

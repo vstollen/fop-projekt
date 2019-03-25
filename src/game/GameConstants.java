@@ -49,6 +49,12 @@ public class GameConstants {
     	new TunnelJoker()
     };
     
+    /**
+     * Gibt den zu dem Namen passenden Joker zurück
+     * 
+     * @param name der Name des Jokers den man haben will
+     * @return den Joker zu dem der Name passt
+     */
     public static Joker getJokerByName(String name) {
     	for(Joker joker:JOKERS) {
     		if(joker.getName() == name)

@@ -232,10 +232,13 @@ public class MapPanel extends JScrollPane {
                             pathFinding.run();
                     		repaint();
                     	} else if(selectedCastle != nextCastle) {
+                    		int temp = map.getEdges().size();
                     		game.addEdge(selectedCastle, nextCastle);
-                    		currentAction = Action.NONE;
-                    		highlightedEdges.clear(); //TODO
-                    		repaint();
+                    		if(temp != map.getEdges().size()) {  // Player is forced to generate an edge or discard his joker through pressing escape
+                    			currentAction = Action.NONE;
+	                    		highlightedEdges.clear();
+	                    		repaint();
+                    		}
                     	}
                     		
                     }else {

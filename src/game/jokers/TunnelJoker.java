@@ -15,6 +15,7 @@ public class TunnelJoker extends Joker {
 	private HashMap<Player, Integer> tunnelsLeft;
 	private Game game;
 	MapPanel map;
+	Integer numberOfEdges;
 	
 	public TunnelJoker() {
 		super("Tunnel", "Grabe einen Tunnel von einer Burg zu einer beliebigen anderen.\nAber vorsicht! Dein Gegner kann den Tunnel auch benutzen, setzte also deinen Maulwurf mit Weitsicht ein.");
@@ -27,7 +28,7 @@ public class TunnelJoker extends Joker {
 		this.game = getGame();
 
 		Player player = game.getCurrentPlayer();
-		
+
 		if(!tunnelsLeft.containsKey(player))
 			tunnelsLeft.put(player, this.getNumberOfInvocations());
 		
@@ -35,7 +36,7 @@ public class TunnelJoker extends Joker {
 	}
 	
 	private Integer getNumberOfInvocations() {
-		return Math.max(game.getMap().getCastles().size()/21, 1);  // min 1, max 4 Tunnel, durch |Castles| abhängig von allem
+		return Math.max(game.getMap().getCastles().size()/25, 1);  // min 1, max 3 Tunnel, durch |Castles| abhängig von allem
 	}
 	
 	public void setMapPanel(MapPanel map) {
@@ -44,17 +45,10 @@ public class TunnelJoker extends Joker {
 	
 	@Override
 	public void invoke() {
-		//	map.reset();
-		
-		map.setCurrentAction(MapPanel.Action.NONE);
-        map.clearSelection();
-        map.setCursor(Cursor.getDefaultCursor());
-        map.repaint();
-		
+		map.reset();	
 		map.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		map.repaint();
 		map.setCurrentAction(Action.TUNNELING);
-		
 		map.repaint();
 		tunnelsLeft.put(game.getCurrentPlayer(), tunnelsLeft.get(game.getCurrentPlayer()) -1);  // One invoke less
 	}

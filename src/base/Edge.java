@@ -2,6 +2,7 @@ package base;
 
 /**
  * Diese Klasse representiert eine generische Kante zwischen zwei Knoten
+ *
  * @param <T> die zugrunde liegende Datenstruktur
  */
 public class Edge<T> {
@@ -10,6 +11,7 @@ public class Edge<T> {
 
     /**
      * Erstellt eine neue Kante zwischen zwei gegebenen Knoten
+     *
      * @param nodeA der erste Knoten
      * @param nodeB der zweite Knoten
      */
@@ -20,6 +22,7 @@ public class Edge<T> {
 
     /**
      * Gibt an, ob die Kante mit dem gegebenen Knoten verbunden ist
+     *
      * @param node Der Knoten der überprüft wird
      * @return true, wenn die Kante mit dem Knoten verbunden ist
      */
@@ -29,6 +32,7 @@ public class Edge<T> {
 
     /**
      * Gibt den ersten Knoten zurück
+     *
      * @return der erste Knoten
      */
     public Node<T> getNodeA() {
@@ -37,6 +41,7 @@ public class Edge<T> {
 
     /**
      * Gibt den zweiten Knoten zurück
+     *
      * @return der zweite Knoten
      */
     public Node<T> getNodeB() {
@@ -45,6 +50,7 @@ public class Edge<T> {
 
     /**
      * Gibt den jeweils anderen Knoten zurück, abhängig von dem gegebenen
+     *
      * @param source der eine Knoten
      * @return der andere Knoten
      */

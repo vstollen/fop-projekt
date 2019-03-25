@@ -31,7 +31,7 @@ public class StartScreen extends View {
         offsetY += labelHeight + 50;
 
         int offsetX = (width - BUTTON_SIZE.width) / 2;
-        JButton[] buttons = { btnStart, btnStats, btnInfo, btnQuit };
+        JButton[] buttons = {btnStart, btnStats, btnInfo, btnQuit};
         for (JButton button : buttons) {
             button.setLocation(offsetX, offsetY);
             offsetY += BUTTON_SIZE.height + 15;
@@ -54,13 +54,13 @@ public class StartScreen extends View {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if(actionEvent.getSource() == btnQuit) {
+        if (actionEvent.getSource() == btnQuit) {
             getWindow().dispose();
-        } else if(actionEvent.getSource() == btnStart) {
+        } else if (actionEvent.getSource() == btnStart) {
             getWindow().setView(new GameMenu(getWindow()));
-        } else if(actionEvent.getSource() == btnInfo) {
+        } else if (actionEvent.getSource() == btnInfo) {
             getWindow().setView(new InfoView(getWindow()));
-        } else if(actionEvent.getSource() == btnStats) {
+        } else if (actionEvent.getSource() == btnStats) {
             getWindow().setView(new HighscoreView(getWindow()));
         }
     }
@@ -69,9 +69,9 @@ public class StartScreen extends View {
     public void paint(Graphics g) {
         super.paint(g);
 
-        BufferedImage soldiers[] = getWindow().getResources().getSoldiers();
+        BufferedImage[] soldiers = getWindow().getResources().getSoldiers();
         int width = 200;
-        int height = (int) (((double)width / soldiers[0].getWidth()) * soldiers[0].getHeight());
+        int height = (int) (((double) width / soldiers[0].getWidth()) * soldiers[0].getHeight());
 
         g.drawImage(soldiers[0], 25, 100, width, height, null);
         g.drawImage(soldiers[1], getWidth() - 25 - width, 100, width, height, null);

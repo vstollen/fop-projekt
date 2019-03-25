@@ -4,7 +4,8 @@ import gui.views.StartScreen;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 
 /**
  * Diese Klasse bietet das Fenster wo die grafische Oberfläche angezeigt wird.
@@ -15,6 +16,14 @@ public class GameWindow extends JFrame {
 
     private View activeView;
     private Resources resources;
+    private WindowStateListener windowStateListener = new WindowStateListener() {
+        @Override
+        public void windowStateChanged(WindowEvent windowEvent) {
+            if ((windowEvent.getNewState() & JFrame.MAXIMIZED_BOTH) != JFrame.MAXIMIZED_BOTH) {
+                activeView.onResize();
+            }
+        }
+    };
 
     private GameWindow(Resources resources) {
         this.resources = resources;
@@ -23,10 +32,21 @@ public class GameWindow extends JFrame {
         this.setVisible(true);
     }
 
+    public static void main(String[] args) {
+
+        Resources resources = Resources.getInstance();
+        if (!resources.load())
+            return;
+
+        new GameWindow(resources);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(resources::save));
+    }
+
     private void initWindow() {
 
         LookAndFeel laf = UIManager.getLookAndFeel();
-        if(laf.getSupportsWindowDecorations()) {
+        if (laf.getSupportsWindowDecorations()) {
             UIManager.getCrossPlatformLookAndFeelClassName();
         }
 
@@ -43,26 +63,6 @@ public class GameWindow extends JFrame {
         this.activeView.setSize(getContentPane().getSize());
         this.setContentPane(view);
         this.requestFocus();
-    }
-
-    private WindowStateListener windowStateListener = new WindowStateListener() {
-        @Override
-        public void windowStateChanged(WindowEvent windowEvent) {
-            if ((windowEvent.getNewState() & JFrame.MAXIMIZED_BOTH) != JFrame.MAXIMIZED_BOTH) {
-                activeView.onResize();
-            }
-        }
-    };
-
-    public static void main(String[] args) {
-
-        Resources resources = Resources.getInstance();
-        if(!resources.load())
-            return;
-
-        new GameWindow(resources);
-
-        Runtime.getRuntime().addShutdownHook(new Thread(resources::save));
     }
 
     public Resources getResources() {

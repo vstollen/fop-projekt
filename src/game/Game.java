@@ -1,14 +1,14 @@
 package game;
 
-import java.util.*;
-
 import game.map.Castle;
-import game.map.Kingdom;
 import game.map.GameMap;
+import game.map.Kingdom;
 import game.map.MapSize;
 import gui.AttackThread;
 import gui.Resources;
 import gui.views.GameView;
+
+import java.util.*;
 
 public class Game {
 
@@ -33,19 +33,19 @@ public class Game {
     }
 
     public void addPlayer(Player p) {
-        if(players.contains(p))
+        if (players.contains(p))
             throw new IllegalArgumentException("Spieler wurde bereits hinzugefügt");
 
         this.players.add(p);
     }
 
+    public Goal getGoal() {
+        return this.goal;
+    }
+
     public void setGoal(Goal goal) {
         this.goal = goal;
         this.goal.setGame(this);
-    }
-
-    public Goal getGoal() {
-    	return this.goal;
     }
 
     public int getRound() {
@@ -77,13 +77,13 @@ public class Game {
 
     public void start(GameInterface gameInterface) {
 
-        if(hasStarted)
+        if (hasStarted)
             throw new IllegalArgumentException("Spiel wurde bereits gestartet");
 
-        if(players.size() < 2)
+        if (players.size() < 2)
             throw new IllegalArgumentException("Nicht genug Spieler");
 
-        if(goal == null)
+        if (goal == null)
             throw new IllegalArgumentException("Kein Spielziel gesetzt");
 
         this.generateMap();
@@ -93,7 +93,7 @@ public class Game {
         this.gameInterface = gameInterface;
         List<Player> tempList = new ArrayList<>(players);
         playerQueue = new ArrayDeque<>();
-        while(!tempList.isEmpty()) {
+        while (!tempList.isEmpty()) {
             Player player = tempList.remove((int) (Math.random() * tempList.size()));
             player.reset();
             playerQueue.add(player);
@@ -109,10 +109,10 @@ public class Game {
     }
 
     public AttackThread startAttack(Castle source, Castle target, int troopCount) {
-        if(attackThread != null)
+        if (attackThread != null)
             return attackThread;
 
-        if(source.getOwner().getTeam() == target.getOwner().getTeam() || troopCount < 1)
+        if (source.getOwner().getTeam() == target.getOwner().getTeam() || troopCount < 1)
             return null;
 
         attackThread = new AttackThread(this, source, target, troopCount);
@@ -129,10 +129,10 @@ public class Game {
         Player attacker = attackerCastle.getOwner();
         Player defender = defenderCastle.getOwner();
 
-        for(int i = 0; i < Math.min(rollAttacker.length, rollDefender.length); i++) {
-            if(rollAttackerSorted[i] > rollDefenderSorted[i]) {
+        for (int i = 0; i < Math.min(rollAttacker.length, rollDefender.length); i++) {
+            if (rollAttackerSorted[i] > rollDefenderSorted[i]) {
                 defenderCastle.removeTroops(1);
-                if(defenderCastle.getTroopCount() == 0) {
+                if (defenderCastle.getTroopCount() == 0) {
                     attackerCastle.removeTroops(1);
                     defenderCastle.setOwner(attacker);
                     defenderCastle.addTroops(1);
@@ -152,7 +152,7 @@ public class Game {
     }
 
     public void moveTroops(Castle source, Castle destination, int troopCount) {
-        if(troopCount >= source.getTroopCount() || source.getOwner().getTeam() != destination.getOwner().getTeam())
+        if (troopCount >= source.getTroopCount() || source.getOwner().getTeam() != destination.getOwner().getTeam())
             return;
 
         source.moveTroops(destination, troopCount);
@@ -177,7 +177,7 @@ public class Game {
     }
 
     public void chooseCastle(Castle castle, Player player) {
-        if(castle.getOwner() != null || player.getRemainingTroops() == 0)
+        if (castle.getOwner() != null || player.getRemainingTroops() == 0)
             return;
 
         gameInterface.onCastleChosen(castle, player);
@@ -186,14 +186,14 @@ public class Game {
         castle.addTroops(1);
         addScore(player, 5);
 
-        if(player.getRemainingTroops() == 0 || allCastlesChosen()) {
+        if (player.getRemainingTroops() == 0 || allCastlesChosen()) {
             player.removeTroops(player.getRemainingTroops());
             nextTurn();
         }
     }
 
     public void addTroops(Player player, Castle castle, int count) {
-        if(count < 1 || castle.getOwner() != player)
+        if (count < 1 || castle.getOwner() != player)
             return;
 
         count = Math.min(count, player.getRemainingTroops());
@@ -210,13 +210,13 @@ public class Game {
         isOver = true;
         Player winner = goal.getWinner();
 
-        if(winner != null) {
-        	for (Player p : winner.getTeam().getMembers())
-        		addScore(p, 150);
+        if (winner != null) {
+            for (Player p : winner.getTeam().getMembers())
+                addScore(p, 150);
         }
 
         Resources resources = Resources.getInstance();
-        for(Player player : players) {
+        for (Player player : players) {
             resources.addScoreEntry(new ScoreEntry(player, goal));
         }
 
@@ -225,7 +225,7 @@ public class Game {
 
     public void nextTurn() {
 
-        if(goal.isCompleted()) {
+        if (goal.isCompleted()) {
             endGame();
             return;
         }
@@ -236,52 +236,52 @@ public class Game {
             nextPlayer = playerQueue.remove();
 
             // if player has already lost, remove him from queue
-            if(goal.hasLost(nextPlayer)) {
-                if(startingPlayer == nextPlayer) {
+            if (goal.hasLost(nextPlayer)) {
+                if (startingPlayer == nextPlayer) {
                     startingPlayer = playerQueue.peek();
                 }
                 nextPlayer = null;
             }
-        } while(nextPlayer == null && !playerQueue.isEmpty());
+        } while (nextPlayer == null && !playerQueue.isEmpty());
 
-        if(nextPlayer == null) {
+        if (nextPlayer == null) {
             isOver = true;
             gameInterface.onGameOver(goal.getWinner());
             return;
         }
-        
+
         if (round == 1 && allCastlesChosen()) {
-        	startingPlayer = nextPlayer;
+            startingPlayer = nextPlayer;
         }
 
         currentPlayer = nextPlayer;
-        if(round == 0 || (round == 1 && allCastlesChosen()) || (round > 1 && currentPlayer == startingPlayer)) {
+        if (round == 0 || (round == 1 && allCastlesChosen()) || (round > 1 && currentPlayer == startingPlayer)) {
             round++;
             gameInterface.onNewRound(round);
         }
-        
+
         if (shouldSkipTurn()) {
-        	if (gameInterface instanceof GameView) {
-        		GameView gameView = (GameView) gameInterface;
-        		gameView.logLine("%PLAYER% wird übersprungen.", currentPlayer);
-        	}
-        	
-        	playerQueue.add(currentPlayer);
-        	nextTurn();
-        	return;
+            if (gameInterface instanceof GameView) {
+                GameView gameView = (GameView) gameInterface;
+                gameView.logLine("%PLAYER% wird übersprungen.", currentPlayer);
+            }
+
+            playerQueue.add(currentPlayer);
+            nextTurn();
+            return;
         }
 
         int numRegions = currentPlayer.getNumRegions(this);
 
         int addTroops;
-        if(round == 1)
+        if (round == 1)
             addTroops = GameConstants.CASTLES_AT_BEGINNING;
         else {
             addTroops = Math.max(3, numRegions / GameConstants.TROOPS_PER_ROUND_DIVISOR);
             addScore(currentPlayer, addTroops * 5);
 
-            for(Kingdom kingdom : gameMap.getKingdoms()) {
-                if(kingdom.getOwner() == currentPlayer) {
+            for (Kingdom kingdom : gameMap.getKingdoms()) {
+                if (kingdom.getOwner() == currentPlayer) {
                     addScore(currentPlayer, 10);
                     addTroops++;
                 }
@@ -291,8 +291,8 @@ public class Game {
         currentPlayer.addTroops(addTroops);
         boolean isAI = (currentPlayer instanceof AI);
         gameInterface.onNextTurn(currentPlayer, addTroops, !isAI);
-        if(isAI) {
-            ((AI)currentPlayer).doNextTurn(this);
+        if (isAI) {
+            ((AI) currentPlayer).doNextTurn(this);
         }
 
         playerQueue.add(currentPlayer);
@@ -301,13 +301,13 @@ public class Game {
     public Player getCurrentPlayer() {
         return this.currentPlayer;
     }
-    
+
     public Player getStartingPlayer() {
-    	return startingPlayer;
+        return startingPlayer;
     }
-    
+
     public Queue<Player> getPlayerQueue() {
-    	return playerQueue;
+        return playerQueue;
     }
 
     public List<Player> getPlayers() {
@@ -321,48 +321,50 @@ public class Game {
     public boolean isOver() {
         return this.isOver;
     }
-    
+
     /**
      * Berechnet die gesamte Anzahl an verfügbaren Truppen.
      * Zählt sowohl Truppen auf Burgen, als auch unverteilte Truppen.
+     *
      * @return Die gesamte Truppenanzahl.
      */
     public int getTotalTroopCount() {
-    	int totalTroopCount = 0;
-    	List<Castle> allCastles = gameMap.getCastles();
-    	
-    	for (Castle castle : allCastles) {
-    		totalTroopCount += castle.getTroopCount();
-    	}
-    	
-    	for (Player player : players) {
-    		totalTroopCount += player.getRemainingTroops();
-    	}
-    	
-    	return totalTroopCount;
+        int totalTroopCount = 0;
+        List<Castle> allCastles = gameMap.getCastles();
+
+        for (Castle castle : allCastles) {
+            totalTroopCount += castle.getTroopCount();
+        }
+
+        for (Player player : players) {
+            totalTroopCount += player.getRemainingTroops();
+        }
+
+        return totalTroopCount;
     }
-    
+
     /**
      * Bereitet die Joker auf das Spiel vor
      */
     private void setupJokers() {
-    	for (Joker joker : GameConstants.JOKERS) {
-    		joker.setGame(this);
-    	}
+        for (Joker joker : GameConstants.JOKERS) {
+            joker.setGame(this);
+        }
     }
-    
+
     /**
      * Bewertet, ob der aktuelle Zug übersprungen werden sollte
+     *
      * @return true, wenn der aktuelle Zug übersprungen werden sollte
      */
     private boolean shouldSkipTurn() {
-    	
-    	for (Joker joker : GameConstants.JOKERS) {
-    		if (joker.shouldSkipTurn()) {
-    			return true;
-    		}
-    	}
-    	
-    	return false;
+
+        for (Joker joker : GameConstants.JOKERS) {
+            if (joker.shouldSkipTurn()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

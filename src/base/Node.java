@@ -2,6 +2,7 @@ package base;
 
 /**
  * Diese Klasse representiert einen generischen Knoten
+ *
  * @param <T>
  */
 public class Node<T> {
@@ -10,6 +11,7 @@ public class Node<T> {
 
     /**
      * Erzeugt einen neuen Knoten mit dem gegebenen Wert
+     *
      * @param value der Wert des Knotens
      */
     Node(T value) {
@@ -18,6 +20,7 @@ public class Node<T> {
 
     /**
      * Gibt den Wert des Knotens zurück
+     *
      * @return der Wert des Knotens
      */
     public T getValue() {

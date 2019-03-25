@@ -30,7 +30,7 @@ public class AttackThread extends Thread {
 
     private void sleep(int ms) throws InterruptedException {
         long end = System.currentTimeMillis() + ms;
-        while(System.currentTimeMillis() < end && !fastForward) {
+        while (System.currentTimeMillis() < end && !fastForward) {
             Thread.sleep(10);
         }
     }
@@ -43,27 +43,27 @@ public class AttackThread extends Thread {
         try {
             sleep(1500);
 
-            while(attackerCastle.getTroopCount() > attackUntil) {
+            while (attackerCastle.getTroopCount() > attackUntil) {
 
                 // Attacker dices: at maximum 3 and not more than actual troop count
-                int attackerCount =  Math.min(troopAttackCount, Math.min(attackerCastle.getTroopCount() - 1, 3));
-                int attackerDice[] = game.roll(attacker, attackerCount, fastForward);
+                int attackerCount = Math.min(troopAttackCount, Math.min(attackerCastle.getTroopCount() - 1, 3));
+                int[] attackerDice = game.roll(attacker, attackerCount, fastForward);
 
                 sleep(1500);
 
                 // Defender dices: at maximum 2
                 int defenderCount = Math.min(2, defenderCastle.getTroopCount());
-                int defenderDice[] = game.roll(defender, defenderCount, fastForward);
+                int[] defenderDice = game.roll(defender, defenderCount, fastForward);
 
                 game.doAttack(attackerCastle, defenderCastle, attackerDice, defenderDice);
-                if(defenderCastle.getOwner() == attacker) {
+                if (defenderCastle.getOwner() == attacker) {
                     winner = attacker;
                     break;
                 }
 
                 sleep(1500);
             }
-        } catch(InterruptedException ex) {
+        } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
 

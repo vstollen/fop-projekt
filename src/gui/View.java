@@ -3,7 +3,6 @@ package gui;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -20,8 +19,8 @@ import java.util.Vector;
  */
 public abstract class View extends Container implements ActionListener {
 
-    private GameWindow gameWindow;
     protected static final Dimension BUTTON_SIZE = new Dimension(125, 40);
+    private GameWindow gameWindow;
 
     public View(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
@@ -35,17 +34,26 @@ public abstract class View extends Container implements ActionListener {
         });
     }
 
-    public abstract void onResize();
-    protected abstract void onInit();
-
     public static Font createFont(int Size) {
-      return new Font("Times New Roman", Font.PLAIN, Size);
+        return new Font("Times New Roman", Font.PLAIN, Size);
     }
 
     public static Font createCelticFont(float Size) {
         Resources resources = Resources.getInstance();
         return resources.getCelticFont().deriveFont(Size);
     }
+
+    public static Dimension calculateTextSize(String text, Font font) {
+        AffineTransform affinetransform = new AffineTransform();
+        FontRenderContext frc = new FontRenderContext(affinetransform, true, true);
+        int width = (int) (font.getStringBounds(text, frc).getWidth());
+        int height = (int) (font.getStringBounds(text, frc).getHeight());
+        return new Dimension(width, height);
+    }
+
+    public abstract void onResize();
+
+    protected abstract void onInit();
 
     protected GameWindow getWindow() {
         return this.gameWindow;
@@ -64,14 +72,6 @@ public abstract class View extends Container implements ActionListener {
         return button;
     }
 
-    public static Dimension calculateTextSize(String text, Font font) {
-        AffineTransform affinetransform = new AffineTransform();
-        FontRenderContext frc = new FontRenderContext(affinetransform,true,true);
-        int width = (int)(font.getStringBounds(text, frc).getWidth());
-        int height = (int)(font.getStringBounds(text, frc).getHeight());
-        return new Dimension(width, height);
-    }
-
     private Dimension calculateLabelSize(JLabel label) {
         return calculateTextSize(label.getText(), label.getFont());
     }
@@ -85,7 +85,7 @@ public abstract class View extends Container implements ActionListener {
         label.setFont(createFont(fontSize));
         label.setSize(calculateLabelSize(label));
 
-        if(underline) {
+        if (underline) {
             Font font = label.getFont();
             Map<TextAttribute, Object> attributes = new HashMap<>(font.getAttributes());
             attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
@@ -110,7 +110,7 @@ public abstract class View extends Container implements ActionListener {
         textPane.setEditable(false);
         textPane.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(Color.BLACK),
-                new EmptyBorder(3,3,3,3)
+                new EmptyBorder(3, 3, 3, 3)
         ));
         return textPane;
     }
@@ -120,7 +120,7 @@ public abstract class View extends Container implements ActionListener {
         textArea.setWrapStyleWord(true);
         textArea.setLineWrap(true);
 
-        if(readonly) {
+        if (readonly) {
             textArea.setEditable(false);
             textArea.setBackground(this.getBackground());
         }

@@ -20,7 +20,7 @@ public class Vector {
         this.y = v.y;
         this.z = v.z;
     }
-    
+
     public void set(double x, double y, double z) {
         this.x = x;
         this.y = y;
@@ -32,7 +32,7 @@ public class Vector {
         this.y = v.y;
         this.z = v.z;
     }
-    
+
     public void add(Vector v) {
         this.x += v.x;
         this.y += v.y;
@@ -48,13 +48,13 @@ public class Vector {
     public void scale(double s) {
         scale(s, s, s);
     }
-    
+
     public void scale(double sx, double sy, double sz) {
         this.x *= sx;
         this.y *= sy;
         this.z *= sz;
     }
-    
+
     public double getSize() {
         return Math.sqrt(x * x + y * y + z * z);
     }
@@ -67,9 +67,9 @@ public class Vector {
     public String toString() {
         return "[" + x + ", " + y + ", " + z + "]";
     }
-    
+
     public boolean equals(Vector v) {
-    	return v.x == x && v.y == y && v.z == z;
+        return v.x == x && v.y == y && v.z == z;
     }
-    
+
 }

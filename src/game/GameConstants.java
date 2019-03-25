@@ -1,14 +1,14 @@
 package game;
 
-import java.awt.Color;
-
 import game.goals.ConquerGoal;
 import game.goals.RoundGoal;
 import game.jokers.DummyJoker;
-import game.jokers.TroopbonusJoker;
 import game.jokers.SkipPlayerJoker;
+import game.jokers.TroopbonusJoker;
 import game.players.BasicAI;
 import game.players.Human;
+
+import java.awt.*;
 
 public class GameConstants {
 
@@ -21,34 +21,34 @@ public class GameConstants {
     public static final int TROOPS_PER_ROUND_DIVISOR = 3;
 
     public static final Color COLOR_WATER = Color.BLUE;
-    public static final Color COLOR_SAND  = new Color(210, 170, 109);
+    public static final Color COLOR_SAND = new Color(210, 170, 109);
     public static final Color COLOR_GRASS = new Color(50, 89, 40);
     public static final Color COLOR_STONE = Color.GRAY;
-    public static final Color COLOR_SNOW  = Color.WHITE;
+    public static final Color COLOR_SNOW = Color.WHITE;
 
-    public static final Color PLAYER_COLORS[] = {
-        Color.CYAN,
-        Color.RED,
-        Color.GREEN,
-        Color.ORANGE
+    public static final Color[] PLAYER_COLORS = {
+            Color.CYAN,
+            Color.RED,
+            Color.GREEN,
+            Color.ORANGE
     };
 
-    public static final Goal GAME_GOALS[] = {
-        new ConquerGoal(),
-        new RoundGoal()
-        // TODO: Add more Goals
+    public static final Goal[] GAME_GOALS = {
+            new ConquerGoal(),
+            new RoundGoal()
+            // TODO: Add more Goals
     };
 
-    public static final Class<?> PLAYER_TYPES[] = {
-        Human.class,
-        BasicAI.class,
-        // TODO: Add more Player types, like different AIs
+    public static final Class<?>[] PLAYER_TYPES = {
+            Human.class,
+            BasicAI.class,
+            // TODO: Add more Player types, like different AIs
     };
-    
-    public static final Joker JOKERS[] = {
-    	new TroopbonusJoker(),
-    	new DummyJoker("Dummy Übernahme", "Übernahme"),
-    	new SkipPlayerJoker(),
-    	new DummyJoker("Dummy Tunnel", "Tunnel")
+
+    public static final Joker[] JOKERS = {
+            new TroopbonusJoker(),
+            new DummyJoker("Dummy Übernahme", "Übernahme"),
+            new SkipPlayerJoker(),
+            new DummyJoker("Dummy Tunnel", "Tunnel")
     };
 }

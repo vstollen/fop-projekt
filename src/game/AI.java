@@ -1,13 +1,13 @@
 package game;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Random;
 
 public abstract class AI extends Player {
 
+    protected boolean fastForward;
     private AIThread aiThread;
     private Random random;
-    protected boolean fastForward;
 
     public AI(String name, Color color) {
         super(name, color);
@@ -21,7 +21,7 @@ public abstract class AI extends Player {
     protected abstract void actions(Game game) throws InterruptedException;
 
     public void doNextTurn(Game game) {
-        if(aiThread != null)
+        if (aiThread != null)
             return;
 
         fastForward = false;
@@ -30,13 +30,13 @@ public abstract class AI extends Player {
     }
 
     public void fastForward() {
-        if(aiThread != null)
+        if (aiThread != null)
             fastForward = true;
     }
 
     protected void sleep(int ms) throws InterruptedException {
         long end = System.currentTimeMillis() + ms;
-        while(System.currentTimeMillis() < end && !fastForward) {
+        while (System.currentTimeMillis() < end && !fastForward) {
             Thread.sleep(10);
         }
     }
@@ -54,7 +54,7 @@ public abstract class AI extends Player {
             fastForward = false;
 
             // Trigger next round, if not automatically
-            if(game.getRound() > 1 && game.getCurrentPlayer() == AI.this)
+            if (game.getRound() > 1 && game.getCurrentPlayer() == AI.this)
                 game.nextTurn();
         }
 

@@ -12,18 +12,18 @@ import java.awt.event.ActionEvent;
 public class InfoView extends View {
 
     private static final String ABOUT_TEXT =
-        "~ Game of Castles ~\nFOP-Projekt WiSe 18/19\n" +
-            "Hauptautor: Roman Hergenreder\n" +
-            "Mitwirkende: Philipp Imperatori, Nils Nedderhut, Louis Neumann\n" +
-            "Icons/Bilder: Smashicons, Freepick, Retinaicons, Skyclick (www.flaticon.com)\n" +
-            "Keine Haftung für Bugs, Systemabstürze, Datenverlust und rauchende Grafikkarten\n\n" +
-            "HowTo:\n" +
-            "Bevor ein neues Spiel gestartet werden kann, müssen Sie 2-4 Spieler sowie die Kartengröße und die Spielmission festlegen. " +
-            "Es ist auch möglich, ein Programm als Spieler einzustellen (z.B. BasicAI). " +
-            "Anschließend wird eine Karte generiert. In der ersten Runde müssen abwechselnd 3 Burgen ausgewählt werden. Nachdem alle Burgen " +
-            "verteilt wurden, beginnt das eigentliche Spiel. Sie haben die Möglichkeit neue Truppen auf Ihre Burgen aufzuteilen, Truppen zwischen " +
-            "Ihren Burgen zu bewegen sowie andere Burgen anzugreifen. Bei der Standardmission 'Eroberung' gewinnt der Spieler, der zuerst alle Burgen " +
-            "eingenommen hat.";
+            "~ Game of Castles ~\nFOP-Projekt WiSe 18/19\n" +
+                    "Hauptautor: Roman Hergenreder\n" +
+                    "Mitwirkende: Philipp Imperatori, Nils Nedderhut, Louis Neumann\n" +
+                    "Icons/Bilder: Smashicons, Freepick, Retinaicons, Skyclick (www.flaticon.com)\n" +
+                    "Keine Haftung für Bugs, Systemabstürze, Datenverlust und rauchende Grafikkarten\n\n" +
+                    "HowTo:\n" +
+                    "Bevor ein neues Spiel gestartet werden kann, müssen Sie 2-4 Spieler sowie die Kartengröße und die Spielmission festlegen. " +
+                    "Es ist auch möglich, ein Programm als Spieler einzustellen (z.B. BasicAI). " +
+                    "Anschließend wird eine Karte generiert. In der ersten Runde müssen abwechselnd 3 Burgen ausgewählt werden. Nachdem alle Burgen " +
+                    "verteilt wurden, beginnt das eigentliche Spiel. Sie haben die Möglichkeit neue Truppen auf Ihre Burgen aufzuteilen, Truppen zwischen " +
+                    "Ihren Burgen zu bewegen sowie andere Burgen anzugreifen. Bei der Standardmission 'Eroberung' gewinnt der Spieler, der zuerst alle Burgen " +
+                    "eingenommen hat.";
 
     private JButton btnBack;
     private JTextPane txtInfo;
@@ -37,7 +37,8 @@ public class InfoView extends View {
     public void onResize() {
 
         int offsetY = 25;
-        lblTitle.setLocation((getWidth() - lblTitle.getWidth()) / 2, offsetY); offsetY += lblTitle.getSize().height + 25;
+        lblTitle.setLocation((getWidth() - lblTitle.getWidth()) / 2, offsetY);
+        offsetY += lblTitle.getSize().height + 25;
         txtInfo.setLocation(25, offsetY);
         txtInfo.setSize(getWidth() - 50, getHeight() - 50 - BUTTON_SIZE.height - offsetY);
 

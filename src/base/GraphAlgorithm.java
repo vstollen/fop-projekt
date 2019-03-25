@@ -5,39 +5,21 @@ import java.util.*;
 /**
  * Abstrakte generische Klasse um Wege zwischen Knoten in einem Graph zu finden.
  * Eine implementierende Klasse ist beispielsweise {@link game.map.PathFinding}
+ *
  * @param <T> Die Datenstruktur des Graphen
  */
 public abstract class GraphAlgorithm<T> {
 
-    /**
-     * Innere Klasse um {@link Node} zu erweitern, aber nicht zu verändern
-     * Sie weist jedem Knoten einen Wert und einen Vorgängerknoten zu.
-     * @param <T>
-     */
-    private static class AlgorithmNode<T> {
-
-        private Node<T> node;
-        private double value;
-        private AlgorithmNode<T> previous;
-
-        AlgorithmNode(Node<T> parentNode, AlgorithmNode<T> previousNode, double value) {
-            this.node = parentNode;
-            this.previous = previousNode;
-            this.value = value;
-        }
-    }
-
     private Graph<T> graph;
-
     // Diese Liste enthält alle Knoten, die noch nicht abgearbeitet wurden
     private List<Node<T>> availableNodes;
-
     // Diese Map enthält alle Zuordnungen
     private Map<Node<T>, AlgorithmNode<T>> algorithmNodes;
 
     /**
      * Erzeugt ein neues GraphAlgorithm-Objekt mit dem dazugehörigen Graphen und dem Startknoten.
-     * @param graph der zu betrachtende Graph
+     *
+     * @param graph      der zu betrachtende Graph
      * @param sourceNode der Startknoten
      */
     public GraphAlgorithm(Graph<T> graph, Node<T> sourceNode) {
@@ -45,7 +27,7 @@ public abstract class GraphAlgorithm<T> {
         this.availableNodes = new LinkedList<>(graph.getNodes());
         this.algorithmNodes = new HashMap<>();
 
-        for(Node<T> node : graph.getNodes())
+        for (Node<T> node : graph.getNodes())
             this.algorithmNodes.put(node, new AlgorithmNode<>(node, null, -1));
 
         this.algorithmNodes.get(sourceNode).value = 0;
@@ -55,6 +37,7 @@ public abstract class GraphAlgorithm<T> {
      * Diese Methode gibt einen Knoten mit dem kleinsten Wert, der noch nicht abgearbeitet wurde, zurück und entfernt ihn aus der Liste {@link #availableNodes}.
      * Sollte kein Knoten gefunden werden, wird null zurückgegeben.
      * Verbindliche Anforderung: Verwenden Sie beim Durchlaufen der Liste Iteratoren
+     *
      * @return Der nächste abzuarbeitende Knoten oder null
      */
     private AlgorithmNode<T> getSmallestNode() {
@@ -70,9 +53,9 @@ public abstract class GraphAlgorithm<T> {
                 smallestNode = nextNode;
                 continue;
             }
-            
+
             if (nextNode.value == -1) {
-            	continue;
+                continue;
             }
 
             if (nextNode.value < smallestNode.value || smallestNode.value == -1) {
@@ -95,8 +78,9 @@ public abstract class GraphAlgorithm<T> {
      * 2b. Berechne den Wert des Knotens, in dem du den aktuellen Wert des Knotens und den der Kante addierst
      * 2c. Ist der alte Wert nicht gesetzt (-1) oder ist der neue Wert kleiner, setze den neuen Wert und den Vorgängerknoten
      * 3. Wiederhole solange, bis alle Knoten abgearbeitet wurden
-
+     * <p>
      * Nützliche Methoden:
+     *
      * @see #getSmallestNode()
      * @see #isPassable(Edge)
      * @see Graph#getEdges(Node)
@@ -108,16 +92,16 @@ public abstract class GraphAlgorithm<T> {
 
         while (visitedNode != null) {
 
-        	if (!isPassable(visitedNode.node)) {
-        		visitedNode = getSmallestNode();
-        		continue;
-        	}
-        	
-        	if (visitedNode.value == -1) {
-        		visitedNode = getSmallestNode();
-        		continue;
-        	}
-        
+            if (!isPassable(visitedNode.node)) {
+                visitedNode = getSmallestNode();
+                continue;
+            }
+
+            if (visitedNode.value == -1) {
+                visitedNode = getSmallestNode();
+                continue;
+            }
+
             for (Edge<T> edge : graph.getEdges(visitedNode.node)) {
 
                 if (!isPassable(edge)) {
@@ -145,6 +129,7 @@ public abstract class GraphAlgorithm<T> {
      * Diese Methode gibt eine Liste von Kanten zurück, die einen Pfad zu dem angegebenen Zielknoten representiert.
      * Dabei werden zuerst beginnend mit dem Zielknoten alle Kanten mithilfe des Vorgängerattributs {@link AlgorithmNode#previous} zu der Liste hinzugefügt.
      * Zum Schluss muss die Liste nur noch umgedreht werden. Sollte kein Pfad existieren, geben Sie null zurück.
+     *
      * @param destination Der Zielknoten des Pfads
      * @return eine Liste von Kanten oder null
      */
@@ -163,9 +148,9 @@ public abstract class GraphAlgorithm<T> {
         }
 
         if (inversePath.isEmpty()) {
-        	return null;
+            return null;
         }
-        
+
         Collections.reverse(inversePath);
 
         return inversePath;
@@ -173,6 +158,7 @@ public abstract class GraphAlgorithm<T> {
 
     /**
      * Gibt den betrachteten Graphen zurück
+     *
      * @return der zu betrachtende Graph
      */
     protected Graph<T> getGraph() {
@@ -182,6 +168,7 @@ public abstract class GraphAlgorithm<T> {
     /**
      * Gibt den Wert einer Kante zurück.
      * Diese Methode ist abstrakt und wird in den implementierenden Klassen definiert um eigene Kriterien für Werte zu ermöglichen.
+     *
      * @param edge Eine Kante
      * @return Ein Wert, der der Kante zugewiesen wird
      */
@@ -189,6 +176,7 @@ public abstract class GraphAlgorithm<T> {
 
     /**
      * Gibt an, ob eine Kante passierbar ist.
+     *
      * @param edge Eine Kante
      * @return true, wenn die Kante passierbar ist.
      */
@@ -196,8 +184,28 @@ public abstract class GraphAlgorithm<T> {
 
     /**
      * Gibt an, ob ein Knoten passierbar ist.
+     *
      * @param node Ein Knoten
      * @return true, wenn der Knoten passierbar ist.
-    */
+     */
     protected abstract boolean isPassable(Node<T> node);
+
+    /**
+     * Innere Klasse um {@link Node} zu erweitern, aber nicht zu verändern
+     * Sie weist jedem Knoten einen Wert und einen Vorgängerknoten zu.
+     *
+     * @param <T>
+     */
+    private static class AlgorithmNode<T> {
+
+        private Node<T> node;
+        private double value;
+        private AlgorithmNode<T> previous;
+
+        AlgorithmNode(Node<T> parentNode, AlgorithmNode<T> previousNode, double value) {
+            this.node = parentNode;
+            this.previous = previousNode;
+            this.value = value;
+        }
+    }
 }

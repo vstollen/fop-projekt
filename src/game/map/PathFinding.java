@@ -1,11 +1,10 @@
 package game.map;
 
-import base.GraphAlgorithm;
-import base.Node;
 import base.Edge;
 import base.Graph;
+import base.GraphAlgorithm;
+import base.Node;
 import game.Player;
-import game.map.Castle;
 import gui.components.MapPanel;
 
 import java.util.List;
@@ -35,15 +34,15 @@ public class PathFinding extends GraphAlgorithm<Castle> {
         Castle castleB = edge.getNodeB().getValue();
 
         // One of the regions should belong to the current player's team
-        if(castleA.getOwner().getTeam() != currentPlayer.getTeam() && castleB.getOwner().getTeam() != currentPlayer.getTeam())
+        if (castleA.getOwner().getTeam() != currentPlayer.getTeam() && castleB.getOwner().getTeam() != currentPlayer.getTeam())
             return false;
 
-        if(action == MapPanel.Action.ATTACKING) {
+        if (action == MapPanel.Action.ATTACKING) {
             return castleA.getOwner() != null && castleB.getOwner() != null;
-        } else if(action == MapPanel.Action.MOVING) {
+        } else if (action == MapPanel.Action.MOVING) {
 
             // One of the regions may be empty
-            if(castleA.getOwner() == null || castleB.getOwner() == null)
+            if (castleA.getOwner() == null || castleB.getOwner() == null)
                 return true;
 
             // Else both regions should belong to the current player's team

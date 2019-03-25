@@ -18,15 +18,15 @@ public class NumberDialog {
     boolean showDialog(JComponent parent) {
         String result = JOptionPane.showInputDialog(parent, text, String.valueOf(value));
 
-        if(result == null)
+        if (result == null)
             return false;
 
         result = result.trim();
         try {
             value = Integer.parseInt(result);
-            if(value >= min && value <= max)
+            if (value >= min && value <= max)
                 return true;
-        } catch(NumberFormatException | InputMismatchException ignored) {
+        } catch (NumberFormatException | InputMismatchException ignored) {
         }
 
         JOptionPane.showMessageDialog(parent, "Bitte gib eine gültige Zahl ein.", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);

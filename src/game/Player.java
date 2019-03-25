@@ -2,7 +2,7 @@ package game;
 
 import game.map.Castle;
 
-import java.awt.Color;
+import java.awt.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -24,12 +24,8 @@ public abstract class Player {
         this.remainingTroops = 0;
     }
 
-    public int getRemainingTroops() {
-        return this.remainingTroops;
-    }
-
     public static Player createPlayer(Class<?> playerType, String name, Color color) {
-        if(!Player.class.isAssignableFrom(playerType))
+        if (!Player.class.isAssignableFrom(playerType))
             throw new IllegalArgumentException("Not a player class");
 
         try {
@@ -41,25 +37,29 @@ public abstract class Player {
         }
     }
 
-    public void setColor(Color c) {
-        this.color = c;
+    public int getRemainingTroops() {
+        return this.remainingTroops;
     }
 
     public Color getColor() {
         return this.color;
     }
 
+    public void setColor(Color c) {
+        this.color = c;
+    }
+
     public String getName() {
         return this.name;
     }
 
-    public void setTeam(Team newTeam) {
-    	this.team = newTeam.addPlayer(this);
+    public Team getTeam() {
+        return this.team;
     }
 
-    public Team getTeam() {
-		return this.team;
-	}
+    public void setTeam(Team newTeam) {
+        this.team = newTeam.addPlayer(this);
+    }
 
     public int getPoints() {
         return points;
@@ -70,14 +70,14 @@ public abstract class Player {
     }
 
     public void addTroops(int troops) {
-        if(troops < 0)
+        if (troops < 0)
             return;
 
         this.remainingTroops += troops;
     }
 
     public void removeTroops(int troops) {
-        if(this.remainingTroops - troops < 0 || troops < 0)
+        if (this.remainingTroops - troops < 0 || troops < 0)
             return;
 
         this.remainingTroops -= troops;
@@ -99,22 +99,23 @@ public abstract class Player {
     /**
      * Berechnet die gesamte Anzahl von Truppen in Besitz des Spielers.
      * Dazu zählen Truppen auf Burgen und unverteilte Truppen
+     *
      * @param game
      * @return Die Anzahl von Truppen in Besitz des Spielers
      */
     public int getTotalTroopCount(Game game) {
-    	int totalTroopCount = remainingTroops;
-    	
-    	for (Castle ownCastle : getCastles(game)) {
-    		totalTroopCount += ownCastle.getTroopCount();
-    	}
-    	
-    	return totalTroopCount;
+        int totalTroopCount = remainingTroops;
+
+        for (Castle ownCastle : getCastles(game)) {
+            totalTroopCount += ownCastle.getTroopCount();
+        }
+
+        return totalTroopCount;
     }
-    
+
     @Override
     public String toString() {
-    	return name;
+        return name;
     }
 
 }

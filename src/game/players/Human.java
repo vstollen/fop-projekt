@@ -1,8 +1,8 @@
 package game.players;
 
-import java.awt.Color;
-
 import game.Player;
+
+import java.awt.*;
 
 public class Human extends Player {
     public Human(String name, Color color) {

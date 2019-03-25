@@ -2,30 +2,28 @@ package game;
 
 public abstract class Goal {
 
-    private Game game;
     private final String description;
     private final String name;
+    private Game game;
 
     public Goal(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
     public abstract boolean isCompleted();
+
     public abstract Player getWinner();
+
     public abstract boolean hasLost(Player player);
-    
+
     /**
      * Beinhaltet Funktionalitäten, die unmittelbar vor dem Spielstart ausgeführt werden sollen
      */
     public void onGameInit() {
-    	
+
     }
-    
+
     public final String getDescription() {
         return this.description;
     }
@@ -36,5 +34,9 @@ public abstract class Goal {
 
     protected Game getGame() {
         return this.game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

@@ -7,14 +7,10 @@ import gui.View;
 import gui.components.ColorChooserButton;
 import gui.components.NumberChooser;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.font.TextAttribute;
-import java.util.*;
-
-import javax.swing.*;
+import java.util.Vector;
 
 public class GameMenu extends View {
 
@@ -50,18 +46,18 @@ public class GameMenu extends View {
         int columnWidth = Math.max(300, (getWidth() - 75) / 2);
 
         // Column 1
-        offsetX = (getWidth() - 2*columnWidth - 25) / 2 + (columnWidth - 350) / 2;
+        offsetX = (getWidth() - 2 * columnWidth - 25) / 2 + (columnWidth - 350) / 2;
         lblPlayerCount.setLocation(offsetX, offsetY + 2);
         playerCount.setLocation(offsetX + lblPlayerCount.getWidth() + 10, offsetY);
         teamsCheck.setLocation(offsetX + lblPlayerCount.getWidth() + 10 + playerCount.getWidth() + 10, offsetY);
         offsetY += 50;
 
-        for(int i = 0; i < GameConstants.MAX_PLAYERS; i++) {
+        for (int i = 0; i < GameConstants.MAX_PLAYERS; i++) {
             int tempOffsetX = offsetX;
-            for(int j = 0; j < playerConfig[i].length; j++) {
-            	playerConfig[i][j].setLocation(tempOffsetX, offsetY);
-            	tempOffsetX += playerConfig[i][j].getWidth() + 10;
-            	playerConfig[i][j].setEnabled(i < playerCount.getValue() && (j == 4 ? teamsCheck.isSelected() : true));
+            for (int j = 0; j < playerConfig[i].length; j++) {
+                playerConfig[i][j].setLocation(tempOffsetX, offsetY);
+                tempOffsetX += playerConfig[i][j].getWidth() + 10;
+                playerConfig[i][j].setEnabled(i < playerCount.getValue() && (j != 4 || teamsCheck.isSelected()));
             }
 
             offsetY += 40;
@@ -69,17 +65,21 @@ public class GameMenu extends View {
 
         // Column 2
         offsetY = 125 - lblMapSize.getHeight();
-        offsetX = (getWidth() - 2*columnWidth - 25) / 2 + columnWidth + 25 + (columnWidth - mapSize.getWidth()) / 2;
-        lblMapSize.setLocation(offsetX, offsetY); offsetY += lblMapSize.getHeight();
-        mapSize.setLocation(offsetX, offsetY); offsetY += mapSize.getHeight() + 10;
-        lblGoal.setLocation(offsetX, offsetY); offsetY += lblGoal.getHeight();
-        goal.setLocation(offsetX, offsetY); offsetY += goal.getHeight();
+        offsetX = (getWidth() - 2 * columnWidth - 25) / 2 + columnWidth + 25 + (columnWidth - mapSize.getWidth()) / 2;
+        lblMapSize.setLocation(offsetX, offsetY);
+        offsetY += lblMapSize.getHeight();
+        mapSize.setLocation(offsetX, offsetY);
+        offsetY += mapSize.getHeight() + 10;
+        lblGoal.setLocation(offsetX, offsetY);
+        offsetY += lblGoal.getHeight();
+        goal.setLocation(offsetX, offsetY);
+        offsetY += goal.getHeight();
         lblGoalDescription.setLocation(offsetX, offsetY);
         lblGoalDescription.setSize(goal.getWidth() + 25, getHeight() - offsetY - BUTTON_SIZE.height - 50);
 
         // Button bar
         offsetY = this.getHeight() - BUTTON_SIZE.height - 25;
-        offsetX = (this.getWidth() - 2*BUTTON_SIZE.width - 25) / 2;
+        offsetX = (this.getWidth() - 2 * BUTTON_SIZE.width - 25) / 2;
         btnBack.setLocation(offsetX, offsetY);
         btnStart.setLocation(offsetX + BUTTON_SIZE.width + 25, offsetY);
     }
@@ -96,7 +96,7 @@ public class GameMenu extends View {
         playerCount.setSize(125, 25);
         playerCount.addValueListener((oldValue, newValue) -> onResize());
         add(playerCount);
-        
+
         // Team Checkbox
         teamsCheck = new JCheckBox("Teams");
         teamsCheck.setSize(75, 25);
@@ -106,24 +106,24 @@ public class GameMenu extends View {
         // Player rows:
         // [Number] [Color] [Name] [Human/AI] [Team]
         Vector<String> availableTeams = new Vector<>();
-        for(int i = 0; i < GameConstants.MAX_PLAYERS; i++)
-        	availableTeams.add(String.format("Team %d", i + 1));
+        for (int i = 0; i < GameConstants.MAX_PLAYERS; i++)
+            availableTeams.add(String.format("Team %d", i + 1));
 
         Vector<String> playerTypes = new Vector<>();
-        for(Class<?> c : GameConstants.PLAYER_TYPES)
+        for (Class<?> c : GameConstants.PLAYER_TYPES)
             playerTypes.add(c.getSimpleName());
 
         playerConfig = new JComponent[GameConstants.MAX_PLAYERS][];
-        for(int i = 0; i < GameConstants.MAX_PLAYERS; i++) {
-        	JComboBox<String> teamSelection = new JComboBox<>(availableTeams);
-        	teamSelection.setSelectedIndex(i);
-        	
-            playerConfig[i] = new JComponent[] {
-                createLabel(String.format("%d.", i + 1),16),
-                new ColorChooserButton(GameConstants.PLAYER_COLORS[i]),
-                new JTextField(String.format("Spieler %d", i + 1)),
-                new JComboBox<>(playerTypes),
-                teamSelection
+        for (int i = 0; i < GameConstants.MAX_PLAYERS; i++) {
+            JComboBox<String> teamSelection = new JComboBox<>(availableTeams);
+            teamSelection.setSelectedIndex(i);
+
+            playerConfig[i] = new JComponent[]{
+                    createLabel(String.format("%d.", i + 1), 16),
+                    new ColorChooserButton(GameConstants.PLAYER_COLORS[i]),
+                    new JTextField(String.format("Spieler %d", i + 1)),
+                    new JComboBox<>(playerTypes),
+                    teamSelection
             };
 
             playerConfig[i][1].setSize(25, 25);
@@ -131,7 +131,7 @@ public class GameMenu extends View {
             playerConfig[i][3].setSize(100, 25);
             playerConfig[i][4].setSize(100, 25);
 
-            for(JComponent c : playerConfig[i])
+            for (JComponent c : playerConfig[i])
                 add(c);
         }
 
@@ -141,7 +141,7 @@ public class GameMenu extends View {
 
         // Goals
         Vector<String> goalNames = new Vector<>();
-        for(Goal goal : GameConstants.GAME_GOALS)
+        for (Goal goal : GameConstants.GAME_GOALS)
             goalNames.add(goal.getName());
 
         lblGoal = createLabel("Mission", 16);
@@ -150,7 +150,7 @@ public class GameMenu extends View {
         goal = createCombobox(goalNames, 0);
         goal.addItemListener(itemEvent -> {
             int i = goal.getSelectedIndex();
-            if(i < 0 || i >= GameConstants.GAME_GOALS.length)
+            if (i < 0 || i >= GameConstants.GAME_GOALS.length)
                 lblGoalDescription.setText("");
             else
                 lblGoalDescription.setText(GameConstants.GAME_GOALS[i].getDescription());
@@ -166,9 +166,9 @@ public class GameMenu extends View {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if(actionEvent.getSource() == btnBack)
+        if (actionEvent.getSource() == btnBack)
             getWindow().setView(new StartScreen(getWindow()));
-        else if(actionEvent.getSource() == btnStart) {
+        else if (actionEvent.getSource() == btnStart) {
 
             try {
 
@@ -198,7 +198,7 @@ public class GameMenu extends View {
                 // Create Teams
                 Team[] teamList = new Team[playerCount];
                 for (int i = 0; i < playerCount; i++) {
-                	teamList[i] = new Team();
+                    teamList[i] = new Team();
                 }
 
                 // Create Players
@@ -243,7 +243,7 @@ public class GameMenu extends View {
                 game.setGoal(goal);
                 game.start(gameView);
                 getWindow().setView(gameView);
-            } catch(IllegalArgumentException ex) {
+            } catch (IllegalArgumentException ex) {
                 ex.printStackTrace();
                 showErrorMessage("Fehler beim Erstellen des Spiels: " + ex.getMessage(), "Interner Fehler");
             }

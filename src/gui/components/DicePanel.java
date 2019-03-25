@@ -4,12 +4,11 @@ import gui.Resources;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.Random;
 
 public class DicePanel extends JPanel {
 
-    private int diceValues[];
+    private int[] diceValues;
     private Random random;
     private Resources resources;
     private int numDices;
@@ -35,17 +34,17 @@ public class DicePanel extends JPanel {
     }
 
     public int[] generateRandom(int numDices, boolean animate) throws InterruptedException {
-        if(animate) {
+        if (animate) {
             long duration = 1500;
             long start = System.currentTimeMillis();
             long end = start + duration;
             long lastTick = 0;
 
-            while(System.currentTimeMillis() < end) {
+            while (System.currentTimeMillis() < end) {
                 long tick = System.currentTimeMillis() - start;
-                double progress = (double)tick / (double) duration;
+                double progress = (double) tick / (double) duration;
                 long waitTime = (long) (200 * Math.pow(progress, 3) - 800 * Math.pow(progress, 2) + 850 * progress + 20);
-                if(lastTick == 0 || (waitTime > 0 && (tick - lastTick) >= waitTime)) {
+                if (lastTick == 0 || (waitTime > 0 && (tick - lastTick) >= waitTime)) {
                     lastTick = tick;
                     generateRandom(numDices);
                 } else {
@@ -69,7 +68,7 @@ public class DicePanel extends JPanel {
         int diceSize = Math.min(height - 2 * margin, (width - (diceCount + 1) * margin) / diceCount);
         int offsetX = (width - 2 * margin - (diceCount * diceSize)) / 2;
 
-        for(int i = 0; i < diceCount; i++) {
+        for (int i = 0; i < diceCount; i++) {
             int x = offsetX + i * (margin + diceSize);
             int y = margin;
             int value = (diceValues[i] - 1) % 6;

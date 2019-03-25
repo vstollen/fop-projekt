@@ -11,8 +11,10 @@ import java.awt.image.WritableRaster;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Diese Klasse verwaltet die Resourcen des Spiels, darunter beispielsweise Bilder, Icons und Schriftarten.
@@ -22,11 +24,11 @@ public class Resources {
     private static final int NUM_CASTLES = 6;
     private static Resources instance;
     private Map<Color, BufferedImage[]> castlesColored;
-    private BufferedImage dices[];
+    private BufferedImage[] dices;
     private BufferedImage check;
     private BufferedImage unit;
     private BufferedImage arrow, arrowDeactivated, plus, plusDeactivated, swords;
-    private BufferedImage soldiers[];
+    private BufferedImage[] soldiers;
     private List<String> castleNames;
     private Font celticFont;
 
@@ -44,10 +46,11 @@ public class Resources {
 
     /**
      * Gibt die Instanz des Resourcen Managers zurück oder erzeugt eine neue
+     *
      * @return Resourcen Manager
      */
     public static Resources getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new Resources();
             instance.load();
         }
@@ -57,13 +60,14 @@ public class Resources {
 
     /**
      * Lädt ein Bild aus den Resourcen
+     *
      * @param name der Name der Datei
      * @return das Bild als {@link BufferedImage}-Objekt
      * @throws IOException Eine IOException wird geworfen, falls das Bild nicht gefunden wurde oder andere Probleme beim Laden auftreten
      */
     private BufferedImage loadImage(String name) throws IOException {
         URL res = Resources.class.getClassLoader().getResource(name);
-        if(res == null)
+        if (res == null)
             throw new IOException("Resource not found: " + name);
 
         return ImageIO.read(res);
@@ -71,17 +75,18 @@ public class Resources {
 
     /**
      * Lädt alle Resourcen
+     *
      * @return true, wenn alle Resourcen erfolgreich geladen wurden
      */
     public boolean load() {
-        if(resourcesLoaded)
+        if (resourcesLoaded)
             return true;
 
         try {
             // Load Castle
             castlesColored = new HashMap<>();
-            BufferedImage castles[] = new BufferedImage[NUM_CASTLES];
-            for(int i = 0; i < NUM_CASTLES; i++)
+            BufferedImage[] castles = new BufferedImage[NUM_CASTLES];
+            for (int i = 0; i < NUM_CASTLES; i++)
                 castles[i] = loadImage("castle" + (i + 1) + ".png");
             castlesColored.put(Color.WHITE, castles);
 
@@ -89,12 +94,12 @@ public class Resources {
             dices = loadDices();
 
             // Load Icons
-            soldiers = new BufferedImage[] { loadImage("soldier1.png"), loadImage("soldier2.png") };
-            check  = loadImage("check.png");
-            unit   = loadImage("unit.png");
-            arrow  = loadImage("arrow.png");
+            soldiers = new BufferedImage[]{loadImage("soldier1.png"), loadImage("soldier2.png")};
+            check = loadImage("check.png");
+            unit = loadImage("unit.png");
+            arrow = loadImage("arrow.png");
             swords = loadImage("swords.png");
-            plus   = loadImage("plus.png");
+            plus = loadImage("plus.png");
             plusDeactivated = loadImage("plus_deactivated.png");
             arrowDeactivated = loadImage("arrow_deactivated.png");
 
@@ -109,7 +114,7 @@ public class Resources {
 
             resourcesLoaded = true;
             return true;
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Konnte Resourcen nicht laden: " + ex.getMessage(), "Fehler beim Laden der Resourcen", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             return false;
@@ -118,13 +123,14 @@ public class Resources {
 
     /**
      * Speichert bestimmte Resourcen, zurzeit nur den Highscore-Table
+     *
      * @return gibt true zurück, wenn erfolgreich gespeichert wurde
      */
     public boolean save() {
         try {
             saveScoreEntries();
             return true;
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
             return false;
         }
@@ -134,19 +140,20 @@ public class Resources {
      * Diese Methode speichert alle Objekte des Typs {@link ScoreEntry} in der Textdatei "highscores.txt"
      * Jede Zeile stellt dabei einen ScoreEntry dar. Sollten Probleme auftreten, muss eine {@link IOException} geworfen werden.
      * Die Einträge sind in der Liste {@link #scoreEntries} zu finden.
-     * @see ScoreEntry#write(PrintWriter)
+     *
      * @throws IOException Eine IOException wird geworfen, wenn Probleme beim Schreiben auftreten.
+     * @see ScoreEntry#write(PrintWriter)
      */
     private void saveScoreEntries() throws IOException {
-    	PrintWriter out = new PrintWriter("highscores.txt");
-    	
-    	for (ScoreEntry entry : scoreEntries) {
-    		entry.write(out);
-    	}
-    	
-    	// Flush und prüfe, ob ein Fehler aufgetreten ist
-    	if (out.checkError()) throw new IOException();
-    	out.close();
+        PrintWriter out = new PrintWriter("highscores.txt");
+
+        for (ScoreEntry entry : scoreEntries) {
+            entry.write(out);
+        }
+
+        // Flush und prüfe, ob ein Fehler aufgetreten ist
+        if (out.checkError()) throw new IOException();
+        out.close();
     }
 
     /**
@@ -155,38 +162,40 @@ public class Resources {
      * Beachte dabei, dass die Liste nach dem Einlesen absteigend nach den Punktzahlen sortiert sein muss.
      * Sollte eine Exception auftreten, kann diese ausgegeben werden, sie sollte aber nicht weitergegeben werden,
      * da sonst das Laden der restlichen Resourcen abgebrochen wird ({@link #load()}).
+     *
      * @see ScoreEntry#read(String)
      * @see #addScoreEntry(ScoreEntry)
      */
     private void loadScoreEntries() {
-    	scoreEntries = new LinkedList<>();
-    	
-    	try (FileReader fr = new FileReader("highscores.txt");
-    		BufferedReader br = new BufferedReader(fr)) {
-    		
-    		String line;
-    		
-			while ((line = br.readLine()) != null) {
-				line = line.trim();
-				ScoreEntry entry = ScoreEntry.read(line);
-				if (entry != null) addScoreEntry(entry);
-			}
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        scoreEntries = new LinkedList<>();
+
+        try (FileReader fr = new FileReader("highscores.txt");
+             BufferedReader br = new BufferedReader(fr)) {
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                ScoreEntry entry = ScoreEntry.read(line);
+                if (entry != null) addScoreEntry(entry);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Fügt ein {@link ScoreEntry}-Objekt der Liste von Einträgen hinzu.
      * Beachte: Nach dem Einfügen muss die Liste nach den Punktzahlen absteigend sortiert bleiben.
+     *
      * @param scoreEntry Der einzufügende Eintrag
      * @see ScoreEntry#compareTo(ScoreEntry)
      */
     public void addScoreEntry(ScoreEntry scoreEntry) {
         int i = scoreEntries.size() - 1;
-        for(; i >= 0; i--) {
-            if(scoreEntry.compareTo(scoreEntries.get(i)) < 0) {
+        for (; i >= 0; i--) {
+            if (scoreEntry.compareTo(scoreEntries.get(i)) < 0) {
                 break;
             }
         }
@@ -211,7 +220,7 @@ public class Resources {
         BufferedImage diceImage = loadImage("dices.png");
         int diceSizeW = diceImage.getWidth() / 3;
         int diceSizeH = diceImage.getHeight() / 2;
-        if(diceSizeW != diceSizeH)
+        if (diceSizeW != diceSizeH)
             System.out.println("Invalid dice dimensions for resource: dice.png. Expected 3x2 dices, got dimensions: " + diceImage.getWidth() + "x" + diceImage.getHeight());
 
         int diceSize = diceSizeH;
@@ -240,9 +249,9 @@ public class Resources {
         BufferedReader br = new BufferedReader(isr);
 
         String line;
-        while((line = br.readLine()) != null) {
+        while ((line = br.readLine()) != null) {
             line = line.trim();
-            if(line.length() > 0 && !line.startsWith("#")) {
+            if (line.length() > 0 && !line.startsWith("#")) {
                 regionNames.add(line);
             }
         }
@@ -257,10 +266,10 @@ public class Resources {
         WritableRaster raster = original.copyData(null);
         BufferedImage newImage = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 
-        for(int x = 0; x < original.getWidth(); x++) {
-            for(int y = 0; y < original.getHeight(); y++) {
+        for (int x = 0; x < original.getWidth(); x++) {
+            for (int y = 0; y < original.getHeight(); y++) {
                 Color oldColor = new Color(original.getRGB(x, y), true);
-                if(oldColor.getRed() == 255 && oldColor.getGreen() == 255 && oldColor.getBlue() == 255 && oldColor.getAlpha() == 255) {
+                if (oldColor.getRed() == 255 && oldColor.getGreen() == 255 && oldColor.getBlue() == 255 && oldColor.getAlpha() == 255) {
                     newImage.setRGB(x, y, color.getRGB());
                 }
             }
@@ -270,17 +279,17 @@ public class Resources {
     }
 
     public BufferedImage getCastle(Color color, int index) {
-        if(!resourcesLoaded)
+        if (!resourcesLoaded)
             return null;
 
         index = index % NUM_CASTLES;
-        BufferedImage images[];
-        if(castlesColored.containsKey(color))
+        BufferedImage[] images;
+        if (castlesColored.containsKey(color))
             images = castlesColored.get(color);
         else
             images = new BufferedImage[NUM_CASTLES];
 
-        if(images[index] != null)
+        if (images[index] != null)
             return images[index];
 
         BufferedImage castleGeneric = castlesColored.get(Color.WHITE)[index];
@@ -290,7 +299,7 @@ public class Resources {
     }
 
     public BufferedImage getDice(int value) {
-        if(!resourcesLoaded)
+        if (!resourcesLoaded)
             return null;
 
         return dices[value % dices.length];

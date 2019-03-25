@@ -16,6 +16,17 @@ public class ColorChooserButton extends JButton {
         });
     }
 
+    public static ImageIcon createIcon(Color main, int width, int height) {
+        BufferedImage image = new BufferedImage(width, height, java.awt.image.BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics = image.createGraphics();
+        graphics.setColor(main);
+        graphics.fillRect(0, 0, width, height);
+        graphics.setXORMode(Color.DARK_GRAY);
+        graphics.drawRect(0, 0, width - 1, height - 1);
+        image.flush();
+        return new ImageIcon(image);
+    }
+
     public Color getSelectedColor() {
         return current;
     }
@@ -27,16 +38,5 @@ public class ColorChooserButton extends JButton {
         current = newColor;
         setIcon(createIcon(current, 16, 16));
         repaint();
-    }
-
-    public static  ImageIcon createIcon(Color main, int width, int height) {
-        BufferedImage image = new BufferedImage(width, height, java.awt.image.BufferedImage.TYPE_INT_RGB);
-        Graphics2D graphics = image.createGraphics();
-        graphics.setColor(main);
-        graphics.fillRect(0, 0, width, height);
-        graphics.setXORMode(Color.DARK_GRAY);
-        graphics.drawRect(0, 0, width-1, height-1);
-        image.flush();
-        return new ImageIcon(image);
     }
 }

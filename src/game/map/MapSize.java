@@ -11,17 +11,18 @@ public enum MapSize {
     LARGE("Groß");
 
     private String label;
+
     MapSize(String lbl) {
         this.label = lbl;
+    }
+
+    public static Vector<String> getMapSizes() {
+        return Arrays.stream(values()).map(MapSize::toString).collect(Collectors.toCollection(Vector::new));
     }
 
     @Override
     public String toString() {
         return this.label;
-    }
-
-    public static Vector<String> getMapSizes() {
-        return Arrays.stream(values()).map(MapSize::toString).collect(Collectors.toCollection(Vector::new));
     }
 
 }

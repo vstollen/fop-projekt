@@ -1,10 +1,5 @@
 package game.players;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import base.Edge;
 import base.Graph;
 import base.Node;
@@ -12,6 +7,11 @@ import game.AI;
 import game.Game;
 import game.map.Castle;
 import gui.AttackThread;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BasicAI extends AI {
 
@@ -21,8 +21,8 @@ public class BasicAI extends AI {
 
     private Castle getCastleWithFewestTroops(List<Castle> castles) {
         Castle fewestTroops = castles.get(0);
-        for(Castle castle : castles) {
-            if(castle.getTroopCount() < fewestTroops.getTroopCount()) {
+        for (Castle castle : castles) {
+            if (castle.getTroopCount() < fewestTroops.getTroopCount()) {
                 fewestTroops = castle;
             }
         }
@@ -32,9 +32,9 @@ public class BasicAI extends AI {
 
     @Override
     protected void actions(Game game) throws InterruptedException {
-        if(game.getRound() == 1) {
+        if (game.getRound() == 1) {
             List<Castle> availableCastles = game.getMap().getCastles().stream().filter(c -> c.getOwner() == null).collect(Collectors.toList());
-            while(availableCastles.size() > 0 && getRemainingTroops() > 0) {
+            while (availableCastles.size() > 0 && getRemainingTroops() > 0) {
 
                 sleep(1000);
 
@@ -46,11 +46,11 @@ public class BasicAI extends AI {
             // 1. Distribute remaining troops
             Graph<Castle> graph = game.getMap().getGraph();
             List<Castle> castleNearEnemy = new ArrayList<>();
-            for(Castle castle : this.getCastles(game)) {
+            for (Castle castle : this.getCastles(game)) {
                 Node<Castle> node = graph.getNode(castle);
-                for(Edge<Castle> edge : graph.getEdges(node)) {
+                for (Edge<Castle> edge : graph.getEdges(node)) {
                     Castle otherCastle = edge.getOtherNode(node).getValue();
-                    if(otherCastle.getOwner().getTeam() != this.getTeam()) {
+                    if (otherCastle.getOwner().getTeam() != this.getTeam()) {
                         castleNearEnemy.add(castle);
                         break;
                     }
@@ -59,10 +59,10 @@ public class BasicAI extends AI {
 
             // If no enemy castles are nearby, idle
             if (castleNearEnemy.isEmpty()) {
-            	return;
+                return;
             }
 
-            while(this.getRemainingTroops() > 0) {
+            while (this.getRemainingTroops() > 0) {
                 Castle fewestTroops = getCastleWithFewestTroops(castleNearEnemy);
                 sleep(500);
                 game.addTroops(this, fewestTroops, 1);
@@ -82,7 +82,7 @@ public class BasicAI extends AI {
                 // 3. attack!
                 attackWon = false;
                 for (Castle castle : castleNearEnemy) {
-                    if(castle.getTroopCount() < 2)
+                    if (castle.getTroopCount() < 2)
                         continue;
 
                     Node<Castle> node = graph.getNode(castle);
@@ -90,7 +90,7 @@ public class BasicAI extends AI {
                         Castle otherCastle = edge.getOtherNode(node).getValue();
                         if (otherCastle.getOwner().getTeam() != this.getTeam() && castle.getTroopCount() >= otherCastle.getTroopCount()) {
                             AttackThread attackThread = game.startAttack(castle, otherCastle, castle.getTroopCount());
-                            if(fastForward)
+                            if (fastForward)
                                 attackThread.fastForward();
 
                             attackThread.join();
@@ -99,10 +99,10 @@ public class BasicAI extends AI {
                         }
                     }
 
-                    if(attackWon)
+                    if (attackWon)
                         break;
                 }
-            } while(attackWon);
+            } while (attackWon);
         }
     }
 }

@@ -19,12 +19,12 @@ public class Vector<T> {
         return this.x;
     }
 
-    public T getY() {
-        return this.y;
-    }
-
     public void setX(T x) {
         this.x = x;
+    }
+
+    public T getY() {
+        return this.y;
     }
 
     public void setY(T y) {

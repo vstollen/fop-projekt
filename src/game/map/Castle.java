@@ -20,8 +20,9 @@ public class Castle {
 
     /**
      * Eine neue Burg erstellen
+     *
      * @param location die Koordinaten der Burg
-     * @param name der Name der Burg
+     * @param name     der Name der Burg
      */
     public Castle(Point location, String name) {
         this.location = location;
@@ -35,8 +36,23 @@ public class Castle {
         return this.owner;
     }
 
+    public void setOwner(Player player) {
+        this.owner = player;
+    }
+
     public Kingdom getKingdom() {
         return this.kingdom;
+    }
+
+    /**
+     * Die Burg einem Königreich zuordnen
+     *
+     * @param kingdom Ein Königreich oder null
+     */
+    public void setKingdom(Kingdom kingdom) {
+        this.kingdom = kingdom;
+        if (kingdom != null)
+            kingdom.addCastle(this);
     }
 
     public int getTroopCount() {
@@ -46,17 +62,18 @@ public class Castle {
     /**
      * Truppen von dieser Burg zur angegebenen Burg bewegen.
      * Dies funktioniert nur, wenn die Besitzer übereinstimmen und bei der aktuellen Burg mindestens eine Truppe übrig bleibt
+     *
      * @param target
      * @param troops
      */
     public void moveTroops(Castle target, int troops) {
 
         // Troops can only be moved to own team regions
-        if(target.owner.getTeam() != this.owner.getTeam())
+        if (target.owner.getTeam() != this.owner.getTeam())
             return;
 
         // At least one unit must remain in the source region
-        if(this.troopCount - troops < 1)
+        if (this.troopCount - troops < 1)
             return;
 
         this.troopCount -= troops;
@@ -69,6 +86,7 @@ public class Castle {
 
     /**
      * Berechnet die eukldische Distanz zu dem angegebenen Punkt
+     *
      * @param dest die Zielkoordinate
      * @return die euklidische Distanz
      */
@@ -78,6 +96,7 @@ public class Castle {
 
     /**
      * Berechnet die eukldische Distanz zu der angegebenen Burg
+     *
      * @param next die Zielburg
      * @return die euklidische Distanz
      * @see #distance(Point)
@@ -87,12 +106,8 @@ public class Castle {
         return this.distance(otherLocation);
     }
 
-    public void setOwner(Player player) {
-        this.owner = player;
-    }
-
     public void addTroops(int i) {
-        if(i <= 0)
+        if (i <= 0)
             return;
 
         this.troopCount += i;
@@ -104,25 +119,16 @@ public class Castle {
 
     public void removeTroops(int i) {
         this.troopCount = Math.max(0, this.troopCount - i);
-        if(this.troopCount == 0)
+        if (this.troopCount == 0)
             this.owner = null;
     }
 
     /**
      * Gibt den Burg-Typen zurück. Falls die Burg einem Königreich angehört, wird der Typ des Königreichs zurückgegeben, ansonsten 0
+     *
      * @return der Burg-Typ für die Anzeige
      */
     public int getType() {
         return this.kingdom == null ? 0 : this.kingdom.getType();
-    }
-
-    /**
-     * Die Burg einem Königreich zuordnen
-     * @param kingdom Ein Königreich oder null
-     */
-    public void setKingdom(Kingdom kingdom) {
-        this.kingdom = kingdom;
-        if(kingdom != null)
-            kingdom.addCastle(this);
     }
 }

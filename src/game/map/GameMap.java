@@ -378,4 +378,16 @@ public class GameMap {
     public List<Kingdom> getKingdoms() {
         return this.kingdoms;
     }
+	
+    /**
+     * Generiert eine Kante zwischen den Burgen A und B
+     * 
+     * @param A, die Burg von der die Kante ausgehen soll
+     * @param B, die Burg an der die Kante ankommen soll
+     */
+    public void addEdge(Castle A, Castle B) {
+    	Node<Castle> nodeA = castleGraph.getNode(A);
+    	Node<Castle> nodeB = castleGraph.getNode(B);
+    	this.castleGraph.addEdge(nodeA, nodeB);
+    }
 }

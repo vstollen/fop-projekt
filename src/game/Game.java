@@ -4,6 +4,7 @@ import java.util.*;
 
 import game.gameExceptions.alreadyFlagCastleException;
 import game.gameExceptions.hasFlagCastleException;
+import game.goals.CaptureTheFlagGoal;
 import game.map.Castle;
 import game.map.Kingdom;
 import game.map.GameMap;
@@ -186,11 +187,7 @@ public class Game {
     }
 
     public void chooseCastle(Castle castle, Player player) {
-        if(allCastlesChosen() &&
-    	   castle.getOwner() == player && 
-    	   player.getFlagCastle() == null &&
-    	   this.getGoal().getName() == "Capture the Flag" &&
-    	   !this.allFlagsDistributed()) {
+        if(isFlagCastleChoice(castle, player)) {
     		
     		try {
 				player.setFlagCastle(castle);
@@ -220,6 +217,36 @@ public class Game {
             player.removeTroops(player.getRemainingTroops());
             nextTurn();
         }
+    }
+    
+    /**
+     * Prüft ob die übergebene Burg in verbindung mit player als Flagge gewählt wurde
+     * @param castle Burg, die eventuell als Flagge gewählt wurde
+     * @param player Spieler, der eventuell eine Flagge gewählt haben könnte
+     * @return true, wenn die Burg als Flagge gewählt wurde
+     */
+    private boolean isFlagCastleChoice(Castle castle, Player player) {
+    	if (!allCastlesChosen()) {
+    		return false;
+    	}
+    	
+    	if (castle.getOwner() != player) {
+    		return false;
+    	}
+    	
+    	if (player.getFlagCastle() != null) {
+    		return false;
+    	}
+    	
+    	if (!(getGoal() instanceof CaptureTheFlagGoal)) {
+    		return false;
+    	}
+    	
+    	if (allFlagsDistributed()) {
+    		return false;
+    	}
+    	
+    	return true;
     }
 
     public void addTroops(Player player, Castle castle, int count) {

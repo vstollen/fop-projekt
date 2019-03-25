@@ -7,7 +7,9 @@ import game.map.Kingdom;
 import game.map.GameMap;
 import game.map.MapSize;
 import gui.AttackThread;
+import gui.ConvertThread;
 import gui.Resources;
+import gui.views.GameView;
 
 public class Game {
 
@@ -114,9 +116,16 @@ public class Game {
         if(source.getOwner().getTeam() == target.getOwner().getTeam() || troopCount < 1)
             return null;
 
-        attackThread = new AttackThread(this, source, target, troopCount);
+        if (source.getOwner().isInstantAttackWin()) {
+        	attackThread = new ConvertThread(this, source, target, troopCount);
+        	gameInterface.onConversionStarted(source, target, troopCount);
+        } else {
+        	attackThread = new AttackThread(this, source, target, troopCount);
+        	gameInterface.onAttackStarted(source, target, troopCount);
+        }
+
         attackThread.start();
-        gameInterface.onAttackStarted(source, target, troopCount);
+        gameInterface.onUpdate();
         return attackThread;
     }
 
@@ -258,6 +267,17 @@ public class Game {
             round++;
             gameInterface.onNewRound(round);
         }
+        
+        if (shouldSkipTurn()) {
+        	if (gameInterface instanceof GameView) {
+        		GameView gameView = (GameView) gameInterface;
+        		gameView.logLine("%PLAYER% wird übersprungen.", currentPlayer);
+        	}
+        	
+        	playerQueue.add(currentPlayer);
+        	nextTurn();
+        	return;
+        }
 
         int numRegions = currentPlayer.getNumRegions(this);
 
@@ -340,9 +360,32 @@ public class Game {
     	return totalTroopCount;
     }
     
+    /**
+     * Bereitet die Joker auf das Spiel vor
+     */
     private void setupJokers() {
     	for (Joker joker : GameConstants.JOKERS) {
+    		if (joker instanceof game.jokers.ConversionJoker) {
+    			int mapSizeMultiplier = this.mapSize.ordinal() + 1;
+    			int maxInvocations = GameConstants.CONVERSION_JOKER_INVOCATION_MULTIPLIER * mapSizeMultiplier;
+    			((game.jokers.ConversionJoker) joker).setMaxInvocations(maxInvocations);
+    		}
     		joker.setGame(this);
     	}
+    }
+    
+    /**
+     * Bewertet, ob der aktuelle Zug übersprungen werden sollte
+     * @return true, wenn der aktuelle Zug übersprungen werden sollte
+     */
+    private boolean shouldSkipTurn() {
+    	
+    	for (Joker joker : GameConstants.JOKERS) {
+    		if (joker.shouldSkipTurn()) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
     }
 }

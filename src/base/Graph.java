@@ -81,7 +81,7 @@ public class Graph<T> {
     public List<T> getAllValues() {
     	return this.nodes.stream()
     			.map(node -> node.getValue())
-    			.collect(Collectors.toCollection(ArrayList::new));
+    			.collect(Collectors.toList());
     }
 
     /**
@@ -94,7 +94,7 @@ public class Graph<T> {
     public List<Edge<T>> getEdges(Node<T> node) {
     	return this.edges.stream()
     			.filter(edge -> edge.contains(node))
-    			.collect(Collectors.toCollection(ArrayList::new));
+    			.collect(Collectors.toList());
     }
 
     /**
@@ -154,7 +154,7 @@ public class Graph<T> {
     	
     	List<Node<T>> nextNodes = getEdges(node).stream()
     			.map(edge -> edge.getOtherNode(node))
-    			.collect(Collectors.toCollection(ArrayList::new));
+    			.collect(Collectors.toList());
     	
     	for (Node<T> nextNode : nextNodes)
     		if (!visited.contains(nextNode))

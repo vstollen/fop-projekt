@@ -27,7 +27,8 @@ public class MapPanel extends JScrollPane {
     public enum Action {
         NONE,
         MOVING,
-        ATTACKING
+        ATTACKING,
+        TUNNELING
     }
 
     private static final int CASTLE_SIZE = 50;
@@ -95,7 +96,10 @@ public class MapPanel extends JScrollPane {
 
         if(game.isOver())
             return false;
-
+        
+        if(currentAction == Action.TUNNELING)
+        	return false;
+        
         return game.getAttackThread() == null;
     }
 
@@ -135,7 +139,7 @@ public class MapPanel extends JScrollPane {
                     if(getHeight() >= imagePanel.getHeight())
                         newY = vp.getViewPosition().y;
 
-                    if(currentAction == Action.ATTACKING ||  currentAction == Action.MOVING)
+                    if(currentAction == Action.ATTACKING ||  currentAction == Action.MOVING || currentAction == Action.TUNNELING)
                         setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
                     else
                         setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
@@ -154,7 +158,7 @@ public class MapPanel extends JScrollPane {
                 boolean selectNew = true;
                 Action lastAction = currentAction;
 
-                if (selectedCastle != null && canPerformAction()) {
+                if (selectedCastle != null && canPerformAction() && currentAction != Action.TUNNELING) {
                     Point castlePos = selectedCastle.getLocationOnMap();
 
                     if(canChooseCastle()) {
@@ -221,7 +225,18 @@ public class MapPanel extends JScrollPane {
                             game.startAttack(selectedCastle, nextCastle, nd.getValue());
                             currentAction = Action.NONE;
                         }
-                    } else {
+                    } else if(currentAction == Action.TUNNELING){
+                    	if(selectedCastle == null) {
+                    		selectedCastle = nextCastle;
+                    		pathFinding = new PathFinding(game.getMap().getGraph(), selectedCastle, currentAction, currentPlayer);
+                            pathFinding.run();
+                    		repaint();
+                    	} else if(selectedCastle != nextCastle) {
+                    		game.addEdge(selectedCastle, nextCastle);
+                    		currentAction = Action.NONE;
+                    	}
+                    		
+                    }else {
                         currentAction = Action.NONE;
                         selectedCastle = nextCastle;
                         setCursor(Cursor.getDefaultCursor());
@@ -262,7 +277,7 @@ public class MapPanel extends JScrollPane {
                     }
                 }
 
-                if(currentAction == Action.MOVING || currentAction == Action.ATTACKING) {
+                if(currentAction == Action.MOVING || currentAction == Action.ATTACKING || currentAction == Action.TUNNELING) {
                     targetCastle = getRegion(mousePos);
                     if(targetCastle != null) {
                         if(currentAction != Action.ATTACKING || targetCastle.getOwner().getTeam() != selectedCastle.getOwner().getTeam()) {

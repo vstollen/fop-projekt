@@ -3,6 +3,7 @@ package game;
 import game.goals.*;
 import game.jokers.DummyJoker;
 import game.jokers.TroopbonusJoker;
+import game.jokers.TunnelJoker;
 import game.players.*;
 
 import java.awt.*;
@@ -46,6 +47,6 @@ public class GameConstants {
     	new TroopbonusJoker(),
     	new DummyJoker("Dummy Übernahme", "Übernahme"),
     	new DummyJoker("Dummy Aussetzen", "Aussetzen"),
-    	new DummyJoker("Dummy Tunnel", "Tunnel")
+    	new TunnelJoker()
     };
 }

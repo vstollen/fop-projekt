@@ -59,6 +59,7 @@ public class BasicAI extends AI {
 
             // If no enemy castles are nearby, idle
             if (castleNearEnemy.isEmpty()) {
+            	sleep(500);
             	return;
             }
 

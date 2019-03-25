@@ -5,6 +5,7 @@ public abstract class Joker {
 	private Game game;
 	private final String name;
 	private String hint;
+	private MapPanel map;
 	
 	public Joker(String name, String hint) {
 		this.name = name;
@@ -55,5 +56,9 @@ public abstract class Joker {
 	
 	protected Game getGame() {
 		return game;
+	}
+	
+	public void setMapPanel(MapPanel map) {
+		this.map = map;
 	}
 }

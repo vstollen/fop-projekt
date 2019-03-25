@@ -66,10 +66,6 @@ public class ConversionJoker extends Joker {
 		Game game = getGame();
 		Player currentPlayer = game.getCurrentPlayer();
 		
-		if (!invocationsLeft.containsKey(currentPlayer)) {
-			invocationsLeft.put(currentPlayer, maxInvocationsPerPlayer);
-		}
-		
 		setHint(String.format(hintTemplate, invocationsLeft.get(currentPlayer)));
 		super.update();
 	}

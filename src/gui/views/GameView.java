@@ -422,6 +422,7 @@ public class GameView extends View implements GameInterface {
     		return;
     	}
     	
+    	selectedJoker.update();
     	String hint = selectedJoker.getHint();
     	jokerHint.setText(hint);
     }

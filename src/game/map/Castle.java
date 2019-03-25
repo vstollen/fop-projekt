@@ -1,8 +1,10 @@
 package game.map;
 
-import game.Player;
+import java.awt.Point;
+import java.util.List;
 
-import java.awt.*;
+import base.Edge;
+import game.Player;
 
 /**
  * Diese Klasse representiert eine Burg.
@@ -125,4 +127,25 @@ public class Castle {
         if(kingdom != null)
             kingdom.addCastle(this);
     }
+    
+	public boolean isBorderCastle(GameMap map) {
+		
+		List<Edge<Castle>> allEdges = map.getEdges();
+		
+		for (Edge<Castle> edge : allEdges) {
+			
+			Castle castleA = edge.getNodeA().getValue();
+			Castle castleB = edge.getNodeB().getValue();
+					
+			if (castleA != this && castleB != this) {
+				continue;
+			}
+			
+			if (castleA.getOwner() != castleB.getOwner()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }

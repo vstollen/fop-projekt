@@ -32,6 +32,7 @@ public class CustomAI extends AI {
 		}
 		
 		distributeTroops();
+		reinforceBorders();
 	}
 	
 	private void chooseCastles() throws InterruptedException {
@@ -64,7 +65,33 @@ public class CustomAI extends AI {
 			return;
 		}
 		
+		for (Castle castle : ownedCastles) {
+			if (castle.isBorderCastle(game.getMap())) {
+				continue;
+			}
+			
+			castle.addTroops(remainingTroops);
+			return;
+		}
+		
 		ownedCastles.get(0).addTroops(remainingTroops);
+	}
+	
+	private void reinforceBorders() {
+		List<Castle> ownedCastles = this.getCastles(game);
+		Collection<Castle> borderCastles = getBorderCastles();
+		
+		for (Castle castle : ownedCastles) {
+			if (castle.isBorderCastle(game.getMap())) {
+				continue;
+			}
+			
+			while (castle.getTroopCount() > 1) {
+				Castle weakestCastle = getWeakestCastle(borderCastles);
+				game.moveTroops(castle, weakestCastle, 1);
+			}
+		}
+		
 	}
 	
 	private List<Kingdom> getKingdomsSortedBySize() {
@@ -100,6 +127,36 @@ public class CustomAI extends AI {
 		}
 		
 		return freeCastles;
+	}
+	
+	private Castle getWeakestCastle(Collection<Castle> castles) {
+		Castle weakestCastle = null;
+		
+		for (Castle castle : castles) {
+			if (weakestCastle == null) {
+				weakestCastle = castle;
+				continue;
+			}
+			
+			if (castle.getTroopCount() < weakestCastle.getTroopCount()) {
+				weakestCastle = castle;
+			}
+		}
+		
+		return weakestCastle;
+	}
+	
+	private Collection<Castle> getBorderCastles() {
+		List<Castle> ownedCastles = this.getCastles(game);
+		LinkedList<Castle> borderCastles = new LinkedList<>();
+		
+		for (Castle castle : ownedCastles) {
+			if (castle.isBorderCastle(game.getMap())) {
+				borderCastles.add(castle);
+			}
+		}
+		
+		return borderCastles;
 	}
 	
 	private Castle findCastleInKingdom(Collection<Castle> castles, Kingdom kingdom) {

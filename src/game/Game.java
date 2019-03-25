@@ -327,9 +327,7 @@ public class Game {
 
         int addTroops;
         if(round == 1) {
-            addTroops = GameConstants.CASTLES_AT_BEGINNING;  // TODO decide if more troops are needed for the FlagCastle
-            /* if(allCastlesChosen() && this.getRound() == 1 && this.goal.getName() == "Capture the Flag")
-            	addTroops += x; */ // x = whatever many - 3 troops are fitting for being dumped on the flagcastle
+            addTroops = GameConstants.CASTLES_AT_BEGINNING;
         } else {
             addTroops = Math.max(3, numRegions / GameConstants.TROOPS_PER_ROUND_DIVISOR);
             addScore(currentPlayer, addTroops * 5);

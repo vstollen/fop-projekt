@@ -101,7 +101,7 @@ public class SkipPlayerJoker extends Joker {
 	}
 
 	/**
-	 * Bildet eine Liste aller Spieler, die nicht mit currentPlayer verbüdet sind.
+	 * Bildet eine Liste aller Spieler, die nicht mit currentPlayer verbündet sind.
 	 * @param currentPlayer Der Spieler dessen Gegner gesucht werden
 	 * @return Einer Liste aller Gegner von currentPlayer
 	 */

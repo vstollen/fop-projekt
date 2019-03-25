@@ -351,7 +351,7 @@ public class Game {
     }
     
     /**
-     * Bewerted, ob der aktuelle Zug übersprungen werden sollte
+     * Bewertet, ob der aktuelle Zug übersprungen werden sollte
      * @return true, wenn der aktuelle Zug übersprungen werden sollte
      */
     private boolean shouldSkipTurn() {

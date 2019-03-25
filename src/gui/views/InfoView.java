@@ -13,8 +13,8 @@ public class InfoView extends View {
 
     private static final String ABOUT_TEXT =
         "~ Game of Castles ~\nFOP-Projekt WiSe 18/19\n" +
-            "Hauptautor: Roman Hergenreder\n" +
-            "Mitwirkende: Philipp Imperatori, Nils Nedderhut, Louis Neumann\n" +
+            "Hauptautor: Roman Hergenreder\n\n" +
+            "Mitwirkende: Philipp Imperatori, Nils Nedderhut, Louis Neumann,\n Arne Turuc, Anna-Felicitas Hausmann, Felix Graner, Vincent Stollenwerk\n\n" +
             "Icons/Bilder: Smashicons, Freepick, Retinaicons, Skyclick (www.flaticon.com)\n" +
             "Keine Haftung für Bugs, Systemabstürze, Datenverlust und rauchende Grafikkarten\n\n" +
             "HowTo:\n" +

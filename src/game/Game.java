@@ -4,7 +4,7 @@ import java.util.*;
 
 import game.gameExceptions.alreadyFlagCastleException;
 import game.gameExceptions.hasFlagCastleException;
-import game.goals.CaptureTheFlagGoal;
+import game.CaptureTheFlagGoal;
 import game.map.Castle;
 import game.map.Kingdom;
 import game.map.GameMap;
@@ -198,6 +198,7 @@ public class Game {
 				castle.makeFlagCastle(player);
 				castle.addTroops(player.getRemainingTroops());
 				player.removeTroops(player.getRemainingTroops());
+				gameInterface.onCastleChosen(castle, player);
 				nextTurn();
 				
 			} catch (hasFlagCastleException | alreadyFlagCastleException ex) {

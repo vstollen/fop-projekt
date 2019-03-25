@@ -15,7 +15,7 @@ import game.Game;
 import game.GameConstants;
 import game.map.PathFinding;
 import game.Player;
-import game.goals.CaptureTheFlagGoal;
+import game.CaptureTheFlagGoal;
 import game.map.Castle;
 import game.map.GameMap;
 import game.players.Human;

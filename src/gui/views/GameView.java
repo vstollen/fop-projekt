@@ -21,7 +21,7 @@ import game.GameInterface;
 import game.Joker;
 import game.Player;
 import game.Team;
-import game.goals.CaptureTheFlagGoal;
+import game.CaptureTheFlagGoal;
 import game.map.Castle;
 import gui.GameWindow;
 import gui.View;

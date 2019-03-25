@@ -163,6 +163,7 @@ public class GameView extends View implements GameInterface {
                                 return;
                         }
                     }
+			    
 		    map.reset();
                     game.nextTurn();
                     break;

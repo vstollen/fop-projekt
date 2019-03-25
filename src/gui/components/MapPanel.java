@@ -206,7 +206,12 @@ public class MapPanel extends JScrollPane {
                         selectedCastle = nextCastle;
                         setCursor(Cursor.getDefaultCursor());
                     } else if(currentAction == Action.MOVING && pathFinding.getPath(nextCastle) != null) {
-                        NumberDialog nd = new NumberDialog("Wie viele Truppen möchtest du verschieben?", 1, selectedCastle.getTroopCount() - 1, 1);
+                    	NumberDialog nd = null;
+                    	if(game.getGoal() instanceof CaptureTheFlagGoal && selectedCastle.isFlagCastle()) {
+                    		nd = new NumberDialog("Wie viele Truppen möchtest du verschieben?", 1, selectedCastle.getTroopCount() - 3, selectedCastle.getTroopCount() - 3);
+                    	} else {
+                    		nd = new NumberDialog("Wie viele Truppen möchtest du verschieben?", 1, selectedCastle.getTroopCount() - 1, selectedCastle.getTroopCount() - 1);
+                    	}
                         if(nd.showDialog(MapPanel.this)) {
                             selectedCastle.moveTroops(nextCastle, nd.getValue());
                             currentAction = Action.NONE;
@@ -217,7 +222,12 @@ public class MapPanel extends JScrollPane {
                             gameView.updateStats();
                         }
                     } else if(currentAction == Action.ATTACKING && pathFinding.getPath(nextCastle) != null && nextCastle.getOwner().getTeam() != selectedCastle.getOwner().getTeam()) {
-                        NumberDialog nd = new NumberDialog("Mit wie vielen Truppen möchtest du angreifen?", 1, selectedCastle.getTroopCount(), selectedCastle.getTroopCount()  - 1);
+                    	NumberDialog nd = null;
+                    	if(game.getGoal() instanceof CaptureTheFlagGoal && selectedCastle.isFlagCastle()) {
+                    		nd = new NumberDialog("Mit wie vielen Truppen möchtest du angreifen?", 1, selectedCastle.getTroopCount() - 3, selectedCastle.getTroopCount()  - 3);
+                    	} else {
+                    		nd = new NumberDialog("Mit wie vielen Truppen möchtest du angreifen?", 1, selectedCastle.getTroopCount() - 1, selectedCastle.getTroopCount()  - 1);
+                    	}
                         if(nd.showDialog(MapPanel.this)) {
                             game.startAttack(selectedCastle, nextCastle, nd.getValue());
                             currentAction = Action.NONE;

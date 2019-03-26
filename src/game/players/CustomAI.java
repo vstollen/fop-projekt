@@ -83,11 +83,11 @@ public class CustomAI extends AI {
 				continue;
 			}
 			
-			castle.addTroops(remainingTroops);
+			game.addTroops(this, castle, remainingTroops);
 			return;
 		}
 		
-		ownedCastles.get(0).addTroops(remainingTroops);
+		game.addTroops(this, ownedCastles.get(0), remainingTroops);
 	}
 	
 	private void attack() throws InterruptedException {
@@ -157,6 +157,11 @@ public class CustomAI extends AI {
 			
 			while (castle.getTroopCount() > 1) {
 				Castle weakestCastle = getWeakestCastle(borderCastles);
+				
+				if (weakestCastle == null) {
+					break;
+				}
+				
 				game.moveTroops(castle, weakestCastle, 1);
 			}
 		}
@@ -207,9 +212,9 @@ public class CustomAI extends AI {
 					}
 				}
 				
-				for (Castle kingdom1Castle : kingdom1Castles) {
-					if (kingdom1Castle.getOwner() != thisAI) {
-						kingdom1MissingCastles.add(kingdom1Castle);
+				for (Castle kingdom2Castle : kingdom2Castles) {
+					if (kingdom2Castle.getOwner() != thisAI) {
+						kingdom2MissingCastles.add(kingdom2Castle);
 					}
 				}
 				

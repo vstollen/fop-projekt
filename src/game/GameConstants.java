@@ -1,6 +1,6 @@
 package game;
 
-import java.awt.Color;
+import java.awt.*;
 
 import game.goals.*;
 import game.jokers.*;

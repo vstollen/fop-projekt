@@ -182,7 +182,9 @@ public class MapPanel extends JScrollPane {
                                 gameView.updateStats();
                             }
                         } else if (iconArrow.contains(mousePos)) {
-                            if(selectedCastle.getTroopCount() > 1) {
+                        	if(selectedCastle.getTroopCount() < 4 && selectedCastle.isFlagCastle()) {
+                            	currentAction = Action.NONE;
+                            } else if(selectedCastle.getTroopCount() > 1) {
                                 currentAction = (currentAction == Action.MOVING ? Action.NONE : Action.MOVING);
                             }
                         } else if (iconSwords.contains(mousePos)) {
@@ -216,7 +218,12 @@ public class MapPanel extends JScrollPane {
                         	gameView.updateJokers();
                         }
                     } else if(currentAction == Action.MOVING && pathFinding.getPath(nextCastle) != null) {
-                        NumberDialog nd = new NumberDialog("Wie viele Truppen möchtest du verschieben?", 1, selectedCastle.getTroopCount() - 1, 1);
+                    	NumberDialog nd = null;
+                    	if(game.getGoal() instanceof game.CaptureTheFlagGoal && selectedCastle.isFlagCastle()) {
+                    		nd = new NumberDialog("Wie viele Truppen möchtest du verschieben?", 1, selectedCastle.getTroopCount() - 3, selectedCastle.getTroopCount() - 3);
+                    	} else {
+                    		nd = new NumberDialog("Wie viele Truppen möchtest du verschieben?", 1, selectedCastle.getTroopCount() - 1, selectedCastle.getTroopCount() - 1);
+                    	}
                         if(nd.showDialog(MapPanel.this)) {
                             selectedCastle.moveTroops(nextCastle, nd.getValue());
                             currentAction = Action.NONE;
@@ -227,7 +234,12 @@ public class MapPanel extends JScrollPane {
                             gameView.updateStats();
                         }
                     } else if(currentAction == Action.ATTACKING && pathFinding.getPath(nextCastle) != null && nextCastle.getOwner().getTeam() != selectedCastle.getOwner().getTeam()) {
-                        NumberDialog nd = new NumberDialog("Mit wie vielen Truppen möchtest du angreifen?", 1, selectedCastle.getTroopCount(), selectedCastle.getTroopCount()  - 1);
+                    	NumberDialog nd = null;
+                    	if(game.getGoal() instanceof game.CaptureTheFlagGoal && selectedCastle.isFlagCastle()) {
+                    		nd = new NumberDialog("Mit wie vielen Truppen möchtest du angreifen?", 1, selectedCastle.getTroopCount() - 3, selectedCastle.getTroopCount()  - 3);
+                    	} else {
+                    		nd = new NumberDialog("Mit wie vielen Truppen möchtest du angreifen?", 1, selectedCastle.getTroopCount() - 1, selectedCastle.getTroopCount()  - 1);
+                    	}
                         if(nd.showDialog(MapPanel.this)) {
                             game.startAttack(selectedCastle, nextCastle, nd.getValue());
                             currentAction = Action.NONE;
@@ -274,7 +286,11 @@ public class MapPanel extends JScrollPane {
                 if (canChooseCastle()) {
                     Rectangle iconCheck = getBoundsIconCheck(castlePos);
                     if (iconCheck.contains(mousePos)) {
-                        setToolTipText("Diese Burg besetzen");
+                        if(game.getGoal() instanceof game.CaptureTheFlagGoal && game.allCastlesChosen()) {
+                    		setToolTipText("Diese Burg als Flagburg besetzen");
+                    	} else {
+                    		setToolTipText("Diese Burg besetzen");
+                    	}
                         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                         return;
                     }
@@ -325,15 +341,33 @@ public class MapPanel extends JScrollPane {
         if (selectedCastle == null)
             return false;
 
-        return game.getCurrentPlayer() instanceof Human &&
-                game.getCurrentPlayer().getRemainingTroops() > 0 &&
-                game.getRound() == 1 &&
-                selectedCastle.getOwner() == null;
+        Player currentPlayer = game.getCurrentPlayer();
+
+        if(game.getGoal() instanceof game.CaptureTheFlagGoal && 
+        		currentPlayer.getFlagCastle() == null &&
+        		currentPlayer instanceof Human &&
+        		game.getRound() == 1 &&
+        		game.allCastlesChosen() &&
+        		selectedCastle.getOwner() == currentPlayer) {
+        		
+        	return true;
+        }
+
+        return currentPlayer instanceof Human &&
+				   currentPlayer.getRemainingTroops() > 0 &&
+				   game.getRound() == 1 &&
+				   selectedCastle.getOwner() == null;
     }
 
     private boolean canAttack() {
         if(selectedCastle == null)
             return false;
+
+        if(selectedCastle.isFlagCastle()) {
+        	return game.getCurrentPlayer() instanceof Human &&
+        		   selectedCastle.getOwner() == game.getCurrentPlayer() &&
+        		   selectedCastle.getTroopCount() > 3;
+        }
 
         return game.getCurrentPlayer() instanceof Human &&
                selectedCastle.getOwner() == game.getCurrentPlayer() &&
@@ -482,6 +516,9 @@ public class MapPanel extends JScrollPane {
                     Point location = translate(selectedCastle.getLocationOnMap());
                     g.setColor(selectedCastle.getOwner() == null ? Color.WHITE : selectedCastle.getOwner().getColor());
                     g.drawRect(location.x - 5, location.y - 5, CASTLE_SIZE + 10, CASTLE_SIZE + 10);
+                    if(selectedCastle.isFlagCastle()) {
+                    	g.drawRect(location.x, location.y, CASTLE_SIZE, CASTLE_SIZE);
+                    }
 
                     if(canPerformAction()) {
                         if (canChooseCastle()) {
@@ -490,7 +527,8 @@ public class MapPanel extends JScrollPane {
                             g.drawImage(icon, bounds.x, bounds.y, ICON_SIZE, ICON_SIZE, null);
                         } else if (selectedCastle.getOwner() == game.getCurrentPlayer() && game.getRound() > 1) {
                             boolean hasTroops = game.getCurrentPlayer().getRemainingTroops() > 0;
-                            boolean canMove = selectedCastle.getTroopCount() > 1;
+                            boolean flagCastle = game.getGoal() instanceof game.CaptureTheFlagGoal && selectedCastle.isFlagCastle();
+                            boolean canMove = flagCastle ? selectedCastle.getTroopCount() > 3 : selectedCastle.getTroopCount() > 1 ;
 
                             BufferedImage plusIcon = hasTroops ? resources.getPlusIcon() : resources.getPlusIconDeactivated();
                             BufferedImage swordsIcon = resources.getSwordsIcon();

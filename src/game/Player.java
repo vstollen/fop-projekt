@@ -1,5 +1,6 @@
 package game;
 
+import game.gameExceptions.hasFlagCastleException;
 import game.map.Castle;
 
 import java.awt.Color;
@@ -13,9 +14,10 @@ public abstract class Player {
     private final String name;
     private Team team;
     private Color color;
+    private Castle flagCastle;
+    private Boolean instantAttackWin;
     private int points;
     private int remainingTroops;
-	private boolean instantAttackWin;
 
     protected Player(String name, Color color) {
         this.name = name;
@@ -23,6 +25,7 @@ public abstract class Player {
         this.points = 0;
         this.color = color;
         this.remainingTroops = 0;
+        this.flagCastle = null;
         this.instantAttackWin = false;
     }
 
@@ -91,6 +94,27 @@ public abstract class Player {
 
     public List<Castle> getCastles(Game game) {
         return game.getMap().getCastles().stream().filter(c -> c.getOwner() == this).collect(Collectors.toList());
+    }
+
+    /**
+     * Gibt die Flagburg des Spielers zurück
+     * @return die Flagburg des Spielers
+     */
+    public Castle getFlagCastle() {
+    	return this.flagCastle;
+    }
+
+    /**
+     * Weist dem Spieler eine Burg zu, in der dessen Flagge aufbewahrt wird
+     * @param castle die Burg die als Flagburg verwendet werden soll
+     * @throws hasFlagCastleException falls dem Spieler schon eine Flagburg zugewiesen ist
+     */
+    public void setFlagCastle(Castle castle) throws hasFlagCastleException {
+    	if (this.flagCastle == null) {
+    		this.flagCastle = castle;
+    	} else {
+    		throw new hasFlagCastleException(this.flagCastle);
+    	}
     }
 
     public boolean isInstantAttackWin() {

@@ -2,6 +2,9 @@ package game;
 
 import java.util.*;
 
+import game.gameExceptions.alreadyFlagCastleException;
+import game.gameExceptions.hasFlagCastleException;
+import game.CaptureTheFlagGoal;
 import game.map.Castle;
 import game.map.Kingdom;
 import game.map.GameMap;
@@ -180,14 +183,44 @@ public class Game {
         return gameMap.getCastles().stream().noneMatch(c -> c.getOwner() == null);
     }
 
+    /**
+    * Prüft, ob alle Flaggen bereits verteilt sind
+    * @return true, wenn jeder Spieler eine Flagburg gewählt hat, oder der Spielmodus nicht "Capture the Flag ist"
+    */
+    public boolean allFlagsDistributed() {
+    	if (!(getGoal() instanceof CaptureTheFlagGoal)) {
+    		return true;
+    	}
+    	
+    	return this.getPlayers().stream().allMatch(c -> c.getFlagCastle() != null);
+    }
+    
     public AttackThread getAttackThread() {
         return this.attackThread;
     }
 
     public void chooseCastle(Castle castle, Player player) {
-        if(castle.getOwner() != null || player.getRemainingTroops() == 0)
+        if(isFlagCastleChoice(castle, player)) {
+    		
+    		try {
+				player.setFlagCastle(castle);
+				castle.makeFlagCastle(player);
+				castle.addTroops(player.getRemainingTroops());
+				player.removeTroops(player.getRemainingTroops());
+				gameInterface.onCastleChosen(castle, player);
+				nextTurn();
+				
+			} catch (hasFlagCastleException | alreadyFlagCastleException ex) {
+				System.out.println(ex.getMessage());
+				ex.printStackTrace();
+				nextTurn();
+			}
+    		
+    	}
+    	
+        if(castle.getOwner() != null || player.getRemainingTroops() == 0) {
             return;
-
+        }
         gameInterface.onCastleChosen(castle, player);
         player.removeTroops(1);
         castle.setOwner(currentPlayer);
@@ -198,6 +231,36 @@ public class Game {
             player.removeTroops(player.getRemainingTroops());
             nextTurn();
         }
+    }
+
+    /**
+     * Prüft, ob die übergebene Burg in Verbindung mit dem Spieler als Flagge gewählt wurde
+     * @param castle Burg, die eventuell als Flagge gewählt wurde
+     * @param player Spieler, der eventuell eine Flagge gewählt haben könnte
+     * @return true, wenn die Burg als Flagge gewählt wurde
+     */
+    private boolean isFlagCastleChoice(Castle castle, Player player) {
+    	if (!allCastlesChosen()) {
+    		return false;
+    	}
+    	
+    	if (castle.getOwner() != player) {
+    		return false;
+    	}
+    	
+    	if (player.getFlagCastle() != null) {
+    		return false;
+    	}
+    	
+    	if (!(getGoal() instanceof CaptureTheFlagGoal)) {
+    		return false;
+    	}
+    	
+    	if (allFlagsDistributed()) {
+    		return false;
+    	}
+    	
+    	return true;
     }
 
     public void addTroops(Player player, Castle castle, int count) {
@@ -258,12 +321,14 @@ public class Game {
             return;
         }
         
-        if (round == 1 && allCastlesChosen()) {
+        if (round == 1 && allCastlesChosen() && allFlagsDistributed()) {
         	startingPlayer = nextPlayer;
         }
 
         currentPlayer = nextPlayer;
-        if(round == 0 || (round == 1 && allCastlesChosen()) || (round > 1 && currentPlayer == startingPlayer)) {
+        if(round == 0 || (round == 1 && allCastlesChosen() && allFlagsDistributed()) ||
+          (round > 1 && currentPlayer == startingPlayer)) {
+
             round++;
             gameInterface.onNewRound(round);
         }
@@ -282,9 +347,9 @@ public class Game {
         int numRegions = currentPlayer.getNumRegions(this);
 
         int addTroops;
-        if(round == 1)
+        if(round == 1) {
             addTroops = GameConstants.CASTLES_AT_BEGINNING;
-        else {
+        } else {
             addTroops = Math.max(3, numRegions / GameConstants.TROOPS_PER_ROUND_DIVISOR);
             addScore(currentPlayer, addTroops * 5);
 

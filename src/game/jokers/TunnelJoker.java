@@ -3,11 +3,14 @@ package game.jokers;
 import java.awt.Cursor;
 import java.util.HashMap;
 
+import game.CaptureTheFlagGoal;
 import game.Game;
 import game.Joker;
 import game.Player;
 import gui.components.MapPanel;
 import gui.components.MapPanel.Action;
+import game.GameConstants;
+import game.Goal;
 
 
 public class TunnelJoker extends Joker {
@@ -21,12 +24,18 @@ public class TunnelJoker extends Joker {
 		super("Tunnel", "Grabe einen Tunnel von einer Burg zu einer beliebigen anderen.\nAber vorsicht! Dein Gegner kann den Tunnel auch benutzen, setzte also deinen Maulwurf mit Weitsicht ein.");
 		this.tunnelsLeft = new HashMap<Player, Integer>();
 		this.game = getGame();
+		for(Goal goal:GameConstants.GAME_GOALS) {
+			if(goal instanceof CaptureTheFlagGoal)
+				this.whitelistForGameMode.put(goal, false);
+		}
 	}
 	
 	@Override
 	public boolean isUsable() {
 		this.game = getGame();
-
+		
+		if(!(whitelistForGameMode.get(game.getGoal())))
+				return false;
 		Player player = game.getCurrentPlayer();
 
 		if(!tunnelsLeft.containsKey(player))

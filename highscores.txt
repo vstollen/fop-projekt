@@ -1,0 +1,4 @@
+Spieler 2;1553576912339;1410;Standard Capture the Flag
+Spieler 1;1553576912339;825;Standard Capture the Flag
+Spieler 1;1553571384061;305;Alternatives Capture the Flag
+Spieler 2;1553571384061;190;Alternatives Capture the Flag

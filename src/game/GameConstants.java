@@ -64,4 +64,12 @@ public class GameConstants {
     	}
     	return null;
     }
+    
+    public static Goal getGoalByName(String name) {
+    	for(Goal goal:GAME_GOALS) {
+    		if (goal.getName() == name)
+    			return goal;
+    	}
+    	return null;
+    }
 }

@@ -607,4 +607,11 @@ public class MapPanel extends JScrollPane {
     public void setCurrentAction(Action action) {
     	this.currentAction = action;
     }
+    
+    /**
+     * Setzt justTriedTunneling auf true
+     */
+    public void tryTunneling() {
+    	this.justTriedTunneling = true;
+    }
 }

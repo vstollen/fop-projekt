@@ -54,6 +54,7 @@ public class TunnelJoker extends Joker {
 		map.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		map.repaint();
 		map.setCurrentAction(Action.TUNNELING);
+		map.tryTunneling();
 		map.repaint();
 		tunnelsLeft.put(game.getCurrentPlayer(), tunnelsLeft.get(game.getCurrentPlayer()) - 1); // verbrauche eine Nutzung
 	}

@@ -56,7 +56,7 @@ public class CaptureTheFlagAlternativeGoal extends CaptureTheFlagGoal {
 		if(winner != null) {
 			for(Castle flagCastle:flagCastles) {
 				if(flagCastle.getOwner().getTeam() != winner.getTeam())
-					winner = null;
+					return null;
 			}
 		}
 		return winner;

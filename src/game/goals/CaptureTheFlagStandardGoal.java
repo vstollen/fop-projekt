@@ -22,7 +22,7 @@ import game.map.Castle;
 public class CaptureTheFlagStandardGoal extends CaptureTheFlagGoal {
 
 	public CaptureTheFlagStandardGoal() {
-		super("Capture the Flag (Letzte Flagge)", "Derjenige Spieler gewinnt, der es schafft am längsten seine Flagburg zu halten.\n\nIm Teammodus gewinnt das gesamte Team des Siegers.");
+		super("Capture the Flag (Letzte Flagge)", "Derjenige Spieler gewinnt, der es schafft am längsten seine Hauptstadt zu halten.\n\nIm Teammodus gewinnt das gesamte Team des Siegers.");
 	}
 
 	@Override

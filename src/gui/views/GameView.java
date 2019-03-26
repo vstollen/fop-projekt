@@ -145,7 +145,7 @@ public class GameView extends View implements GameInterface {
                     if (game.getCurrentPlayer().getRemainingTroops() > 0) {
                         if (game.getRound() == 1) {
                             if(game.allCastlesChosen() && !game.allFlagsDistributed() && game.getGoal() instanceof game.CaptureTheFlagGoal) {
-                        		JOptionPane.showMessageDialog(this, "Du musst noch eine Flagburg auswählen.", "Flagburg wählen", JOptionPane.WARNING_MESSAGE);
+                        		JOptionPane.showMessageDialog(this, "Du musst noch eine Hauptstadt auswählen.", "Hauptstadt wählen", JOptionPane.WARNING_MESSAGE);
                         		return;
                         	}
                             int troops = game.getCurrentPlayer().getRemainingTroops();
@@ -254,7 +254,7 @@ public class GameView extends View implements GameInterface {
     @Override
     public void onCastleChosen(Castle castle, Player player) {
         if(game.allCastlesChosen()) {  // If allCastlesChosen() --> there is only picking flagCastles, only occurs in CTF
-    		logLine("%PLAYER% wählt "  + castle.getName() + " als Flagburg.", player);
+    		logLine("%PLAYER% wählt "  + castle.getName() + " als Hauptstadt.", player);
     	} else {
     		logLine("%PLAYER% wählt "  + castle.getName() + ".", player);
     	}
@@ -267,7 +267,7 @@ public class GameView extends View implements GameInterface {
         this.logLine("%PLAYER% ist am Zug.", currentPlayer);
 
         if(game.getRound() == 1 && game.getGoal() instanceof game.CaptureTheFlagGoal && game.allCastlesChosen()) {
-        	this.logLine("%PLAYER% muss eine Flagburg auswählen.", currentPlayer);
+        	this.logLine("%PLAYER% muss eine Hauptstadt auswählen.", currentPlayer);
         } else if (game.getRound() == 1) {
             this.logLine("%PLAYER% muss " + troopsGot + " Burgen auswählen.", currentPlayer);
         } else {

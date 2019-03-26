@@ -84,6 +84,7 @@ public class RoundGoal extends Goal {
 
 	@Override
 	public Player getWinner() {
+		maxRounds = 1;
 		game = getGame();
 		
 		Player winner = null;

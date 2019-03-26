@@ -19,7 +19,7 @@ public class RoundGoal extends Goal {
 	private Game game;
 	
 	public RoundGoal() {
-		super("Schnelles Spiel", "Der Spieler gewinnt, der nach einer bestimmten Rundenzahl am meisten Punkte hat.");
+		super("Schnelles Spiel", "Derjenige Spieler gewinnt, der nach einer festgelegten Rundenzahl die meisten Punkte erhalten hat.\nIm Teammodus gewinnt das gesamte Team des Siegers.");
 	}
 	
 	@Override

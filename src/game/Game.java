@@ -334,10 +334,8 @@ public class Game {
         }
         
         if (shouldSkipTurn()) {
-        	if (gameInterface instanceof GameView) {
-        		GameView gameView = (GameView) gameInterface;
-        		gameView.logLine("%PLAYER% wird übersprungen.", currentPlayer);
-        	}
+        	
+        	logIfPossible("%PLAYER% wird übersprungen.", currentPlayer);
         	
         	playerQueue.add(currentPlayer);
         	nextTurn();
@@ -460,5 +458,17 @@ public class Game {
      */
     public MapSize getMapSize() {
     	return this.mapSize;
+    }
+    
+    /**
+     * Prüft ob das gameInterface loggen unterstützt und schreibt message in den log
+     * @param message Nachricht, die geloggt werden soll
+     * @param players Spieler, um message zu formatieren
+     */
+    public void logIfPossible(String message, Player... players) {
+    	if (gameInterface instanceof GameView) {
+    		GameView gameView = (GameView) gameInterface;
+    		gameView.logLine(message, players);
+    	}
     }
 }

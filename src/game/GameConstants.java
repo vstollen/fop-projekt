@@ -40,6 +40,8 @@ public class GameConstants {
     public static final Class<?> PLAYER_TYPES[] = {
         Human.class,
         BasicAI.class,
+        CustomAI.class,
+        JokerAI.class
     };
     
     public static final Joker JOKERS[] = {

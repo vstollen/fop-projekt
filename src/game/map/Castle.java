@@ -1,9 +1,11 @@
 package game.map;
 
+import java.awt.Point;
+import java.util.List;
+
+import base.Edge;
 import game.Player;
 import game.gameExceptions.alreadyFlagCastleException;
-
-import java.awt.*;
 
 /**
  * Diese Klasse representiert eine Burg.
@@ -164,4 +166,30 @@ public class Castle {
         if(kingdom != null)
             kingdom.addCastle(this);
     }
+    
+    /**
+     * Prüft ob die Burg an einer Grenze liegt
+     * @param map Die Spielkarte
+     * @return true, wenn die Burg an einer Grenze liegt
+     */
+	public boolean isBorderCastle(GameMap map) {
+		
+		List<Edge<Castle>> allEdges = map.getEdges();
+		
+		for (Edge<Castle> edge : allEdges) {
+			
+			Castle castleA = edge.getNodeA().getValue();
+			Castle castleB = edge.getNodeB().getValue();
+					
+			if (castleA != this && castleB != this) {
+				continue;
+			}
+			
+			if (castleA.getOwner().getTeam() != castleB.getOwner().getTeam()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }

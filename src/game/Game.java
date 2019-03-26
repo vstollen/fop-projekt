@@ -326,18 +326,18 @@ public class Game {
         }
 
         currentPlayer = nextPlayer;
+        playerQueue.add(currentPlayer);
+
         if(round == 0 || (round == 1 && allCastlesChosen() && allFlagsDistributed()) ||
           (round > 1 && currentPlayer == startingPlayer)) {
 
             round++;
             gameInterface.onNewRound(round);
         }
-        
+
         if (shouldSkipTurn()) {
-        	
         	logIfPossible("%PLAYER% wird übersprungen.", currentPlayer);
-        	
-        	playerQueue.add(currentPlayer);
+
         	nextTurn();
         	return;
         }
@@ -365,8 +365,6 @@ public class Game {
         if(isAI) {
             ((AI)currentPlayer).doNextTurn(this);
         }
-
-        playerQueue.add(currentPlayer);
     }
     
     /**

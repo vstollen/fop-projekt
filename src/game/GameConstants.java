@@ -1,6 +1,6 @@
 package game;
 
-import java.awt.Color;
+import java.awt.*;
 
 import game.goals.*;
 import game.jokers.*;
@@ -32,8 +32,9 @@ public class GameConstants {
 
     public static final Goal GAME_GOALS[] = {
         new ConquerGoal(),
-        new RoundGoal()
-        // TODO: Add more Goals
+        new RoundGoal(),
+        new CaptureTheFlagStandardGoal(),
+        new CaptureTheFlagAlternativeGoal()
     };
 
     public static final Class<?> PLAYER_TYPES[] = {
@@ -41,19 +42,17 @@ public class GameConstants {
         BasicAI.class,
         CustomAI.class,
         JokerAI.class
-        // TODO: Add more Player types, like different AIs
     };
     
     public static final Joker JOKERS[] = {
     	new TroopbonusJoker(),
-    	new ConversionJoker(),
     	new SkipPlayerJoker(),
+    	new ConversionJoker(),
     	new TunnelJoker()
     };
     
     /**
      * Gibt den zu dem Namen passenden Joker zurück
-     * 
      * @param name der Name des gesuchten Jokers
      * @return der Joker mit dem übergebenen Namen
      */
@@ -61,6 +60,14 @@ public class GameConstants {
     	for(Joker joker:JOKERS) {
     		if(joker.getName() == name)
     			return joker;
+    	}
+    	return null;
+    }
+    
+    public static Goal getGoalByName(String name) {
+    	for(Goal goal:GAME_GOALS) {
+    		if (goal.getName() == name)
+    			return goal;
     	}
     	return null;
     }

@@ -1,8 +1,12 @@
 package game;
 
+import java.util.HashMap;
+import game.GameConstants;
 import gui.components.MapPanel;
 
 public abstract class Joker {
+	
+	protected HashMap<Goal, Boolean> whitelistForGameMode;
 	
 	private Game game;
 	private final String name;
@@ -12,6 +16,11 @@ public abstract class Joker {
 	public Joker(String name, String hint) {
 		this.name = name;
 		this.hint = hint;
+		whitelistForGameMode = new HashMap<>();
+		
+		for(Goal goal:GameConstants.GAME_GOALS) {
+			whitelistForGameMode.put(goal, true);
+		}
 	}
 	
 	public void setGame(Game game) {

@@ -167,6 +167,11 @@ public class Castle {
             kingdom.addCastle(this);
     }
     
+    /**
+     * Prüft ob die Burg an einer Grenze liegt
+     * @param map Die Spielkarte
+     * @return true, wenn die Burg an einer Grenze liegt
+     */
 	public boolean isBorderCastle(GameMap map) {
 		
 		List<Edge<Castle>> allEdges = map.getEdges();
@@ -180,7 +185,7 @@ public class Castle {
 				continue;
 			}
 			
-			if (castleA.getOwner() != castleB.getOwner()) {
+			if (castleA.getOwner().getTeam() != castleB.getOwner().getTeam()) {
 				return true;
 			}
 		}

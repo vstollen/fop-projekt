@@ -176,7 +176,9 @@ public class MapPanel extends JScrollPane {
                                 gameView.updateStats();
                             }
                         } else if (iconArrow.contains(mousePos)) {
-                            if(selectedCastle.getTroopCount() > 1) {
+                        	if(selectedCastle.getTroopCount() < 4 && selectedCastle.isFlagCastle()) {
+                            	currentAction = Action.NONE;
+                            } else if(selectedCastle.getTroopCount() > 1) {
                                 currentAction = (currentAction == Action.MOVING ? Action.NONE : Action.MOVING);
                             }
                         } else if (iconSwords.contains(mousePos)) {

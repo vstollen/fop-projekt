@@ -21,7 +21,7 @@ import game.CaptureTheFlagGoal;
 public class CaptureTheFlagAlternativeGoal extends CaptureTheFlagGoal {
 
 	public CaptureTheFlagAlternativeGoal() {
-		super("Alternatives Capture the Flag", "Es gewinnt der Spieler, der alle Flaggen besitzt.\n\nBei Teams gewinnt das Team, welches alle Flaggen besitzt.");
+		super("Capture the Flag (Alle Flaggen)", "Derjenige Spieler gewinnt, der alle Flaggen in seinen Besitz bringt.\nIm Teammodus gewinnt das Team, das alle Flaggen in seinen Besitz bringt.");
 	}
 
 	@Override

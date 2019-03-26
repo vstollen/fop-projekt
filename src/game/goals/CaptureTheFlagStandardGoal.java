@@ -19,10 +19,10 @@ import game.map.Castle;
  * @author Felix Graner
  *
  */
-public class CaptureTheFlagStandardGoal extends CaptureTheFlagGoal  {
+public class CaptureTheFlagStandardGoal extends CaptureTheFlagGoal {
 
 	public CaptureTheFlagStandardGoal() {
-		super("Standard Capture the Flag", "Derjenige Spieler gewinnt, der als letztes noch seine Flagburg hält.\n\nBei Teams gewinnt das Team, welches einen Spieler enthält, der noch seine Flagge besitzt.");
+		super("Capture the Flag (Letzte Flagge)", "Derjenige Spieler gewinnt, der es schafft am längsten seine Flagburg zu halten.\nIm Teammodus gewinnt das gesamte Team des Siegers.");
 	}
 
 	@Override

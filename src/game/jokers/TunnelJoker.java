@@ -18,7 +18,7 @@ public class TunnelJoker extends Joker {
 	Integer numberOfEdges;
 	
 	public TunnelJoker() {
-		super("Tunnel", "Grabe einen Tunnel von einer Burg zu einer beliebigen anderen.\nAber vorsicht! Dein Gegner kann den Tunnel auch benutzen, setzte also deinen Maulwurf mit Weitsicht ein.");
+		super("Tunnel graben", "Der Spieler wählt zwei beliebige Burgen aus, zwischen denen ein Tunnel gegraben wird.\nDiesen können alle Spieler fortan als Weg benutzen und darüber einen Gegner angreifen.");
 		this.tunnelsLeft = new HashMap<Player, Integer>();
 		this.game = getGame();
 	}

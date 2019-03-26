@@ -169,6 +169,7 @@ public class GameView extends View implements GameInterface {
                         }
                     }
 
+                    map.reset();
                     game.nextTurn();
                     break;
 
@@ -377,7 +378,7 @@ public class GameView extends View implements GameInterface {
     /**
      * Updated die Joker-Liste und zeigt nur nutzbare Joker an.
      */
-    private void updateJokers() {
+    public void updateJokers() {
     	ArrayList<String> oldElements = getCurrentJokerNames();
     	
     	int selectedIndex = jokerList.getSelectedIndex();
@@ -461,6 +462,7 @@ public class GameView extends View implements GameInterface {
     	
     	for (Joker joker : GameConstants.JOKERS) {
     		if (joker.isUsable()) {
+    			joker.setMapPanel(this.map);
         		usableJokers.add(joker);
     		}
     	}

@@ -31,6 +31,11 @@ public class PathFinding extends GraphAlgorithm<Castle> {
     @Override
     protected boolean isPassable(Edge<Castle> edge) {
 
+        // You can pass everything when tunneling
+    	if(action == MapPanel.Action.TUNNELING) {
+            return true;
+        }
+
         Castle castleA = edge.getNodeA().getValue();
         Castle castleB = edge.getNodeB().getValue();
 
@@ -56,6 +61,10 @@ public class PathFinding extends GraphAlgorithm<Castle> {
 
     @Override
     protected boolean isPassable(Node<Castle> node) {
+    	// You can pass everything when tunneling
+        if(action == MapPanel.Action.TUNNELING) {
+            return true;
+        }
         return node.getValue().getOwner().getTeam() == currentPlayer.getTeam();
     }
 

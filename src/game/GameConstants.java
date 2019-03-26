@@ -46,6 +46,20 @@ public class GameConstants {
     	new TroopbonusJoker(),
     	new ConversionJoker(),
     	new SkipPlayerJoker(),
-    	new DummyJoker("Dummy Tunnel", "Tunnel")
+    	new TunnelJoker()
     };
+    
+    /**
+     * Gibt den zu dem Namen passenden Joker zurück
+     * 
+     * @param name der Name des gesuchten Jokers
+     * @return der Joker mit dem übergebenen Namen
+     */
+    public static Joker getJokerByName(String name) {
+    	for(Joker joker:JOKERS) {
+    		if(joker.getName() == name)
+    			return joker;
+    	}
+    	return null;
+    }
 }

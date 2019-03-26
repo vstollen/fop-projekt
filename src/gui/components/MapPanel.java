@@ -27,7 +27,8 @@ public class MapPanel extends JScrollPane {
     public enum Action {
         NONE,
         MOVING,
-        ATTACKING
+        ATTACKING,
+        TUNNELING
     }
 
     private static final int CASTLE_SIZE = 50;
@@ -45,6 +46,7 @@ public class MapPanel extends JScrollPane {
     private PathFinding pathFinding;
     private List<Edge<Castle>> highlightedEdges;
     private Castle targetCastle;
+    private Boolean justTriedTunneling;
 
     public MapPanel(GameView gameView, Resources resources) {
         super();
@@ -57,6 +59,7 @@ public class MapPanel extends JScrollPane {
         this.setAutoscrolls(true);
         this.resources = resources;
         this.currentAction = Action.NONE;
+        this.justTriedTunneling = false;
 
         this.getActionMap().put("Escape", new AbstractAction("Escape") {
             @Override
@@ -95,7 +98,10 @@ public class MapPanel extends JScrollPane {
 
         if(game.isOver())
             return false;
-
+        
+        if(currentAction == Action.TUNNELING)
+        	return false;
+        
         return game.getAttackThread() == null;
     }
 
@@ -135,7 +141,7 @@ public class MapPanel extends JScrollPane {
                     if(getHeight() >= imagePanel.getHeight())
                         newY = vp.getViewPosition().y;
 
-                    if(currentAction == Action.ATTACKING ||  currentAction == Action.MOVING)
+                    if(currentAction == Action.ATTACKING ||  currentAction == Action.MOVING || currentAction == Action.TUNNELING)
                         setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
                     else
                         setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
@@ -204,6 +210,11 @@ public class MapPanel extends JScrollPane {
                         currentAction = Action.NONE;
                         selectedCastle = nextCastle;
                         setCursor(Cursor.getDefaultCursor());
+                        if(justTriedTunneling) {
+                        	justTriedTunneling = false;
+                        	GameConstants.getJokerByName("Tunnel").grantInvocation(game.getCurrentPlayer());
+                        	gameView.updateJokers();
+                        }
                     } else if(currentAction == Action.MOVING && pathFinding.getPath(nextCastle) != null) {
                         NumberDialog nd = new NumberDialog("Wie viele Truppen möchtest du verschieben?", 1, selectedCastle.getTroopCount() - 1, 1);
                         if(nd.showDialog(MapPanel.this)) {
@@ -221,6 +232,27 @@ public class MapPanel extends JScrollPane {
                             game.startAttack(selectedCastle, nextCastle, nd.getValue());
                             currentAction = Action.NONE;
                         }
+                    } else if(currentAction == Action.TUNNELING) {
+                    	justTriedTunneling = true;
+                    	if(selectedCastle == null) {
+                    		selectedCastle = nextCastle;
+                    		pathFinding = new PathFinding(game.getMap().getGraph(), selectedCastle, currentAction, currentPlayer);
+                            pathFinding.run();
+                    		repaint();
+                    	} else if(selectedCastle != nextCastle) {
+                    		int temp = map.getEdges().size();
+                    		game.addEdge(selectedCastle, nextCastle);
+                    		if(temp != map.getEdges().size()) {  // Player is forced to generate an edge or discard his joker through pressing escape
+	                    		justTriedTunneling = false;
+	                    		reset();
+	                    		repaint();
+                    		}
+                    		selectedCastle = null;
+                    		if(highlightedEdges != null)
+                    			highlightedEdges.clear();
+                    		repaint();
+                    	}
+                    		
                     } else {
                         currentAction = Action.NONE;
                         selectedCastle = nextCastle;
@@ -262,7 +294,7 @@ public class MapPanel extends JScrollPane {
                     }
                 }
 
-                if(currentAction == Action.MOVING || currentAction == Action.ATTACKING) {
+                if(currentAction == Action.MOVING || currentAction == Action.ATTACKING || currentAction == Action.TUNNELING) {
                     targetCastle = getRegion(mousePos);
                     if(targetCastle != null) {
                         if(currentAction != Action.ATTACKING || targetCastle.getOwner().getTeam() != selectedCastle.getOwner().getTeam()) {
@@ -528,5 +560,13 @@ public class MapPanel extends JScrollPane {
         targetCastle = null;
         setCursor(Cursor.getDefaultCursor());
         repaint();
+    }
+    
+    /**
+     * Erlaubt die Veränderung der Spielhandlung von außen
+     * @param action die neue momentane Handlung
+     */
+    public void setCurrentAction(Action action) {
+    	this.currentAction = action;
     }
 }

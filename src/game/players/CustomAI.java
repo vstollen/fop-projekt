@@ -209,6 +209,11 @@ public class CustomAI extends AI {
 		
 	}
 	
+	/**
+	 * Prüft, ob die übergebene Burg Truppen verschieben kann.
+	 * @param castle die übergebene Burg
+	 * @return true, wenn die Burg Truppen verschieben kann
+	 */
 	private boolean shouldMoveTroops(Castle castle) {
 		if (castle.isBorderCastle(game.getMap())) {
 			return false;

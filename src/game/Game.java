@@ -309,8 +309,8 @@ public class Game {
     /**
      * Fügt dem Spielfeld eine Kante hinzu
      * 
-     * @param startCastle, das erste Ende der Kante
-     * @param destCastle, das zweite Ende der Kante
+     * @param startCastle das erste Ende der Kante
+     * @param destCastle das zweite Ende der Kante
      */
     public void addEdge(Castle startCastle, Castle destCastle) {
     	this.gameMap.addEdge(startCastle, destCastle);

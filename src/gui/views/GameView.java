@@ -168,8 +168,8 @@ public class GameView extends View implements GameInterface {
                                 return;
                         }
                     }
-			    
-		    map.reset();
+
+                    map.reset();
                     game.nextTurn();
                     break;
 
@@ -186,7 +186,7 @@ public class GameView extends View implements GameInterface {
 
                     break;
             }
-        } else if (actionEvent.getSource() == jokerButton && getSelectedJoker() != null) {
+        } else if (actionEvent.getSource() == jokerButton) {
         	invokeJoker();
         	updateStats();
         }
@@ -462,7 +462,7 @@ public class GameView extends View implements GameInterface {
     	
     	for (Joker joker : GameConstants.JOKERS) {
     		if (joker.isUsable()) {
-			joker.setMapPanel(this.map);
+    			joker.setMapPanel(this.map);
         		usableJokers.add(joker);
     		}
     	}

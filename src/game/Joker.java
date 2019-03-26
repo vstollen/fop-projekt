@@ -23,7 +23,7 @@ public abstract class Joker {
 	}
 	/**
 	 * Gibt zurück, ob der Joker aktuell nutzbar ist
-	 * @return true wenn der Joker nutzbar ist
+	 * @return true, wenn der Joker nutzbar ist
 	 */
 	public abstract boolean isUsable();
 	
@@ -65,7 +65,7 @@ public abstract class Joker {
 	}
 	
 	/**
-	 * Gibt das Spiel zurück auf dem der Joker sitzt
+	 * Gibt das Spiel zurück, das den Joker beinhaltet
 	 * @return das Spiel des Jokers
 	 */
 	protected Game getGame() {
@@ -73,7 +73,7 @@ public abstract class Joker {
 	}
 	
 	/**
-	 * Setzt ein MapPanel als Attribut, so dass darauf agiert werden kann
+	 * Setzt ein MapPanel als Attribut, sodass darauf agiert werden kann
 	 * @param map das MapPanel auf dem der Joker verwendet wird
 	 */
 	public void setMapPanel(MapPanel map) {
@@ -82,10 +82,9 @@ public abstract class Joker {
 
 	/**
 	 * Erhöht die Anzahl der verbliebenen Nutzungen des Jokers für den Spieler
-	 * @param currentPlayer der Spieler der die Jokernutzung erhält
+	 * @param currentPlayer der Spieler, der die Jokernutzung erhält
 	 */
 	public void grantInvocation(Player currentPlayer) {
 		
 	}
-	
 }

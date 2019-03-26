@@ -382,8 +382,8 @@ public class GameMap {
     /**
      * Generiert eine Kante zwischen den Burgen A und B
      * 
-     * @param A, die Burg von der die Kante ausgehen soll
-     * @param B, die Burg an der die Kante ankommen soll
+     * @param A die Burg, von der die Kante ausgehen soll
+     * @param B die Burg, zu der die Kante führen soll
      */
     public void addEdge(Castle A, Castle B) {
     	Node<Castle> nodeA = castleGraph.getNode(A);

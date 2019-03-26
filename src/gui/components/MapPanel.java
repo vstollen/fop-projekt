@@ -160,7 +160,7 @@ public class MapPanel extends JScrollPane {
                 boolean selectNew = true;
                 Action lastAction = currentAction;
 
-                if (selectedCastle != null && canPerformAction() && currentAction != Action.TUNNELING) {
+                if (selectedCastle != null && canPerformAction()) {
                     Point castlePos = selectedCastle.getLocationOnMap();
 
                     if(canChooseCastle()) {
@@ -211,8 +211,8 @@ public class MapPanel extends JScrollPane {
                         selectedCastle = nextCastle;
                         setCursor(Cursor.getDefaultCursor());
                         if(justTriedTunneling) {
+                        	justTriedTunneling = false;
                         	GameConstants.getJokerByName("Tunnel").grantInvocation(game.getCurrentPlayer());
-                        	justTriedTunneling = !justTriedTunneling;
                         	gameView.updateJokers();
                         }
                     } else if(currentAction == Action.MOVING && pathFinding.getPath(nextCastle) != null) {
@@ -232,7 +232,7 @@ public class MapPanel extends JScrollPane {
                             game.startAttack(selectedCastle, nextCastle, nd.getValue());
                             currentAction = Action.NONE;
                         }
-                    } else if(currentAction == Action.TUNNELING){
+                    } else if(currentAction == Action.TUNNELING) {
                     	justTriedTunneling = true;
                     	if(selectedCastle == null) {
                     		selectedCastle = nextCastle;
@@ -253,7 +253,7 @@ public class MapPanel extends JScrollPane {
                     		repaint();
                     	}
                     		
-                    }else {
+                    } else {
                         currentAction = Action.NONE;
                         selectedCastle = nextCastle;
                         setCursor(Cursor.getDefaultCursor());
@@ -563,7 +563,7 @@ public class MapPanel extends JScrollPane {
     }
     
     /**
-     * Erlaube die Veränderung der Spielhandlung von außen
+     * Erlaubt die Veränderung der Spielhandlung von außen
      * @param action die neue momentane Handlung
      */
     public void setCurrentAction(Action action) {

@@ -52,8 +52,8 @@ public class GameConstants {
     /**
      * Gibt den zu dem Namen passenden Joker zurück
      * 
-     * @param name der Name des Jokers den man haben will
-     * @return den Joker zu dem der Name passt
+     * @param name der Name des gesuchten Jokers
+     * @return der Joker mit dem übergebenen Namen
      */
     public static Joker getJokerByName(String name) {
     	for(Joker joker:JOKERS) {

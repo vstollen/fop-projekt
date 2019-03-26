@@ -36,7 +36,7 @@ public class TunnelJoker extends Joker {
 	}
 	
 	/**
-	 * Die Anzahl der Invocations die je nach Karten und Spielergröße ausgeführt werden können
+	 * Die Anzahl der Invocations, die je nach Kartengröße und Spielerzahl ausgeführt werden können
 	 * @return 
 	 */
 	private Integer getNumberOfInvocations() {
@@ -55,7 +55,7 @@ public class TunnelJoker extends Joker {
 		map.repaint();
 		map.setCurrentAction(Action.TUNNELING);
 		map.repaint();
-		tunnelsLeft.put(game.getCurrentPlayer(), tunnelsLeft.get(game.getCurrentPlayer()) -1);  // One invoke less
+		tunnelsLeft.put(game.getCurrentPlayer(), tunnelsLeft.get(game.getCurrentPlayer()) - 1); // verbrauche eine Nutzung
 	}
 	
 	@Override

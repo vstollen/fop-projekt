@@ -33,7 +33,7 @@ public class InfoView extends View {
             "Nach dem Wählen der Burgen wird noch eine der Burgen aus dem vorhandenen Besitz gewählt, in der die Flagge des Spielers aufgestellt wird.\n" +
             "Mindestens 3 Truppen müssen immer in der Burg zurückbleiben, um die Flagge zu verteidigen.\n" +
             "Wird die Burg mit der Flagge von einem gegnerischen Spieler erobert, hat der Spieler sofort verloren.\n" +
-            "Der Gewinner ist somit derjenige, der am Ende noch seine Flagburg hält.\n\n" +
+            "Der Gewinner ist somit derjenige, der am Ende noch seine Hauptstadt hält.\n\n" +
             "Alle Spielmodi sind auch in Teams bestreitbar, in denen man in Bündnissen zusammen arbeitet,\n" +
             "sich Truppen schenken kann und über befreundetes Gebiet hinweg angreifen kann."
             ;

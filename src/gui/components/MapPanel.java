@@ -288,7 +288,7 @@ public class MapPanel extends JScrollPane {
                     Rectangle iconCheck = getBoundsIconCheck(castlePos);
                     if (iconCheck.contains(mousePos)) {
                         if(game.getGoal() instanceof game.CaptureTheFlagGoal && game.allCastlesChosen()) {
-                    		setToolTipText("Diese Burg als Flagburg besetzen");
+                    		setToolTipText("Diese Burg als Hauptstadt besetzen");
                     	} else {
                     		setToolTipText("Diese Burg besetzen");
                     	}

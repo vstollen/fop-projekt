@@ -196,11 +196,7 @@ public class CustomAI extends AI {
 		Collection<Castle> borderCastles = getBorderCastles();
 		
 		for (Castle castle : ownedCastles) {
-			if (castle.isBorderCastle(game.getMap())) {
-				continue;
-			}
-			
-			while (castle.getTroopCount() > 1) {
+			while (shouldMoveTroops(castle)) {
 				Castle weakestCastle = getWeakestCastle(borderCastles);
 				
 				if (weakestCastle == null) {
@@ -213,6 +209,21 @@ public class CustomAI extends AI {
 		
 	}
 	
+	private boolean shouldMoveTroops(Castle castle) {
+		if (castle.isBorderCastle(game.getMap())) {
+			return false;
+		}
+		
+		if (castle.isFlagCastle()) {
+			return false;
+		}
+		
+		if (castle.getTroopCount() < 2) {
+			return false;
+		}
+		
+		return true;
+	}
 	/**
 	 * Bildet eine Liste von Königreichen, aufsteigend nach ihrer Größe sortiert.
 	 * @return die sortierte Liste von Königreichen

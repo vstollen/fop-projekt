@@ -7,11 +7,17 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import base.Graph;
 import game.AI;
 import game.Game;
+import game.Player;
 import game.map.Castle;
 import game.map.GameMap;
 import game.map.Kingdom;
+import game.map.PathFinding;
+import gui.AttackThread;
+import gui.components.MapPanel.Action;
+import sun.awt.image.ImageWatched.Link;
 
 public class CustomAI extends AI {
 	
@@ -32,6 +38,13 @@ public class CustomAI extends AI {
 		}
 		
 		distributeTroops();
+		
+		sleep(500);
+		
+		attack();
+		
+		sleep(500);
+		
 		reinforceBorders();
 	}
 	
@@ -77,6 +90,62 @@ public class CustomAI extends AI {
 		ownedCastles.get(0).addTroops(remainingTroops);
 	}
 	
+	private void attack() throws InterruptedException {
+		Collection<Castle> attackReadyCastles = getAttackReadyCastles();
+		
+		while (!attackReadyCastles.isEmpty()) {
+			attackWithCastles(attackReadyCastles);
+			
+			if (getBorderCastles().isEmpty()) {
+				break;
+			}
+			
+			attackReadyCastles = getAttackReadyCastles();
+		}
+	}
+	
+	private void attackWithCastles(Collection<Castle> attackingCastles) throws InterruptedException {
+		GameMap gameMap = game.getMap();
+		Graph<Castle> graph = gameMap.getGraph();
+		
+		List<Kingdom> targetKingdoms = getKingdomsSortedByMissingCastles();
+		
+		for (Castle attackingCastle : attackingCastles) {
+
+			PathFinding pathFinding = new PathFinding(graph, attackingCastle, Action.ATTACKING, this);
+			pathFinding.run();
+			
+			for (Kingdom nextBestKingdom : targetKingdoms) {
+				AttackThread attack = attackKingdom(attackingCastle, nextBestKingdom, pathFinding);
+				
+				if (attack == null) {
+					continue;
+				}
+				
+				if (fastForward) {
+					attack.fastForward();
+				}
+
+                attack.join();
+                break;
+			}
+		}
+	}
+	
+	private AttackThread attackKingdom(Castle source, Kingdom opponent, PathFinding pathFinding) {
+		for (Castle possibleOpponentCastle : opponent.getCastles()) {
+			if (possibleOpponentCastle.getOwner() == this) {
+				continue;
+			}
+			
+			if (pathFinding.getPath(possibleOpponentCastle) != null) {
+				return game.startAttack(source, possibleOpponentCastle, source.getTroopCount());
+			}
+		}
+		
+		return null;
+	}
+	
 	private void reinforceBorders() {
 		List<Castle> ownedCastles = this.getCastles(game);
 		Collection<Castle> borderCastles = getBorderCastles();
@@ -112,6 +181,57 @@ public class CustomAI extends AI {
 		});
 		
 		return sortedKingdoms;
+	}
+	
+	private List<Kingdom> getKingdomsSortedByMissingCastles() {
+		GameMap gameMap = game.getMap();
+		List<Kingdom> allKingdoms = gameMap.getKingdoms();
+		
+		ArrayList<Kingdom> sortedKingdoms = new ArrayList<>(allKingdoms);
+		
+		Player thisAI = this;
+		
+		sortedKingdoms.sort(new Comparator<Kingdom>() {
+			
+			@Override
+			public int compare(Kingdom kingdom1, Kingdom kingdom2) {
+				List<Castle> kingdom1Castles = kingdom1.getCastles();
+				List<Castle> kingdom2Castles = kingdom2.getCastles();
+				
+				LinkedList<Castle> kingdom1MissingCastles = new LinkedList<>();
+				LinkedList<Castle> kingdom2MissingCastles = new LinkedList<>();
+				
+				for (Castle kingdom1Castle : kingdom1Castles) {
+					if (kingdom1Castle.getOwner() != thisAI) {
+						kingdom1MissingCastles.add(kingdom1Castle);
+					}
+				}
+				
+				for (Castle kingdom1Castle : kingdom1Castles) {
+					if (kingdom1Castle.getOwner() != thisAI) {
+						kingdom1MissingCastles.add(kingdom1Castle);
+					}
+				}
+				
+				return Integer.compare(kingdom1MissingCastles.size(), kingdom2MissingCastles.size());
+			}
+		});
+		
+		return sortedKingdoms;
+	}
+	
+	private Collection<Castle> getAttackReadyCastles() {
+		List<Castle> ownedCastles = getCastles(game);
+		
+		LinkedList<Castle> attackReadyCastles = new LinkedList<>();
+		
+		for (Castle castle : ownedCastles) {
+			if (castle.getTroopCount() > 2) {
+				attackReadyCastles.add(castle);
+			}
+		}
+		
+		return attackReadyCastles;
 	}
 	
 	private Collection<Castle> getFreeCastles() {

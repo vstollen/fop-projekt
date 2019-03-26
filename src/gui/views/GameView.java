@@ -1,14 +1,20 @@
 package gui.views;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import javax.swing.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -20,7 +26,6 @@ import game.GameConstants;
 import game.GameInterface;
 import game.Joker;
 import game.Player;
-import game.Team;
 import game.map.Castle;
 import gui.GameWindow;
 import gui.View;
@@ -168,6 +173,7 @@ public class GameView extends View implements GameInterface {
                         }
                     }
 
+                    map.reset();
                     game.nextTurn();
                     break;
 
@@ -228,7 +234,7 @@ public class GameView extends View implements GameInterface {
         gameLog.setCaretPosition(gameLog.getDocument().getLength());
     }
 
-    private void logLine(String line, Player... playerFormat) {
+    public void logLine(String line, Player... playerFormat) {
 
         StyledDocument doc = this.gameLog.getStyledDocument();
         Style style = this.gameLog.getStyle("PlayerColor");
@@ -310,7 +316,7 @@ public class GameView extends View implements GameInterface {
 
         Dimension mapSize = game.getMap().getSize();
         Dimension panelSize = mapPanelSize();
-        if(mapSize.getWidth() > panelSize.getWidth() || mapSize.getHeight() > panelSize.getHeight()) {
+        if(mapSize.getWidth() > panelSize.getWidth() - sidebarWidth() || mapSize.getHeight() > panelSize.getHeight()) {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             int newWidth  = Math.min(screenSize.width, mapSize.width) + getWidth() - panelSize.width + 50;
             int newHeight = Math.min(screenSize.height, mapSize.height) + getHeight() - panelSize.height + 50;
@@ -369,6 +375,15 @@ public class GameView extends View implements GameInterface {
     }
 
     @Override
+    public void onConversionStarted(Castle source, Castle target, int troopCount) {
+    	if (target.isFlagCastle()) {
+    		logLine(target.getName() + " hat die Flagge von %PLAYER% und lässt sich nicht konvertieren!", target.getFlagOwner());
+    	} else {
+    		logLine("%PLAYER% konvertiert " + target.getName() + " mit " + troopCount + " Truppen.", source.getOwner());
+    	}
+    }
+
+    @Override
     public void onAttackStopped() {
         map.reset();
         updateStats();
@@ -378,7 +393,7 @@ public class GameView extends View implements GameInterface {
     /**
      * Updated die Joker-Liste und zeigt nur nutzbare Joker an.
      */
-    private void updateJokers() {
+    public void updateJokers() {
     	ArrayList<String> oldElements = getCurrentJokerNames();
     	
     	int selectedIndex = jokerList.getSelectedIndex();
@@ -428,6 +443,7 @@ public class GameView extends View implements GameInterface {
     		return;
     	}
     	
+    	selectedJoker.update();
     	String hint = selectedJoker.getHint();
     	jokerHint.setText(hint);
     }
@@ -440,9 +456,8 @@ public class GameView extends View implements GameInterface {
     	
     	if (selectedJoker != null) {
         	selectedJoker.invoke();	
+        	logLine(selectedJoker.getLogMessage(), game.getCurrentPlayer());
     	}
-    	
-    	logLine(selectedJoker.getLogMessage(), game.getCurrentPlayer());
     	
     	updateJokers();
     }
@@ -462,6 +477,7 @@ public class GameView extends View implements GameInterface {
     	
     	for (Joker joker : GameConstants.JOKERS) {
     		if (joker.isUsable()) {
+    			joker.setMapPanel(this.map);
         		usableJokers.add(joker);
     		}
     	}

@@ -6,6 +6,7 @@ public interface GameInterface {
 
     void onAttackStopped();
     void onAttackStarted(Castle source, Castle target, int troopCount);
+    void onConversionStarted(Castle source, Castle target, int troopCount);
     void onCastleChosen(Castle castle, Player player);
     void onNextTurn(Player currentPlayer, int troopsGot, boolean human);
     void onNewRound(int round);

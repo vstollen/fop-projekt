@@ -38,7 +38,7 @@ public class RoundGoal extends Goal {
 			try {
 				chooseMaxRounds();
 			} catch(NumberFormatException e) {
-				JOptionPane.showMessageDialog(null, "Es werden nur Werte von mindestens 2 Runden akzeptiert.\nBitte gib einen anderen Wert ein.", "Falscher Wert", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Es werden nur Werte von mindestens 2 und höchstens 99 Runden akzeptiert.\nBitte gib einen anderen Wert ein.", "Falscher Wert", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
@@ -52,6 +52,10 @@ public class RoundGoal extends Goal {
 		int chosenRounds = Integer.parseInt(JOptionPane.showInputDialog("Wie viele Runden soll gespielt werden?", "10"));
 		
 		if (chosenRounds < 2) {
+			throw new NumberFormatException();
+		}
+		
+		if (chosenRounds > 99) {
 			throw new NumberFormatException();
 		}
 		

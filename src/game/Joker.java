@@ -1,10 +1,13 @@
 package game;
 
+import gui.components.MapPanel;
+
 public abstract class Joker {
 	
 	private Game game;
 	private final String name;
 	private String hint;
+	private MapPanel map;
 	
 	public Joker(String name, String hint) {
 		this.name = name;
@@ -20,7 +23,7 @@ public abstract class Joker {
 	}
 	/**
 	 * Gibt zurück, ob der Joker aktuell nutzbar ist
-	 * @return true wenn der Joker nutzbar ist
+	 * @return true, wenn der Joker nutzbar ist
 	 */
 	public abstract boolean isUsable();
 	
@@ -34,6 +37,14 @@ public abstract class Joker {
 	 */
 	public void update() {
 		
+	}
+	
+	/**
+	 * Gibt zurück, ob der aktuelle Zug übersprungen werden sollte
+	 * @return true, wenn der aktuelle Zug übersprungen werden sollte
+	 */
+	public boolean shouldSkipTurn() {
+		return false;
 	}
 	
 	public final String getName() {
@@ -53,7 +64,27 @@ public abstract class Joker {
 		return String.format("%%PLAYER%% hat den Joker %s ausgelöst.", name);
 	}
 	
+	/**
+	 * Gibt das Spiel zurück, das den Joker beinhaltet
+	 * @return das Spiel des Jokers
+	 */
 	protected Game getGame() {
 		return game;
+	}
+	
+	/**
+	 * Setzt ein MapPanel als Attribut, sodass darauf agiert werden kann
+	 * @param map das MapPanel auf dem der Joker verwendet wird
+	 */
+	public void setMapPanel(MapPanel map) {
+		this.map = map;
+	}
+
+	/**
+	 * Erhöht die Anzahl der verbliebenen Nutzungen des Jokers für den Spieler
+	 * @param currentPlayer der Spieler, der die Jokernutzung erhält
+	 */
+	public void grantInvocation(Player currentPlayer) {
+		
 	}
 }

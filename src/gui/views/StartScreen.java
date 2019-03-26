@@ -48,8 +48,8 @@ public class StartScreen extends View {
         this.btnInfo = createButton("Info");
         this.btnQuit = createButton("Beenden");
 
-        getWindow().setSize(750, 450);
         getWindow().setMinimumSize(new Dimension(600, 400));
+        getWindow().setSize(750, 450);
     }
 
     @Override

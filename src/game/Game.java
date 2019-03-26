@@ -460,6 +460,11 @@ public class Game {
     	return this.mapSize;
     }
     
+    /**
+     * Prüft ob das gameInterface loggen unterstützt und schreibt message in den log
+     * @param message Nachricht, die geloggt werden soll
+     * @param players Spieler, um message zu formatieren
+     */
     public void logIfPossible(String message, Player... players) {
     	if (gameInterface instanceof GameView) {
     		GameView gameView = (GameView) gameInterface;

@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 import game.Game;
 import game.Goal;
 import game.Player;
-import game.Team;
 
 public class RoundGoal extends Goal {
 

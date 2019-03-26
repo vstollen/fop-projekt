@@ -3,7 +3,6 @@ package game.goals;
 import game.Game;
 import game.Goal;
 import game.Player;
-import game.Team;
 import game.map.Castle;
 
 public class ConquerGoal extends Goal {

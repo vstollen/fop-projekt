@@ -17,7 +17,6 @@ import game.map.Kingdom;
 import game.map.PathFinding;
 import gui.AttackThread;
 import gui.components.MapPanel.Action;
-import sun.awt.image.ImageWatched.Link;
 
 public class CustomAI extends AI {
 	
@@ -134,7 +133,7 @@ public class CustomAI extends AI {
 	
 	private AttackThread attackKingdom(Castle source, Kingdom opponent, PathFinding pathFinding) {
 		for (Castle possibleOpponentCastle : opponent.getCastles()) {
-			if (possibleOpponentCastle.getOwner() == this) {
+			if (possibleOpponentCastle.getOwner().getTeam() == this.getTeam()) {
 				continue;
 			}
 			

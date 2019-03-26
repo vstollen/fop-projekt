@@ -98,17 +98,20 @@ public class BasicAI extends AI {
                     if(castle.getTroopCount() < 2)
                         continue;
 
+                    if(castle.isFlagCastle() && castle.getTroopCount() < 4)
+                    	continue;
+
                     Node<Castle> node = graph.getNode(castle);
                     for (Edge<Castle> edge : graph.getEdges(node)) {
                         Castle otherCastle = edge.getOtherNode(node).getValue();
-                        if (otherCastle.getOwner().getTeam() != this.getTeam() && castle.getTroopCount() >= otherCastle.getTroopCount()) {
-                    		int attackingTroops = castle.getTroopCount();
-                    		
-                    		if (castle.isFlagCastle()) {
-                    			attackingTroops -= 3;
-                    		}
-                        	
-                        	AttackThread attackThread = game.startAttack(castle, otherCastle, attackingTroops);
+                        int attackingTroops = castle.getTroopCount();
+
+                        if (castle.isFlagCastle()) {
+                        	attackingTroops -= 3;
+                        }
+
+                        if (otherCastle.getOwner().getTeam() != this.getTeam() && attackingTroops >= otherCastle.getTroopCount()) {
+                    		AttackThread attackThread = game.startAttack(castle, otherCastle, attackingTroops);
                             if(fastForward)
                                 attackThread.fastForward();
 

@@ -326,7 +326,7 @@ public class Game {
         }
 
         currentPlayer = nextPlayer;
-        playerQueue.add(currentPlayer);
+        playerQueue.add(currentPlayer); // muss bereits hier stehen, damit Bugs durch Multithreading eliminiert werden
 
         if(round == 0 || (round == 1 && allCastlesChosen() && allFlagsDistributed()) ||
           (round > 1 && currentPlayer == startingPlayer)) {

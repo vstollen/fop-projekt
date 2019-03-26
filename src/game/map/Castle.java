@@ -47,20 +47,19 @@ public class Castle {
     public int getTroopCount() {
         return this.troopCount;
     }
-    
+
     /**
-     * 
+     * Prüft, ob die Burg eine Flagburg ist
      * @return true, falls die Burg als Flagburg ausgewählt wurde
      */
     public Boolean isFlagCastle() {
     	return this.flagCastle;
     }
-    
+
     /**
-     * Weist einer Burg einen Spieler zu, der seine Flagge in der Burg versteckt
-     * 
-     * @param player, der Spieler dessen Flagge in der Burg versteckt wird
-     * @throws alreadyFlagCastleException, falls die Burg schon eine Flagge hält
+     * Weist einer Burg einen Spieler zu, der seine Flagge in der Burg aufbewahrt
+     * @param player der Spieler, dessen Flagge in der Burg aufbewahrt wird
+     * @throws alreadyFlagCastleException falls die Burg schon eine Flagge hält
      */
     public void makeFlagCastle(Player player) throws alreadyFlagCastleException {
     	if(!this.flagCastle) {
@@ -70,10 +69,10 @@ public class Castle {
     		throw new alreadyFlagCastleException();
     	}
     }
-    
+
     /**
-     * 
-     * @return Player, den Spieler der seine Flagge in der Burg versteckt hatte
+     * Gibt den Spieler zurück, dessen Flagge in der Burg aufbewahrt wird
+     * @return Player der Spieler, dessen Flagge in der Burg aufbewahrt wird
      */
     public Player getFlagOwner() {
     	return this.flagOwner;    	
@@ -94,7 +93,7 @@ public class Castle {
         // At least one unit must remain in the source region
         if(this.troopCount - troops < 1)
             return;
-        
+
         // FlagCastles need 3 troops remaining
         if(this.isFlagCastle() && this.troopCount - troops < 3)
         	return;

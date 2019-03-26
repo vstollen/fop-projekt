@@ -5,9 +5,10 @@ public abstract class CaptureTheFlagGoal extends Goal {
 	public CaptureTheFlagGoal(String name, String description) {
 		super(name, description);
 	}
-	
+
 	@Override
 	public abstract boolean isCompleted();
+
 	@Override
 	public abstract Player getWinner();
 

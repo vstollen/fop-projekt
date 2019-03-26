@@ -175,7 +175,7 @@ public class Game {
     }
 
     /**
-    *
+    * Prüft, ob alle Flaggen bereits verteilt sind
     * @return true, wenn jeder Spieler eine Flagburg gewählt hat, oder der Spielmodus nicht "Capture the Flag ist"
     */
     public boolean allFlagsDistributed() {
@@ -223,9 +223,9 @@ public class Game {
             nextTurn();
         }
     }
-    
+
     /**
-     * Prüft ob die übergebene Burg in verbindung mit player als Flagge gewählt wurde
+     * Prüft, ob die übergebene Burg in Verbindung mit dem Spieler als Flagge gewählt wurde
      * @param castle Burg, die eventuell als Flagge gewählt wurde
      * @param player Spieler, der eventuell eine Flagge gewählt haben könnte
      * @return true, wenn die Burg als Flagge gewählt wurde
@@ -312,7 +312,7 @@ public class Game {
             return;
         }
         
-         if (round == 1 && allCastlesChosen() && allFlagsDistributed()) {
+        if (round == 1 && allCastlesChosen() && allFlagsDistributed()) {
         	startingPlayer = nextPlayer;
         }
 

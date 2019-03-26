@@ -33,7 +33,7 @@ public class BasicAI extends AI {
     @Override
     protected void actions(Game game) throws InterruptedException {
         if(game.getRound() == 1) {
-        	
+
             List<Castle> availableCastles = game.getMap().getCastles().stream().filter(c -> c.getOwner() == null).collect(Collectors.toList());
             while(availableCastles.size() > 0 && getRemainingTroops() > 0) {
 
@@ -42,17 +42,17 @@ public class BasicAI extends AI {
                 Castle randomCastle = availableCastles.remove(this.getRandom().nextInt(availableCastles.size()));
                 game.chooseCastle(randomCastle, this);
             }
-            
+
             // For Capture the Flag mode
             if (availableCastles.size() == 0 && getRemainingTroops() > 0) {
             	availableCastles = game.getMap().getCastles().stream().filter(c -> c.getOwner() == this).collect(Collectors.toList());
-            	
+
             	sleep(1000);
-            	
+
             	Castle randomFlagCastle = availableCastles.remove(this.getRandom().nextInt(availableCastles.size()));
             	game.chooseCastle(randomFlagCastle, this);
             }
-            
+
         } else {
 
             // 1. Distribute remaining troops

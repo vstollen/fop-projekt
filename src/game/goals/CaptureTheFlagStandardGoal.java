@@ -10,19 +10,19 @@ import game.Player;
 import game.map.Castle;
 
 /**
- * Eine Klasse für den beliebten Spielmodus "Capture the Flag" in dem jeder Spieler nach der Auswahl
- * der Burgen eine seiner Burgen wählt in der seine Flagge aufbewahrt werden soll.
- * Diese zuletzt gewählte Burg wird mit zusätzlichen Truppen versehen und kann nur über einen Angriff weniger als
+ * Eine Klasse für den beliebten Spielmodus "Capture the Flag", in dem jeder Spieler nach der Auswahl
+ * der Burgen eine seiner Burgen wählt, in der seine Flagge aufbewahrt werden soll.
+ * Diese zuletzt gewählte Burg wird mit zusätzlichen Truppen versehen und kann nur über einen feindlichen Angriff weniger als
  * 3 Truppen halten.
- * Es ist nicht möglich über die Truppenbewegung unter 3 Truppen in der Burg zurückzulassen.
+ * Es ist nicht möglich über die Truppenbewegung weniger als 3 Truppen in der Burg zurückzulassen.
  * 
  * @author Felix Graner
  *
  */
 public class CaptureTheFlagStandardGoal extends CaptureTheFlagGoal  {
-	
+
 	public CaptureTheFlagStandardGoal() {
-		super("Standard Capture the Flag", "Derjenige Spieler gewinnt, der als letztes noch seine Flagburg hält.\n\nBei Teams gewinnt das Team, welches einen Spieler enthält der noch seine Flagge besitzt.");
+		super("Standard Capture the Flag", "Derjenige Spieler gewinnt, der als letztes noch seine Flagburg hält.\n\nBei Teams gewinnt das Team, welches einen Spieler enthält, der noch seine Flagge besitzt.");
 	}
 
 	@Override
@@ -30,10 +30,10 @@ public class CaptureTheFlagStandardGoal extends CaptureTheFlagGoal  {
 		Game game = this.getGame();
 		if(game.getRound() < 2)
 			return false;
-		
+
 		List<Castle> flagDefenders = game.getMap().getCastles().stream().filter(c -> c.isFlagCastle())
 				.filter(g -> g.getFlagOwner() == g.getOwner()).collect(Collectors.toList());
-		
+
 		Player p = null;
 		for(Castle c : flagDefenders) {
 			if(p == null)
@@ -41,7 +41,7 @@ public class CaptureTheFlagStandardGoal extends CaptureTheFlagGoal  {
 			else if(p.getTeam() != c.getOwner().getTeam())
 				return false;
 		}
-		
+
 		return true;
 	}
 
@@ -50,15 +50,15 @@ public class CaptureTheFlagStandardGoal extends CaptureTheFlagGoal  {
 		Game game = this.getGame();
 		if(game.getRound() < 2)
 			return null;
-            
+
 		List<Castle> flagCastles = game.getMap().getCastles().stream().filter(c -> c.isFlagCastle()).collect(Collectors.toList());
-		
+
 		ArrayList<Player> winners = new ArrayList<>();
 		for (Castle castle : flagCastles) {
 			if(castle.getFlagOwner() == castle.getOwner())
 				winners.add(castle.getFlagOwner());
 		}
-		
+
 		if(winners.size() > 0) {
 			Player p = winners.remove(0);
 			for(Player g : winners) {
@@ -67,7 +67,7 @@ public class CaptureTheFlagStandardGoal extends CaptureTheFlagGoal  {
 			}
 			return p;
 		}
-		
+
 		return null;
 	}
 

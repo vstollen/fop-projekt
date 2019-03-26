@@ -185,7 +185,13 @@ public class CustomAI extends AI {
 			return null;
 		}
 		
-		return game.startAttack(source, getWeakestCastle(reachableOpponents), source.getTroopCount());
+		int attackingTroops = source.getTroopCount();
+		
+		if (source.isFlagCastle()) {
+			attackingTroops -= 3;
+		}
+		
+		return game.startAttack(source, getWeakestCastle(reachableOpponents), attackingTroops);
 	}
 	
 	/**
@@ -300,6 +306,10 @@ public class CustomAI extends AI {
 		LinkedList<Castle> attackReadyCastles = new LinkedList<>();
 		
 		for (Castle castle : ownedCastles) {
+			if (castle.isFlagCastle() && castle.getTroopCount() < 4) {
+				continue;
+			}
+			
 			if (castle.getTroopCount() > 2) {
 				attackReadyCastles.add(castle);
 			}

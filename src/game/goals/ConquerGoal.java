@@ -9,7 +9,7 @@ import game.map.Castle;
 public class ConquerGoal extends Goal {
 
     public ConquerGoal() {
-        super("Eroberung", "Derjenige Spieler gewinnt, der als erstes alle Gebiete erobert hat.\nIm Teammodus gewinnt das Team, das als erstes alle Gebiete erobert hat.");
+        super("Eroberung", "Derjenige Spieler gewinnt, der als erstes alle Gebiete erobert hat.\n\nIm Teammodus gewinnt das Team, das als erstes alle Gebiete erobert hat.");
     }
 
     @Override

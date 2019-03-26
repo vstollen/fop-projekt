@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import base.Graph;
+import base.Node;
 import game.AI;
 import game.Game;
 import game.Player;
@@ -61,23 +62,32 @@ public class CustomAI extends AI {
             sleep(1000);
 
             for (Kingdom nextSmallestKingdom : smallestKingdoms) {
-            	Castle usefullCastle = findCastleInKingdom(freeCastles, nextSmallestKingdom);
+            	Castle usefulCastle = findCastleInKingdom(freeCastles, nextSmallestKingdom);
             	
-            	if (usefullCastle == null) {
+            	if (usefulCastle == null) {
             		continue;
             	}
             	
-            	freeCastles.remove(usefullCastle);
-            	game.chooseCastle(usefullCastle, this);
+            	freeCastles.remove(usefulCastle);
+            	game.chooseCastle(usefulCastle, this);
             	break;
             }
         }
+		
+		// Für den Capture the Flag-Modus
+		if (freeCastles.size() == 0 && getRemainingTroops() > 0) {
+			
+			sleep(1000);
+			
+			Castle usefulFlagCastle = findStrongestCastle(this.getCastles(game));
+			game.chooseCastle(usefulFlagCastle, this);
+		}
 	}
 	
 	/**
 	 * Verteilt alle unverteilten Truppen auf die Burgen.
-	 * Hierbei wird versucht alle Truppen auf eine einzige Burg, die nicht an einer Grenze liegt zu setzen.
-	 * Falls dies nicht geht wird eine Burg an der Grenze gewählt.
+	 * Hierbei wird versucht alle Truppen auf eine einzige Burg zu setzen, die nicht an einer Grenze liegt.
+	 * Falls dies nicht geht wird eine Burg an der Grenze ausgewählt.
 	 */
 	private void distributeTroops() {
 		List<Castle> ownedCastles = this.getCastles(game);
@@ -100,7 +110,7 @@ public class CustomAI extends AI {
 	}
 	
 	/**
-	 * Führt so lange Angriffe aus, bis keine Burg mehr die Kriterien von getAttackReadyCastles() erfüllt,
+	 * Führt so lange Angriffe aus, bis keine Burg mehr die Kriterien von getAttackReadyCastles() erfüllt
 	 * oder es keine Burgen zu feindlichen Grenzen mehr gibt.
 	 * @throws InterruptedException
 	 */
@@ -119,9 +129,9 @@ public class CustomAI extends AI {
 	}
 	
 	/**
-	 * Lässt jede Burg aus attackingCastles wenn möglich einmal angreifen.
+	 * Lässt jede Burg aus attackingCastles einmal angreifen, sofern dies möglich ist.
 	 * Dabei werden bevorzugt Königreiche angegriffen, bei denen der AI noch wenige Burgen zur vollständigen Einnahme fehlen.
-	 * @param attackingCastles Die Burgen mit denen angegriffen werden soll
+	 * @param attackingCastles die Burgen, mit denen angegriffen werden soll
 	 * @throws InterruptedException
 	 */
 	private void attackWithCastles(Collection<Castle> attackingCastles) throws InterruptedException {
@@ -147,10 +157,10 @@ public class CustomAI extends AI {
 	}
 	
 	/**
-	 * Versucht die schwächste Burg aus dem Königreich opponent anzugreifen.
-	 * @param source Die Burg, von der aus angegriffen werden soll
-	 * @param opponent Das Königreich, das angegriffen werden soll
-	 * @return Einen AttackThread zu dem ausgeführten Angriff, oder null falls das Königreich nicht angegriffen werden konnte
+	 * Versucht, die schwächste Burg aus dem Königreich opponent anzugreifen.
+	 * @param source die Burg, von der aus angegriffen werden soll
+	 * @param opponent das Königreich, das angegriffen werden soll
+	 * @return einen AttackThread zu dem ausgeführten Angriff oder null, falls das Königreich nicht angegriffen werden konnte
 	 */
 	private AttackThread attackKingdom(Castle source, Kingdom opponent) {
 		GameMap gameMap = game.getMap();
@@ -205,7 +215,7 @@ public class CustomAI extends AI {
 	
 	/**
 	 * Bildet eine Liste von Königreichen, aufsteigend nach ihrer Größe sortiert.
-	 * @return Die sortierte Liste von Königreichen
+	 * @return die sortierte Liste von Königreichen
 	 */
 	private List<Kingdom> getKingdomsSortedBySize() {
 		GameMap gameMap = game.getMap();
@@ -229,7 +239,7 @@ public class CustomAI extends AI {
 	
 	/**
 	 * Bildet eine Liste von Königreichen, aufsteigend nach der Anzahl gegnerischer Burgen sortiert.
-	 * @return Die sortierte Liste von Königreichen
+	 * @return die sortierte Liste von Königreichen
 	 */
 	private List<Kingdom> getKingdomsSortedByMissingCastles() {
 		GameMap gameMap = game.getMap();
@@ -270,8 +280,8 @@ public class CustomAI extends AI {
 	
 	/**
 	 * Findet alle Burgen, die bereit für einen Kampf sind.
-	 * Hierzu zählen alle Burgen mit mindestens drei Truppen
-	 * @return Alle Burgen, die bereit zum Kämpfen sind
+	 * Hierzu zählen alle Burgen mit mindestens drei Truppen.
+	 * @return alle Burgen, die bereit zum Kämpfen sind
 	 */
 	private Collection<Castle> getAttackReadyCastles() {
 		List<Castle> ownedCastles = getCastles(game);
@@ -288,8 +298,8 @@ public class CustomAI extends AI {
 	}
 	
 	/**
-	 * Findet alle Burgen, die noch nicht durch einen Spieler besetzt sind
-	 * @return Alle unbesetzten Burgen
+	 * Findet alle Burgen, die noch nicht durch einen Spieler besetzt sind.
+	 * @return alle unbesetzten Burgen
 	 */
 	private Collection<Castle> getFreeCastles() {
 		GameMap gameMap = game.getMap();
@@ -308,8 +318,8 @@ public class CustomAI extends AI {
 	
 	/**
 	 * Findet in einer Liste von Burgen die Burg, die am wenigsten Truppen beherbergt.
-	 * @param castles
-	 * @return
+	 * @param castles alle Burgen, aus denen gesucht werden soll
+	 * @return die Burg, welche am wenigsten Truppen beherbergt
 	 */
 	private Castle getWeakestCastle(Collection<Castle> castles) {
 		Castle weakestCastle = null;
@@ -329,8 +339,8 @@ public class CustomAI extends AI {
 	}
 	
 	/**
-	 * Bilder eine Liste aller Burgen zur gegnerischen Grenze
-	 * @return Alle Burgen zur gegnerischen Grenze
+	 * Bildet eine Liste aller Burgen zur gegnerischen Grenze
+	 * @return alle Burgen zur gegnerischen Grenze
 	 */
 	private Collection<Castle> getBorderCastles() {
 		List<Castle> ownedCastles = this.getCastles(game);
@@ -347,9 +357,9 @@ public class CustomAI extends AI {
 	
 	/**
 	 * Findet eine Burg aus castles, welche im Königreich kingdom liegt.
-	 * @param castles Alle Burgen, aus welchen gesucht werden soll
-	 * @param kingdom Das Königreich, aus dem die gesuchte Burg stammen soll
-	 * @return Eine Burg, welche im Königreich kingdom liegt
+	 * @param castles alle Burgen, aus denen gesucht werden soll
+	 * @param kingdom das Königreich, aus dem die gesuchte Burg stammen soll
+	 * @return eine Burg, welche im Königreich kingdom liegt
 	 */
 	private Castle findCastleInKingdom(Collection<Castle> castles, Kingdom kingdom) {
     	for (Castle castle : castles) {
@@ -359,6 +369,31 @@ public class CustomAI extends AI {
     	}
     	
     	return null;
+	}
+	
+	/**
+	 * Findet die Burg aus castles, welche die wenigsten Verbindungen besitzt.
+	 * @param castles alle Burgen, aus denen gesucht werden soll
+	 * @return die Burg, welche die wenigsten Verbindungen besitzt
+	 */
+	private Castle findStrongestCastle(Collection<Castle> castles) {
+		Graph<Castle> graph = game.getMap().getGraph();
+		Castle strongestCastle = null;
+		
+		for (Castle castle : castles) {
+			if (strongestCastle == null) {
+				strongestCastle = castle;
+				continue;
+			}
+			
+			Node<Castle> castleNode = graph.getNode(castle);
+			Node<Castle> strongestNode = graph.getNode(strongestCastle);
+			if (graph.getEdges(castleNode).size() < graph.getEdges(strongestNode).size()) {
+				strongestCastle = castle;
+			}
+		}
+		
+		return strongestCastle;
 	}
 
 }

@@ -214,7 +214,8 @@ public class MapPanel extends JScrollPane {
                         setCursor(Cursor.getDefaultCursor());
                         if(justTriedTunneling) {
                         	justTriedTunneling = false;
-                        	GameConstants.getJokerByName("Tunnel").grantInvocation(game.getCurrentPlayer());
+                        	GameConstants.getJokerByName("Tunnel graben").grantInvocation(game.getCurrentPlayer());
+                        	
                         	gameView.updateJokers();
                         }
                     } else if(currentAction == Action.MOVING && pathFinding.getPath(nextCastle) != null) {

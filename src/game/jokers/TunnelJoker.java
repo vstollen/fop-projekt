@@ -7,10 +7,14 @@ import game.CaptureTheFlagGoal;
 import game.Game;
 import game.Joker;
 import game.Player;
-import gui.components.MapPanel;
-import gui.components.MapPanel.Action;
+import game.map.MapSize;
 import game.GameConstants;
 import game.Goal;
+
+import gui.components.MapPanel;
+import gui.components.MapPanel.Action;
+
+
 
 
 public class TunnelJoker extends Joker {
@@ -49,7 +53,11 @@ public class TunnelJoker extends Joker {
 	 * @return 
 	 */
 	private Integer getNumberOfInvocations() {
-		return Math.max(game.getMap().getCastles().size()/25, 1);  // min 1, max 3 Tunnel, durch |Castles| abhängig von allem
+		if(game.getMapSize() == MapSize.LARGE || game.getMapSize().ordinal() > MapSize.LARGE.ordinal())
+			return 2;
+		else {
+			return 1;  // Ein Tunnel für kleine, 2 Tunnel für ganz große Karten
+		}
 	}
 	
 	@Override

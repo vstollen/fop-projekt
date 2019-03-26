@@ -453,4 +453,12 @@ public class Game {
     	
     	return false;
     }
+    
+    /**
+     * Gibt die ausgewählte Größe der Karte zurück
+     * @return, die Kartengröße
+     */
+    public MapSize getMapSize() {
+    	return this.mapSize;
+    }
 }

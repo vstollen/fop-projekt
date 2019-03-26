@@ -25,7 +25,7 @@ public class SkipPlayerJoker extends Joker {
 	}
 
 	public SkipPlayerJoker(int invocations) {
-		super("Aussetzen", "Lässt einen Gegner deiner Wahl eine Runde aussetzen.");
+		super("Spieler Überspringen", "Lässt einen beliebig ausgewählten Gegner eine Runde lang aussetzen.\nDieser erhält keine Truppen und kehrt anschließend in das Spiel zurück.");
 		maxInvocationsPerPlayer = invocations;
 	}
 

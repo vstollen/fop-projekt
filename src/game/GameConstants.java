@@ -35,25 +35,22 @@ public class GameConstants {
         new RoundGoal(),
         new CaptureTheFlagStandardGoal(),
         new CaptureTheFlagAlternativeGoal()
-        // TODO: Add more Goals
     };
 
     public static final Class<?> PLAYER_TYPES[] = {
         Human.class,
         BasicAI.class,
-        // TODO: Add more Player types, like different AIs
     };
     
     public static final Joker JOKERS[] = {
     	new TroopbonusJoker(),
-    	new ConversionJoker(),
     	new SkipPlayerJoker(),
+    	new ConversionJoker(),
     	new TunnelJoker()
     };
     
     /**
      * Gibt den zu dem Namen passenden Joker zurück
-     * 
      * @param name der Name des gesuchten Jokers
      * @return der Joker mit dem übergebenen Namen
      */
